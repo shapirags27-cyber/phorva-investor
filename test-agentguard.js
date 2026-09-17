@@ -257,6 +257,34 @@ function buildApprovalRequest(overrides = {}) {
 }
 
 
+function getJson(path) {
+  return new Promise((resolve, reject) => {
+    const req = http.request({
+      hostname: "127.0.0.1",
+      port: 3000,
+      path,
+      method: "GET"
+    }, res => {
+      let data = "";
+
+      res.on("data", chunk => {
+        data += chunk;
+      });
+
+      res.on("end", () => {
+        try {
+          resolve(JSON.parse(data));
+        } catch (error) {
+          reject(new Error(data || error.message));
+        }
+      });
+    });
+
+    req.on("error", reject);
+    req.end();
+  });
+}
+
 function postJson(path, payload) {
   return new Promise((resolve, reject) => {
     const body = JSON.stringify(payload);
@@ -2289,6 +2317,194 @@ const proofBoundaryTests = [
   }
 ];
 
+const providerRoutingTests = [
+  {
+    name: "Provider status exposes mock capabilities",
+    async run() {
+      const result =
+        await getJson("/provider-status");
+
+      const provider =
+        result.providers?.find(
+          item => item.provider === "mock"
+        );
+
+      return (
+        result.version ===
+          "phorva-provider-status-v1" &&
+        provider?.proofSystem ===
+          "MOCK-SHA256" &&
+        provider?.capabilities?.proving === true &&
+        provider?.capabilities?.verification === true &&
+        provider?.capabilities?.statementVersions
+          ?.includes("phorva-proof-v1") &&
+        provider?.availability?.enabled === true &&
+        provider?.availability?.status ===
+          "available"
+      );
+    }
+  },
+
+  {
+    name: "Compatible proof statement selects mock provider",
+    async run() {
+      const result =
+        await postJson("/providers", {
+          proofStatement: {
+            version: "phorva-proof-v1"
+          },
+          operation: "prove"
+        });
+
+      return (
+        result.version ===
+          "phorva-provider-routing-v1" &&
+        result.statementVersion ===
+          "phorva-proof-v1" &&
+        Array.isArray(
+          result.compatibleProviders
+        ) &&
+        result.compatibleProviders.some(
+          provider =>
+            provider.provider === "mock" &&
+            provider.proofSystem ===
+              "MOCK-SHA256"
+        ) &&
+        result.selectedProvider?.provider ===
+          "mock"
+      );
+    }
+  },
+
+  {
+    name: "Unsupported proof statement version finds no provider",
+    async run() {
+      const result =
+        await postJson("/providers", {
+          proofStatement: {
+            version: "phorva-proof-v999"
+          },
+          operation: "prove"
+        });
+
+      return (
+        result.version ===
+          "phorva-provider-routing-v1" &&
+        result.statementVersion ===
+          "phorva-proof-v999" &&
+        Array.isArray(
+          result.compatibleProviders
+        ) &&
+        result.compatibleProviders.length === 0 &&
+        result.selectedProvider === null
+      );
+    }
+  },
+
+  {
+    name: "Unsupported provider routing operation rejected",
+    async run() {
+      const result =
+        await postJson("/providers", {
+          proofStatement: {
+            version: "phorva-proof-v1"
+          },
+          operation: "prove-and-verify"
+        });
+
+      return (
+        typeof result.error === "string" &&
+        result.error ===
+          'operation must be "prove" or "verify"'
+      );
+    }
+  },
+
+  {
+    name: "Incompatible preferred provider rejected",
+    async run() {
+      const result =
+        await postJson("/providers", {
+          proofStatement: {
+            version: "phorva-proof-v1"
+          },
+          operation: "prove",
+          preferredProvider:
+            "unsupported-provider"
+        });
+
+      return (
+        typeof result.error === "string" &&
+        result.error ===
+          'Preferred prover provider "unsupported-provider" does not support this request'
+      );
+    }
+  }
+];
+
+const proofExecutionRoutingTests = [
+  {
+    name: "Proof execution uses deterministic provider routing",
+    async run() {
+      const result =
+        await postJson("/prove-execution", {
+          executions: [
+            buildGraphExecution()
+          ]
+        });
+
+      return (
+        result.provider === "mock" &&
+        result.routingPolicy?.mode ===
+          "deterministic-fallback" &&
+        result.routingPolicy?.selectedProvider ===
+          "mock"
+      );
+    }
+  },
+
+  {
+    name: "Proof execution respects preferred provider routing",
+    async run() {
+      const result =
+        await postJson("/prove-execution", {
+          executions: [
+            buildGraphExecution()
+          ],
+          preferredProvider: "mock"
+        });
+
+      return (
+        result.provider === "mock" &&
+        result.routingPolicy?.mode ===
+          "preferred" &&
+        result.routingPolicy?.preferredProvider ===
+          "mock"
+      );
+    }
+  },
+
+  {
+    name: "Proof execution rejects incompatible preferred provider",
+    async run() {
+      const result =
+        await postJson("/prove-execution", {
+          executions: [
+            buildGraphExecution()
+          ],
+          preferredProvider:
+            "unsupported-provider"
+        });
+
+      return (
+        typeof result.error === "string" &&
+        result.error ===
+          'Preferred prover provider "unsupported-provider" does not support this request'
+      );
+    }
+  }
+];
+
 const proofVerificationTests = [
   {
     name: "Valid proof",
@@ -2765,6 +2981,58 @@ async function run() {
     `Proof-boundary tests: ${proofBoundaryPassed}/${proofBoundaryTests.length} passed`
   );
 
+  let providerRoutingPassed = 0;
+
+  console.log("\n========================================");
+  console.log("      PROVIDER ROUTING SECURITY TESTS");
+  console.log("========================================\n");
+
+  for (const test of providerRoutingTests) {
+    try {
+      const success = await test.run();
+
+      if (success) {
+        providerRoutingPassed++;
+        console.log(`✓ ${test.name}`);
+      } else {
+        console.log(`✗ ${test.name}`);
+      }
+    } catch (error) {
+      console.log(`✗ ${test.name}`);
+      console.log(`  Error: ${error.message}`);
+    }
+  }
+
+  console.log(
+    `Provider-routing tests: ${providerRoutingPassed}/${providerRoutingTests.length} passed`
+  );
+
+  let proofExecutionRoutingPassed = 0;
+
+  console.log("\n========================================");
+  console.log("      PROOF EXECUTION ROUTING TESTS");
+  console.log("========================================\n");
+
+  for (const test of proofExecutionRoutingTests) {
+    try {
+      const success = await test.run();
+
+      if (success) {
+        proofExecutionRoutingPassed++;
+        console.log(`✓ ${test.name}`);
+      } else {
+        console.log(`✗ ${test.name}`);
+      }
+    } catch (error) {
+      console.log(`✗ ${test.name}`);
+      console.log(`  Error: ${error.message}`);
+    }
+  }
+
+  console.log(
+    `Proof-execution routing tests: ${proofExecutionRoutingPassed}/${proofExecutionRoutingTests.length} passed`
+  );
+
 for (const test of proofVerificationTests) {
     try {
       const success = await test.run();
@@ -2788,7 +3056,9 @@ for (const test of proofVerificationTests) {
     pureVerificationPassed +
     proofPassed +
     proofCarryingPassed +
-    proofBoundaryPassed;
+    proofBoundaryPassed +
+    providerRoutingPassed +
+    proofExecutionRoutingPassed;
 
   const totalTests =
     allTests.length +
@@ -2797,7 +3067,9 @@ for (const test of proofVerificationTests) {
     pureVerificationTests.length +
     proofVerificationTests.length +
     proofCarryingExecutionTests.length +
-    proofBoundaryTests.length;
+    proofBoundaryTests.length +
+    providerRoutingTests.length +
+    proofExecutionRoutingTests.length;
 
   console.log(
     "\n========================================"

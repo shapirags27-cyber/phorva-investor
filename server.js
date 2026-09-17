@@ -4301,7 +4301,9 @@ function selectProverProvider({
         compatibleProviders,
       policy: {
         mode: "preferred",
-        preferredProvider
+        preferredProvider,
+        selectedProvider:
+          preferred.provider
       }
     };
   }
@@ -4329,7 +4331,9 @@ function selectProverProvider({
         policy: {
           mode: "ordered",
           providerOrder:
-            orderedProviders
+            orderedProviders,
+          selectedProvider:
+            candidate.provider
         }
       };
     }
@@ -4351,7 +4355,9 @@ function selectProverProvider({
     policy: {
       mode: "deterministic-fallback",
       providerOrder:
-        orderedProviders
+        orderedProviders,
+      selectedProvider:
+        fallback.provider
     }
   };
 }
@@ -5261,7 +5267,9 @@ app.post("/prove-execution", (req, res) => {
     intent,
     finalState,
     expectedFinalState,
-    provider = "mock"
+    provider = null,
+    preferredProvider = null,
+    providerOrder = []
   } = req.body || {};
 
   if (
@@ -5283,6 +5291,23 @@ app.post("/prove-execution", (req, res) => {
         expectedFinalState
       });
 
+    const routing =
+      selectProverProvider({
+        proofStatement:
+          context.proofStatement,
+
+        operation: "prove",
+
+        preferredProvider:
+          preferredProvider ??
+          provider,
+
+        providerOrder
+      });
+
+    const selectedProvider =
+      routing.selected.provider;
+
     const proving =
       proveWithAdapter({
         proofStatement:
@@ -5291,14 +5316,22 @@ app.post("/prove-execution", (req, res) => {
         proofCommitment:
           context.proofCommitment,
 
-        provider
+        provider:
+          selectedProvider
       });
 
     return res.json({
       version:
         "phorva-proof-carrying-execution-v1",
 
-      provider,
+      provider:
+        selectedProvider,
+
+      routingPolicy:
+        routing.policy,
+
+      compatibleProviders:
+        routing.candidates,
 
       verificationMode:
         "PURE_EXECUTION_VERIFICATION",
