@@ -4564,6 +4564,12 @@ function createPhorvaProofReceipt({
           proverRequest.proofInput
             ?.executionGraph
             ?.commitment ??
+          null,
+
+        finalStateCommitment:
+          proverRequest.proofInput
+            ?.finalState
+            ?.commitment ??
           null
       },
 
@@ -4578,6 +4584,26 @@ function createPhorvaProofReceipt({
           proverRequest.proofInput
             ?.executionGraph
             ?.algorithm ??
+          null
+      },
+
+      finalState: {
+        commitment:
+          proverRequest.proofInput
+            ?.finalState
+            ?.commitment ??
+          null,
+
+        algorithm:
+          proverRequest.proofInput
+            ?.finalState
+            ?.algorithm ??
+          null,
+
+        satisfied:
+          proverRequest.proofInput
+            ?.authorization
+            ?.finalStateSatisfied ??
           null
       },
 
@@ -4724,6 +4750,36 @@ function verifyPhorvaProofReceipt({
       valid: false,
       error:
         "Proof receipt execution graph binding mismatch"
+    };
+  }
+
+  const finalStateCommitment =
+    receipt.finalState?.commitment ??
+    null;
+
+  const statementFinalStateCommitment =
+    receipt.statement
+      ?.finalStateCommitment ??
+    null;
+
+  if (
+    finalStateCommitment !==
+    statementFinalStateCommitment
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt final-state binding mismatch"
+    };
+  }
+
+  if (
+    receipt.finalState?.satisfied === false
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt final-state verification failed"
     };
   }
 
