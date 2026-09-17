@@ -6,3 +6,6 @@ universal-router-test.txt
 
 # Local test backups
 test-agentguard.js.backup-*
+
+# Local test backups
+test-agentguard.js.backup-*
