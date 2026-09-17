@@ -4558,6 +4558,26 @@ function createPhorvaProofReceipt({
         algorithm:
           proverRequest.statement
             ?.algorithm ??
+          null,
+
+        executionGraphCommitment:
+          proverRequest.proofInput
+            ?.executionGraph
+            ?.commitment ??
+          null
+      },
+
+      execution: {
+        graphCommitment:
+          proverRequest.proofInput
+            ?.executionGraph
+            ?.commitment ??
+          null,
+
+        graphAlgorithm:
+          proverRequest.proofInput
+            ?.executionGraph
+            ?.algorithm ??
           null
       },
 
@@ -4685,6 +4705,25 @@ function verifyPhorvaProofReceipt({
       valid: false,
       error:
         "Proof receipt statement binding mismatch"
+    };
+  }
+
+  const statementGraphCommitment =
+    receipt.statement?.executionGraphCommitment ??
+    null;
+
+  const executionGraphCommitment =
+    receipt.execution?.graphCommitment ??
+    null;
+
+  if (
+    executionGraphCommitment !==
+    statementGraphCommitment
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt execution graph binding mismatch"
     };
   }
 
