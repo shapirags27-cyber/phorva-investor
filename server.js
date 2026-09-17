@@ -4503,6 +4503,46 @@ function verifyProofArtifact({
   });
 }
 
+app.get("/provider-status", (req, res) => {
+  const providers =
+    Object.keys(proverAdapters).map(
+      provider => {
+        const adapter =
+          proverAdapters[provider];
+
+        const availability =
+          adapter.availability || {};
+
+        return {
+          provider:
+            adapter.provider,
+
+          proofSystem:
+            adapter.proofSystem,
+
+          capabilities:
+            adapter.capabilities || {},
+
+          availability: {
+            enabled:
+              availability.enabled === true,
+
+            status:
+              availability.status ??
+              "unavailable"
+          }
+        };
+      }
+    );
+
+  return res.json({
+    version:
+      "phorva-provider-status-v1",
+
+    providers
+  });
+});
+
 app.post("/providers", (req, res) => {
   const {
     proofStatement,
