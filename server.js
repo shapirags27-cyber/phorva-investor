@@ -3956,19 +3956,7 @@ function proveWithAdapter({
     });
 
   const adapter =
-    proverAdapters[provider];
-
-  if (!adapter) {
-    throw new Error(
-      `Unsupported prover provider: ${provider}`
-    );
-  }
-
-  if (typeof adapter.prove !== "function") {
-    throw new Error(
-      `Prover provider "${provider}" does not implement prove()`
-    );
-  }
+    getProverAdapter(provider);
 
   return {
     request: proverRequest,
@@ -3996,6 +3984,85 @@ function proveWithAdapter({
  * A real ZK adapter will replace this verification
  * logic with the provider's cryptographic verifier.
  */
+
+/**
+ * Phorva Provider Interface v1
+ *
+ * Every prover adapter must expose:
+ *   provider
+ *   proofSystem
+ *   prove({ proverRequest })
+ *   verify({ proverRequest, proof })
+ *
+ * Phorva owns the proof statement and verification semantics.
+ * Providers only implement the proving-system boundary.
+ */
+function validateProverAdapter({
+  provider,
+  adapter
+}) {
+  if (!provider) {
+    throw new Error(
+      "provider is required"
+    );
+  }
+
+  if (!adapter || typeof adapter !== "object") {
+    throw new Error(
+      `Invalid prover adapter: ${provider}`
+    );
+  }
+
+  if (
+    typeof adapter.provider !== "string" ||
+    adapter.provider !== provider
+  ) {
+    throw new Error(
+      `Prover adapter "${provider}" has invalid provider identifier`
+    );
+  }
+
+  if (
+    typeof adapter.proofSystem !== "string" ||
+    adapter.proofSystem.length === 0
+  ) {
+    throw new Error(
+      `Prover adapter "${provider}" has no proofSystem`
+    );
+  }
+
+  if (typeof adapter.prove !== "function") {
+    throw new Error(
+      `Prover provider "${provider}" does not implement prove()`
+    );
+  }
+
+  if (typeof adapter.verify !== "function") {
+    throw new Error(
+      `Prover provider "${provider}" does not implement verify()`
+    );
+  }
+
+  return true;
+}
+
+function getProverAdapter(provider) {
+  const adapter =
+    proverAdapters[provider];
+
+  if (!adapter) {
+    throw new Error(
+      `Unsupported prover provider: ${provider}`
+    );
+  }
+
+  validateProverAdapter({
+    provider,
+    adapter
+  });
+
+  return adapter;
+}
 
 const proverAdapters = {
   mock: {
@@ -4126,12 +4193,7 @@ function verifyProofArtifact({
     proverRequest?.provider ??
     null;
 
-  const adapter =
-    provider
-      ? proverAdapters[provider]
-      : null;
-
-  if (!adapter) {
+  if (!provider) {
     return {
       valid: false,
       error:
@@ -4139,11 +4201,16 @@ function verifyProofArtifact({
     };
   }
 
-  if (typeof adapter.verify !== "function") {
+  let adapter;
+
+  try {
+    adapter =
+      getProverAdapter(provider);
+  } catch (error) {
     return {
       valid: false,
       error:
-        `Proof provider "${provider}" does not implement verify()`
+        error.message
     };
   }
 
