@@ -3955,33 +3955,30 @@ function proveWithAdapter({
       provider
     });
 
-  /*
-   * Provider dispatch boundary.
-   *
-   * Future adapters:
-   *   succint
-   *   boundless
-   *   fermah
-   *
-   * should be implemented here without changing
-   * the Phorva proof statement format.
-   */
-  if (provider === "mock") {
-    return {
-      request: proverRequest,
+  const adapter =
+    proverAdapters[provider];
 
-      artifact:
-        createMockProofArtifact(
-          proverRequest
-        )
-    };
+  if (!adapter) {
+    throw new Error(
+      `Unsupported prover provider: ${provider}`
+    );
   }
 
-  throw new Error(
-    `Unsupported prover provider: ${provider}`
-  );
-}
+  if (typeof adapter.prove !== "function") {
+    throw new Error(
+      `Prover provider "${provider}" does not implement prove()`
+    );
+  }
 
+  return {
+    request: proverRequest,
+
+    artifact:
+      adapter.prove({
+        proverRequest
+      })
+  };
+}
 
 /*
  * Phorva Prover API v1
@@ -3999,6 +3996,31 @@ function proveWithAdapter({
  * A real ZK adapter will replace this verification
  * logic with the provider's cryptographic verifier.
  */
+
+const proverAdapters = {
+  mock: {
+    provider: "mock",
+    proofSystem: "MOCK-SHA256",
+
+    prove({
+      proverRequest
+    }) {
+      return createMockProofArtifact(
+        proverRequest
+      );
+    },
+
+    verify({
+      proverRequest,
+      proof
+    }) {
+      return verifyMockProofArtifact({
+        proverRequest,
+        proof
+      });
+    }
+  }
+};
 
 function verifyMockProofArtifact({
   proverRequest,
@@ -4099,21 +4121,36 @@ function verifyProofArtifact({
   proverRequest,
   proof
 }) {
-  if (
-    proof?.provider === "mock" &&
-    proof?.proofSystem === "MOCK-SHA256"
-  ) {
-    return verifyMockProofArtifact({
-      proverRequest,
-      proof
-    });
+  const provider =
+    proof?.provider ??
+    proverRequest?.provider ??
+    null;
+
+  const adapter =
+    provider
+      ? proverAdapters[provider]
+      : null;
+
+  if (!adapter) {
+    return {
+      valid: false,
+      error:
+        "No verifier adapter for supplied proof provider"
+    };
   }
 
-  return {
-    valid: false,
-    error:
-      "No verifier adapter for supplied proof provider"
-  };
+  if (typeof adapter.verify !== "function") {
+    return {
+      valid: false,
+      error:
+        `Proof provider "${provider}" does not implement verify()`
+    };
+  }
+
+  return adapter.verify({
+    proverRequest,
+    proof
+  });
 }
 
 app.post("/prove-execution", (req, res) => {
