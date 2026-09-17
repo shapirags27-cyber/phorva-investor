@@ -3844,6 +3844,278 @@ function buildVerifiedPhorvaProofContext({
   };
 }
 
+function buildProverRequest({
+  proofStatement,
+  proofCommitment,
+  provider = "mock"
+}) {
+  if (!proofStatement) {
+    throw new Error(
+      "proofStatement is required"
+    );
+  }
+
+  if (!proofCommitment) {
+    throw new Error(
+      "proofCommitment is required"
+    );
+  }
+
+  const recomputedCommitment =
+    createPhorvaProofStatementCommitment(
+      proofStatement
+    );
+
+  if (
+    proofCommitment.commitment !==
+    recomputedCommitment.commitment
+  ) {
+    throw new Error(
+      "Proof commitment does not match Phorva proof statement"
+    );
+  }
+
+  if (
+    proofCommitment.algorithm &&
+    proofCommitment.algorithm !==
+      recomputedCommitment.algorithm
+  ) {
+    throw new Error(
+      "Proof commitment algorithm does not match Phorva proof statement"
+    );
+  }
+
+  return canonicalizeProofValue({
+    version: "phorva-prover-request-v1",
+
+    provider,
+
+    statement: {
+      version:
+        proofStatement.version ?? null,
+
+      commitment:
+        proofCommitment.commitment ?? null,
+
+      algorithm:
+        proofCommitment.algorithm ?? null
+    },
+
+    proofInput:
+      proofStatement
+  });
+}
+
+function createMockProofArtifact(
+  proverRequest
+) {
+  const canonicalJson =
+    JSON.stringify(
+      canonicalizeProofValue(
+        proverRequest
+      )
+    );
+
+  const proofHash =
+    crypto
+      .createHash("sha256")
+      .update(
+        canonicalJson,
+        "utf8"
+      )
+      .digest("hex");
+
+  return {
+    provider: "mock",
+
+    proofSystem:
+      "MOCK-SHA256",
+
+    status: "PROOF_GENERATED",
+
+    proof:
+      "0x" + proofHash,
+
+    statementCommitment:
+      proverRequest.statement.commitment,
+
+    algorithm: "SHA-256"
+  };
+}
+
+function proveWithAdapter({
+  proofStatement,
+  proofCommitment,
+  provider = "mock"
+}) {
+  const proverRequest =
+    buildProverRequest({
+      proofStatement,
+      proofCommitment,
+      provider
+    });
+
+  /*
+   * Provider dispatch boundary.
+   *
+   * Future adapters:
+   *   succint
+   *   boundless
+   *   fermah
+   *
+   * should be implemented here without changing
+   * the Phorva proof statement format.
+   */
+  if (provider === "mock") {
+    return {
+      request: proverRequest,
+
+      artifact:
+        createMockProofArtifact(
+          proverRequest
+        )
+    };
+  }
+
+  throw new Error(
+    `Unsupported prover provider: ${provider}`
+  );
+}
+
+
+/*
+ * Phorva Prover API v1
+ *
+ * Accepts a canonical Phorva proof statement
+ * and routes it through the selected prover adapter.
+ */
+
+/*
+ * Phorva Proof Verification v1
+ *
+ * Verifies the provider-neutral proof artifact.
+ *
+ * The current mock provider uses SHA-256.
+ * A real ZK adapter will replace this verification
+ * logic with the provider's cryptographic verifier.
+ */
+
+function verifyMockProofArtifact({
+  proverRequest,
+  proof
+}) {
+  if (!proverRequest) {
+    return {
+      valid: false,
+      error: "proverRequest is required"
+    };
+  }
+
+  if (!proof) {
+    return {
+      valid: false,
+      error: "proof is required"
+    };
+  }
+
+  if (proof.provider !== "mock") {
+    return {
+      valid: false,
+      error: "Unsupported proof provider"
+    };
+  }
+
+  if (proof.proofSystem !== "MOCK-SHA256") {
+    return {
+      valid: false,
+      error: "Unsupported proof system"
+    };
+  }
+
+  if (!proof.statementCommitment) {
+    return {
+      valid: false,
+      error: "proof.statementCommitment is required"
+    };
+  }
+
+  const expectedStatementCommitment =
+    proverRequest.statement?.commitment ?? null;
+
+  if (
+    proof.statementCommitment !==
+    expectedStatementCommitment
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof statement commitment mismatch"
+    };
+  }
+
+  const canonicalJson =
+    JSON.stringify(
+      canonicalizeProofValue(
+        proverRequest
+      )
+    );
+
+  const expectedProof =
+    "0x" +
+    crypto
+      .createHash("sha256")
+      .update(
+        canonicalJson,
+        "utf8"
+      )
+      .digest("hex");
+
+  const valid =
+    proof.proof === expectedProof;
+
+  return {
+    valid,
+
+    provider:
+      proof.provider,
+
+    proofSystem:
+      proof.proofSystem,
+
+    statementCommitment:
+      proof.statementCommitment,
+
+    expectedProof,
+
+    actualProof:
+      proof.proof,
+
+    algorithm:
+      "SHA-256"
+  };
+}
+
+function verifyProofArtifact({
+  proverRequest,
+  proof
+}) {
+  if (
+    proof?.provider === "mock" &&
+    proof?.proofSystem === "MOCK-SHA256"
+  ) {
+    return verifyMockProofArtifact({
+      proverRequest,
+      proof
+    });
+  }
+
+  return {
+    valid: false,
+    error:
+      "No verifier adapter for supplied proof provider"
+  };
+}
+
 app.post("/prove-execution", (req, res) => {
   const {
     executions,
