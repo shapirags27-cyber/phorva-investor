@@ -4489,6 +4489,77 @@ function verifyProofArtifact({
   });
 }
 
+app.post("/providers", (req, res) => {
+  const {
+    proofStatement,
+    operation = "prove",
+    preferredProvider = null,
+    providerOrder = []
+  } = req.body || {};
+
+  if (!proofStatement) {
+    return res.status(400).json({
+      error:
+        "proofStatement is required"
+    });
+  }
+
+  if (
+    operation !== "prove" &&
+    operation !== "verify"
+  ) {
+    return res.status(400).json({
+      error:
+        'operation must be "prove" or "verify"'
+    });
+  }
+
+  try {
+    const compatibleProviders =
+      findCompatibleProverProviders({
+        proofStatement,
+        operation
+      });
+
+    let selection = null;
+
+    if (
+      compatibleProviders.length > 0
+    ) {
+      selection =
+        selectProverProvider({
+          proofStatement,
+          operation,
+          preferredProvider,
+          providerOrder
+        });
+    }
+
+    return res.json({
+      version:
+        "phorva-provider-routing-v1",
+
+      operation,
+
+      statementVersion:
+        proofStatement.version ?? null,
+
+      compatibleProviders,
+
+      selectedProvider:
+        selection?.selected ?? null,
+
+      routingPolicy:
+        selection?.policy ?? null
+    });
+  } catch (error) {
+    return res.status(400).json({
+      error:
+        error.message
+    });
+  }
+});
+
 app.post("/prove-execution", (req, res) => {
   const {
     executions,
