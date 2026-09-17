@@ -4209,7 +4209,8 @@ function findCompatibleProverProviders({
 function selectProverProvider({
   proofStatement,
   operation = "prove",
-  preferredProvider = null
+  preferredProvider = null,
+  providerOrder = []
 }) {
   if (!proofStatement) {
     throw new Error(
@@ -4222,6 +4223,14 @@ function selectProverProvider({
       proofStatement,
       operation
     });
+
+  if (
+    compatibleProviders.length === 0
+  ) {
+    throw new Error(
+      "No compatible prover provider found"
+    );
+  }
 
   if (
     preferredProvider
@@ -4242,23 +4251,61 @@ function selectProverProvider({
     return {
       selected: preferred,
       candidates:
-        compatibleProviders
+        compatibleProviders,
+      policy: {
+        mode: "preferred",
+        preferredProvider
+      }
     };
   }
 
-  if (
-    compatibleProviders.length === 0
+  const orderedProviders =
+    Array.isArray(providerOrder)
+      ? providerOrder
+      : [];
+
+  for (
+    const providerName of orderedProviders
   ) {
-    throw new Error(
-      "No compatible prover provider found"
-    );
+    const candidate =
+      compatibleProviders.find(
+        provider =>
+          provider.provider ===
+          providerName
+      );
+
+    if (candidate) {
+      return {
+        selected: candidate,
+        candidates:
+          compatibleProviders,
+        policy: {
+          mode: "ordered",
+          providerOrder:
+            orderedProviders
+        }
+      };
+    }
   }
 
+  const fallback =
+    compatibleProviders
+      .slice()
+      .sort((a, b) =>
+        a.provider.localeCompare(
+          b.provider
+        )
+      )[0];
+
   return {
-    selected:
-      compatibleProviders[0],
+    selected: fallback,
     candidates:
-      compatibleProviders
+      compatibleProviders,
+    policy: {
+      mode: "deterministic-fallback",
+      providerOrder:
+        orderedProviders
+    }
   };
 }
 
