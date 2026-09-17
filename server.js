@@ -3847,10 +3847,16 @@ function buildVerifiedPhorvaProofContext({
 function createProverRequestId(
   proverRequest
 ) {
+  const requestWithoutId = {
+    ...proverRequest
+  };
+
+  delete requestWithoutId.requestId;
+
   const canonicalJson =
     JSON.stringify(
       canonicalizeProofValue(
-        proverRequest
+        requestWithoutId
       )
     );
 
@@ -4489,6 +4495,244 @@ function verifyMockProofArtifact({
  * Ensures a provider proof is cryptographically and
  * semantically bound to the exact prover request.
  */
+/**
+ * Phorva Proof Receipt v1
+ *
+ * Creates a canonical receipt binding a proof artifact
+ * to its exact prover request and verification result.
+ */
+function createPhorvaProofReceipt({
+  proverRequest,
+  proof,
+  verification
+}) {
+  if (!proverRequest) {
+    throw new Error(
+      "proverRequest is required"
+    );
+  }
+
+  if (!proof) {
+    throw new Error(
+      "proof is required"
+    );
+  }
+
+  if (!verification) {
+    throw new Error(
+      "verification is required"
+    );
+  }
+
+  const receipt =
+    canonicalizeProofValue({
+      version:
+        "phorva-proof-receipt-v1",
+
+      requestId:
+        proverRequest.requestId ??
+        createProverRequestId(
+          proverRequest
+        ),
+
+      provider:
+        proverRequest.provider ??
+        proof.provider ??
+        null,
+
+      proofSystem:
+        proof.proofSystem ??
+        null,
+
+      statement: {
+        version:
+          proverRequest.statement
+            ?.version ??
+          null,
+
+        commitment:
+          proverRequest.statement
+            ?.commitment ??
+          null,
+
+        algorithm:
+          proverRequest.statement
+            ?.algorithm ??
+          null
+      },
+
+      proof: {
+        artifact:
+          proof.proof ??
+          null,
+
+        statementCommitment:
+          proof.statementCommitment ??
+          null,
+
+        algorithm:
+          proof.algorithm ??
+          null
+      },
+
+      verification: {
+        valid:
+          verification.valid === true,
+
+        provider:
+          verification.provider ??
+          null,
+
+        proofSystem:
+          verification.proofSystem ??
+          null
+      }
+    });
+
+  const commitment =
+    createPhorvaProofStatementCommitment(
+      receipt
+    );
+
+  return {
+    receipt,
+
+    commitment: {
+      algorithm:
+        commitment.algorithm,
+
+      commitment:
+        commitment.commitment
+    }
+  };
+}
+
+/**
+ * Phorva Proof Receipt Verification v1
+ *
+ * Independently validates the internal bindings of a
+ * Phorva proof receipt and its commitment.
+ */
+function verifyPhorvaProofReceipt({
+  receipt,
+  receiptCommitment
+}) {
+  if (!receipt) {
+    return {
+      valid: false,
+      error:
+        "receipt is required"
+    };
+  }
+
+  if (!receiptCommitment?.commitment) {
+    return {
+      valid: false,
+      error:
+        "receiptCommitment.commitment is required"
+    };
+  }
+
+  const recomputed =
+    createPhorvaProofStatementCommitment(
+      receipt
+    );
+
+  if (
+    receiptCommitment.commitment !==
+    recomputed.commitment
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt commitment mismatch"
+    };
+  }
+
+  if (
+    receiptCommitment.algorithm &&
+    receiptCommitment.algorithm !==
+      recomputed.algorithm
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt commitment algorithm mismatch"
+    };
+  }
+
+  if (!receipt.requestId) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt requestId is required"
+    };
+  }
+
+  if (!receipt.statement?.commitment) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt statement commitment is required"
+    };
+  }
+
+  if (
+    receipt.proof?.statementCommitment !==
+    receipt.statement.commitment
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt statement binding mismatch"
+    };
+  }
+
+  if (
+    receipt.provider !==
+    receipt.proof?.provider &&
+    receipt.proof?.provider !== undefined
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt provider binding mismatch"
+    };
+  }
+
+  if (
+    receipt.verification?.valid !== true
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt does not contain a valid verification result"
+    };
+  }
+
+  return {
+    valid: true,
+
+    requestId:
+      receipt.requestId,
+
+    provider:
+      receipt.provider ?? null,
+
+    proofSystem:
+      receipt.proofSystem ?? null,
+
+    statementCommitment:
+      receipt.statement.commitment,
+
+    receiptCommitment:
+      receiptCommitment.commitment,
+
+    algorithm:
+      recomputed.algorithm
+  };
+}
+
 function validateProofArtifactIntegrity({
   proverRequest,
   proof
@@ -4637,10 +4881,32 @@ function verifyProofArtifact({
     return integrity;
   }
 
-  return adapter.verify({
-    proverRequest,
-    proof
-  });
+  const verification =
+    adapter.verify({
+      proverRequest,
+      proof
+    });
+
+  if (!verification.valid) {
+    return verification;
+  }
+
+  const receipt =
+    createPhorvaProofReceipt({
+      proverRequest,
+      proof,
+      verification
+    });
+
+  return {
+    ...verification,
+
+    receipt:
+      receipt.receipt,
+
+    receiptCommitment:
+      receipt.commitment
+  };
 }
 
 app.get("/provider-status", (req, res) => {
