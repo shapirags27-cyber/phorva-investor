@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentGuard</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#0b0f14;color:#f5f7fa}
+.container{max-width:900px;margin:auto;padding:24px}
+h1{margin-bottom:4px}
+.subtitle{color:#8d99a8;margin-bottom:28px}
+.card{background:#121821;border:1px solid #26303d;border-radius:14px;padding:20px;margin-bottom:18px}
+h2{font-size:18px;margin-top:0}
+label{display:block;margin-top:14px;margin-bottom:6px;color:#aeb8c5;font-size:14px}
+input,select{width:100%;padding:12px;border-radius:8px;border:1px solid #303b49;background:#0d131b;color:white;font-size:15px}
+button{width:100%;padding:15px;border:0;border-radius:9px;background:#fff;color:#080b0f;font-size:16px;font-weight:bold;cursor:pointer;margin-top:18px}
+pre{white-space:pre-wrap;word-break:break-word;background:#090d12;border:1px solid #26303d;border-radius:10px;padding:15px;overflow-x:auto;color:#cdd6e0}
+.result{display:none}
+.status{font-size:25px;font-weight:bold;margin-bottom:15px}
+.authorized{color:#55d68a}
+.blocked{color:#ff6262}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.check{padding:10px 0;border-bottom:1px solid #222b35}
+.good{color:#55d68a}
+.bad{color:#ff6262}
+.small{color:#8995a3;font-size:13px}
+.decoder{font-family:monospace}
+@media(max-width:650px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🛡️ AgentGuard</h1>
+<div class="subtitle">Execution security for autonomous AI agents</div>
+
+<div class="card">
+<h2>1. Agent & Action</h2>
+
+<label>Agent Name</label>
+<input id="agent" value="TradingAgent-01">
+
+<div class="row">
+<div>
+<label>Action</label>
+<select id="actionType">
+<option value="Swap">Swap</option>
+<option value="Transfer">Transfer</option>
+<option value="Trade">Trade</option>
+</select>
+</div>
+
+<div>
+<label>Blockchain</label>
+<select id="chain">
+<option value="Base" selected>Base Sepolia</option>
+<option value="Ethereum">Ethereum</option>
+<option value="Arbitrum">Arbitrum</option>
+</select>
+</div>
+</div>
+
+<div class="row">
+<div>
+<label>Protocol</label>
+<select id="protocol">
+<option value="Uniswap">Uniswap</option>
+<option value="Aave">Aave</option>
+<option value="Polymarket">Polymarket</option>
+</select>
+</div>
+
+<div>
+<label>Asset</label>
+<select id="asset">
+<option value="USDC">USDC</option>
+<option value="ETH">ETH</option>
+<option value="USDT">USDT</option>
+</select>
+</div>
+</div>
+
+<label>Transaction Amount</label>
+<input id="amount" type="number" value="300">
+
+</div>
+
+<div class="card">
+<h2>2. Declared Intent</h2>
+<p class="small">What the AI agent says it intends to do.</p>
+
+<label>Intent Amount</label>
+<input id="intentAmount" type="number" value="300">
+
+<label>Intent Asset</label>
+<select id="intentAsset">
+<option value="USDC">USDC</option>
+<option value="ETH">ETH</option>
+<option value="USDT">USDT</option>
+</select>
+</div>
+
+<div class="card">
+<h2>3. Agent Policy</h2>
+
+<label>Maximum Transaction</label>
+<input id="maxTransaction" type="number" value="500">
+
+<label>Daily Spending Limit</label>
+<input id="dailyLimit" type="number" value="2000">
+</div>
+
+<div class="card">
+<h2>4. Transaction Being Inspected</h2>
+
+<p class="small">
+AgentGuard will construct the transaction data and the backend will decode the EVM function selector.
+</p>
+
+<label>Destination Contract</label>
+<select id="destination">
+<option value="known">Known Uniswap Router</option>
+<option value="unknown">Unknown Contract</option>
+</select>
+
+<label>EVM Function</label>
+<select id="function">
+<option value="swap">Universal Router execute (V2 exact-in)</option>
+<option value="approve">approve</option>
+<option value="approvalForAll">setApprovalForAll</option>
+<option value="transfer">transfer</option>
+<option value="ownership">transferOwnership</option>
+<option value="unknown">Unknown Function</option>
+</select>
+
+<label>Token Approval</label>
+<select id="approval">
+<option value="normal">Normal Approval</option>
+<option value="unlimited">Unlimited Approval</option>
+</select>
+
+<button onclick="authorize()">🔍 ANALYZE & AUTHORIZE</button>
+</div>
+
+<div class="card result" id="rawCard">
+<h2>🔎 Raw EVM Transaction</h2>
+<pre id="rawTransaction"></pre>
+</div>
+
+<div class="card result" id="decoderCard">
+<h2>🧩 Decoded Transaction</h2>
+<div class="check">Contract: <span id="decodedContract"></span></div>
+<div class="check">Protocol: <span id="decodedProtocol"></span></div>
+<div class="check">Selector: <span id="decodedSelector"></span></div>
+<div class="check">Function: <span id="decodedFunction"></span></div>
+<div class="check">Category: <span id="decodedCategory"></span></div>
+</div>
+
+<div class="card result" id="resultCard">
+
+<div id="status" class="status"></div>
+
+<div class="check">Policy: <span id="policyResult"></span></div>
+<div class="check">Intent: <span id="intentResult"></span></div>
+<div class="check">Protocol: <span id="protocolResult"></span></div>
+<div class="check">Contract: <span id="contractResult"></span></div>
+<div class="check">Transaction Security: <span id="securityResult"></span></div>
+<div class="check">Risk: <span id="riskResult"></span></div>
+
+<h3>Reason</h3>
+<p id="reason"></p>
+
+<h3>Security Flags</h3>
+<pre id="flags"></pre>
+
+</div>
+
+</div>
+
+<script>
+
+const selectors = {
+  swap: "0x3593564c",
+  approve: "0x095ea7b3",
+  approvalForAll: "0xa22cb465",
+  transfer: "0xa9059cbb",
+  ownership: "0xf2fde38b",
+  unknown: "0xdeadbeef"
+};
+
+function getChainId(chain) {
+  if (chain === "Ethereum") return 1;
+  if (chain === "Arbitrum") return 42161;
+  return 84532;
+}
+
+async function authorize() {
+
+  const agent =
+    document.getElementById("agent").value;
+
+  const actionType =
+    document.getElementById("actionType").value;
+
+  const chain =
+    document.getElementById("chain").value;
+
+  const protocol =
+    document.getElementById("protocol").value;
+
+  const asset =
+    document.getElementById("asset").value;
+
+  const amount =
+    Number(document.getElementById("amount").value);
+
+  const intentAmount =
+    Number(document.getElementById("intentAmount").value);
+
+  const intentAsset =
+    document.getElementById("intentAsset").value;
+
+  const maxTransaction =
+    Number(document.getElementById("maxTransaction").value);
+
+  const dailyLimit =
+    Number(document.getElementById("dailyLimit").value);
+
+  const destination =
+    document.getElementById("destination").value;
+
+  const functionType =
+    document.getElementById("function").value;
+
+  const approval =
+    document.getElementById("approval").value;
+
+  const chainId =
+    getChainId(chain);
+
+  /*
+   * Base Sepolia verified Uniswap Universal Router.
+   */
+  const to =
+    destination === "known"
+      ? "0x492e6456d9528771018deb9e87ef7750ef184104"
+      : "0x000000000000000000000000000000000000dEaD";
+
+  const selector =
+    selectors[functionType];
+
+  function word(value) {
+    return BigInt(value)
+      .toString(16)
+      .padStart(64, "0");
+  }
+
+  function addressWord(address) {
+    return address
+      .toLowerCase()
+      .replace(/^0x/, "")
+      .padStart(64, "0");
+  }
+
+  const calldataAmount =
+    window.__agentguardTestAmount !== undefined
+      ? Number(window.__agentguardTestAmount)
+      : Number(amount);
+
+  let calldata;
+
+  /*
+   * Universal Router execute(bytes,bytes[])
+   *
+   * One command:
+   *   0x08 = V2_SWAP_EXACT_IN
+   *
+   * The command input matches the AgentGuard decoder:
+   *
+   *   address recipient
+   *   uint256 amountIn
+   *   uint256 amountOutMin
+   *   address[] path
+   *   bool payerIsUser
+   */
+  if (functionType === "swap") {
+
+    const recipient =
+      addressWord(
+        "0x3333333333333333333333333333333333333333"
+      );
+
+    const amountIn =
+      word(calldataAmount);
+
+    const amountOutMin =
+      word(
+        Math.max(
+          0,
+          Math.floor(calldataAmount * 0.96)
+        )
+      );
+
+    /*
+     * The path starts after five 32-byte head words:
+     *
+     * recipient
+     * amountIn
+     * amountOutMin
+     * pathOffset
+     * payerIsUser
+     *
+     * 5 * 32 = 160 bytes
+     */
+    const pathOffset =
+      word(160);
+
+    const payerIsUser =
+      word(1);
+
+    const pathLength =
+      word(2);
+
+    const tokenA =
+      addressWord(
+        "0x1111111111111111111111111111111111111111"
+      );
+
+    const tokenB =
+      addressWord(
+        "0x2222222222222222222222222222222222222222"
+      );
+
+    const commandInput =
+      recipient +
+      amountIn +
+      amountOutMin +
+      pathOffset +
+      payerIsUser +
+      pathLength +
+      tokenA +
+      tokenB;
+
+    /*
+     * execute(bytes commands, bytes[] inputs)
+     *
+     * ABI head:
+     *   commands offset = 0x40
+     *   inputs offset   = 0x80
+     */
+    const commandsOffset =
+      word(64);
+
+    const inputsOffset =
+      word(128);
+
+    /*
+     * commands = one byte: 0x08
+     *
+     * Dynamic bytes encoding:
+     *   length = 1
+     *   data   = 08
+     *   padding
+     */
+    const commands =
+      word(1) +
+      "08".padEnd(64, "0");
+
+    /*
+     * bytes[] inputs:
+     *
+     * length = 1
+     * first element offset = 0x20
+     * element length = commandInput.length / 2
+     * element data
+     */
+    const inputArray =
+      word(1) +
+      word(32) +
+      word(commandInput.length / 2) +
+      commandInput;
+
+    calldata =
+      selector +
+      commandsOffset +
+      inputsOffset +
+      commands +
+      inputArray;
+
+  } else {
+
+    const encodedAmount =
+      approval === "unlimited" &&
+      functionType === "approve"
+        ? "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        : word(calldataAmount);
+
+    calldata =
+      selector +
+      encodedAmount;
+  }
+
+  const transaction = {
+
+    from: "0xAgentWallet",
+
+    to,
+
+    chainId,
+
+    expectedChainId: chainId,
+
+    value: "0",
+
+    calldata,
+
+    token: asset,
+
+    amount,
+
+    approvalAmount:
+      approval === "unlimited"
+        ? "MAX_UINT256"
+        : amount,
+
+    destinationAllowed:
+      destination === "known"
+  };
+
+  document.getElementById("rawCard").style.display = "block";
+
+  document.getElementById("rawTransaction").textContent =
+    JSON.stringify(transaction, null, 2);
+
+  try {
+
+    const response =
+      await fetch("http://127.0.0.1:3000/authorize", {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+          agent,
+
+          action: {
+            type: actionType,
+            chain,
+            protocol,
+            asset,
+            amount
+          },
+
+          intent: {
+            type: actionType,
+            chain,
+            protocol,
+            asset: intentAsset,
+            amount: intentAmount
+          },
+
+          policy: {
+            maxTransaction,
+            dailyLimit
+          },
+
+          transaction
+
+        })
+
+      });
+
+    const data =
+      await response.json();
+
+    document.getElementById("decoderCard").style.display = "block";
+    document.getElementById("resultCard").style.display = "block";
+
+    const decoded =
+      data.decodedTransaction;
+
+    document.getElementById("decodedContract").textContent =
+      decoded.contract;
+
+    document.getElementById("decodedProtocol").textContent =
+      decoded.protocol;
+
+    document.getElementById("decodedSelector").textContent =
+      decoded.selector;
+
+    document.getElementById("decodedFunction").textContent =
+      decoded.function;
+
+    document.getElementById("decodedCategory").textContent =
+      decoded.category;
+
+    const status =
+      document.getElementById("status");
+
+    if (data.proof && data.proof.commitment) {
+      result.innerHTML += `
+        <div style="margin-top:16px;padding:14px;border:1px solid #333;border-radius:10px">
+          <strong>🔐 Proof Commitment</strong>
+          <div style="word-break:break-all;margin-top:8px;font-family:monospace">
+            ${data.proof.commitment}
+          </div>
+          <div style="margin-top:6px;opacity:.7">
+            ${data.proof.algorithm || "SHA-256"} · ${data.proof.version || "agentguard-proof-v1"}
+          </div>
+        </div>
+      `;
+    }
+
+    if (data.authorized) {
+
+      status.textContent =
+        "🟢 AUTHORIZED";
+
+      status.className =
+        "status authorized";
+
+    } else {
+
+      status.textContent =
+        "🔴 BLOCKED";
+
+      status.className =
+        "status blocked";
+    }
+
+    document.getElementById("policyResult").innerHTML =
+      data.policyPassed
+        ? '<span class="good">✓ PASSED</span>'
+        : '<span class="bad">✗ FAILED</span>';
+
+    document.getElementById("intentResult").innerHTML =
+      data.intentMatched
+        ? '<span class="good">✓ MATCHED</span>'
+        : '<span class="bad">✗ MISMATCH</span>';
+
+    document.getElementById("protocolResult").innerHTML =
+      data.protocolMatched
+        ? '<span class="good">✓ MATCHED</span>'
+        : '<span class="bad">✗ MISMATCH</span>';
+
+    document.getElementById("contractResult").innerHTML =
+      data.transactionAnalysis.contractKnown
+        ? '<span class="good">✓ KNOWN</span>'
+        : '<span class="bad">✗ UNKNOWN</span>';
+
+    document.getElementById("securityResult").innerHTML =
+      data.transactionSafe
+        ? '<span class="good">✓ SAFE</span>'
+        : '<span class="bad">✗ THREAT DETECTED</span>';
+
+    document.getElementById("riskResult").textContent =
+      data.risk;
+
+    document.getElementById("reason").textContent =
+      data.reason;
+
+    document.getElementById("flags").textContent =
+      data.transactionAnalysis.flags.length
+        ? data.transactionAnalysis.flags
+            .map(flag => "⚠ " + flag)
+            .join("\n")
+        : "No security threats detected.";
+
+  } catch (error) {
+
+    document.getElementById("resultCard").style.display = "block";
+
+    document.getElementById("status").textContent =
+      "⚠ CONNECTION ERROR";
+
+    document.getElementById("reason").textContent =
+      "Could not connect to AgentGuard backend.";
+
+  }
+}
+
+</script>
+
+</body>
+</html>
