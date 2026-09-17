@@ -4607,6 +4607,38 @@ function createPhorvaProofReceipt({
           null
       },
 
+      authorization: {
+        decision:
+          proverRequest.proofInput
+            ?.authorization
+            ?.decision ??
+          null,
+
+        allExecutionsAuthorized:
+          proverRequest.proofInput
+            ?.authorization
+            ?.allExecutionsAuthorized ??
+          null,
+
+        sequenceValid:
+          proverRequest.proofInput
+            ?.authorization
+            ?.sequenceValid ??
+          null,
+
+        graphInvariantsValid:
+          proverRequest.proofInput
+            ?.authorization
+            ?.graphInvariantsValid ??
+          null,
+
+        finalStateSatisfied:
+          proverRequest.proofInput
+            ?.authorization
+            ?.finalStateSatisfied ??
+          null
+      },
+
       proof: {
         artifact:
           proof.proof ??
@@ -4785,13 +4817,81 @@ function verifyPhorvaProofReceipt({
 
   if (
     receipt.provider !==
-    receipt.proof?.provider &&
-    receipt.proof?.provider !== undefined
+    receipt.verification?.provider
   ) {
     return {
       valid: false,
       error:
         "Proof receipt provider binding mismatch"
+    };
+  }
+
+  if (
+    receipt.proofSystem !==
+    receipt.verification?.proofSystem
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt proof-system binding mismatch"
+    };
+  }
+
+  const authorization =
+    receipt.authorization ?? {};
+
+  if (
+    authorization.decision !==
+    "AUTHORIZED"
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt authorization decision is not authorized"
+    };
+  }
+
+  if (
+    authorization.allExecutionsAuthorized !==
+    true
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt authorization binding failed"
+    };
+  }
+
+  if (
+    authorization.sequenceValid !==
+    true
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt sequence authorization binding failed"
+    };
+  }
+
+  if (
+    authorization.graphInvariantsValid !==
+    true
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt graph authorization binding failed"
+    };
+  }
+
+  if (
+    authorization.finalStateSatisfied !==
+    true
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof receipt final-state authorization binding failed"
     };
   }
 
@@ -4993,6 +5093,44 @@ function verifyProofArtifact({
       verification
     });
 
+  const proofInput =
+    proverRequest?.proofInput ?? {};
+
+  const isProofCarryingExecution =
+    proofInput?.executionGraph !== undefined ||
+    proofInput?.authorization !== undefined ||
+    proofInput?.finalState !== undefined;
+
+  let receiptVerification = null;
+
+  if (isProofCarryingExecution) {
+    receiptVerification =
+      verifyPhorvaProofReceipt({
+        receipt:
+          receipt.receipt,
+
+        receiptCommitment:
+          receipt.commitment
+      });
+
+    if (!receiptVerification.valid) {
+      return {
+        valid: false,
+        error:
+          receiptVerification.error ??
+          "Proof receipt verification failed",
+
+        receipt:
+          receipt.receipt,
+
+        receiptCommitment:
+          receipt.commitment,
+
+        receiptVerification
+      };
+    }
+  }
+
   return {
     ...verification,
 
@@ -5000,7 +5138,9 @@ function verifyProofArtifact({
       receipt.receipt,
 
     receiptCommitment:
-      receipt.commitment
+      receipt.commitment,
+
+    receiptVerification
   };
 }
 

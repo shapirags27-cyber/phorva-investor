@@ -2480,6 +2480,39 @@ const proofVerificationTests = [
 
       return result.valid === false;
     }
+  },
+
+  {
+    name: "Valid proof includes independently verified receipt",
+    async run() {
+      const result =
+        await postJson("/prove-execution", {
+          executions: [
+            buildGraphExecution()
+          ]
+        });
+
+      const verification =
+        await postJson("/verify-proof", {
+          proverRequest:
+            result.proverRequest,
+
+          proof:
+            result.proof
+        });
+
+      return (
+        verification.valid === true &&
+        verification.receipt?.version ===
+          "phorva-proof-receipt-v1" &&
+        verification.receiptCommitment?.commitment &&
+        verification.receiptVerification?.valid === true &&
+        verification.receiptVerification?.requestId ===
+          result.proverRequest.requestId &&
+        verification.receiptVerification?.statementCommitment ===
+          result.proverRequest.statement.commitment
+      );
+    }
   }
 ];
 
