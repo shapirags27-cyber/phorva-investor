@@ -3,3 +3,6 @@ node_modules/
 *.log
 server.js.backup-*
 universal-router-test.txt
+
+# Local test backups
+test-agentguard.js.backup-*
