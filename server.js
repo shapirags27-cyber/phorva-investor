@@ -3958,6 +3958,19 @@ function proveWithAdapter({
   const adapter =
     getProverAdapter(provider);
 
+  const capabilities =
+    checkProverCapabilities({
+      adapter,
+      proofStatement,
+      operation: "prove"
+    });
+
+  if (!capabilities.supported) {
+    throw new Error(
+      capabilities.reason
+    );
+  }
+
   return {
     request: proverRequest,
 
@@ -4062,6 +4075,191 @@ function getProverAdapter(provider) {
   });
 
   return adapter;
+}
+
+/**
+ * Phorva Provider Capability Negotiation v1
+ *
+ * Checks whether a provider supports the requested
+ * proving or verification operation and proof statement
+ * version before the provider is invoked.
+ */
+function checkProverCapabilities({
+  adapter,
+  proofStatement,
+  operation = "prove"
+}) {
+  if (!adapter) {
+    return {
+      supported: false,
+      reason:
+        "Provider adapter is required"
+    };
+  }
+
+  const capabilities =
+    adapter.capabilities || {};
+
+  if (
+    operation === "prove" &&
+    capabilities.proving !== true
+  ) {
+    return {
+      supported: false,
+      reason:
+        `Provider "${adapter.provider}" does not support proving`
+    };
+  }
+
+  if (
+    operation === "verify" &&
+    capabilities.verification !== true
+  ) {
+    return {
+      supported: false,
+      reason:
+        `Provider "${adapter.provider}" does not support verification`
+    };
+  }
+
+  const statementVersion =
+    proofStatement?.version ?? null;
+
+  const statementVersions =
+    Array.isArray(
+      capabilities.statementVersions
+    )
+      ? capabilities.statementVersions
+      : [];
+
+  if (
+    !statementVersion ||
+    !statementVersions.includes(
+      statementVersion
+    )
+  ) {
+    return {
+      supported: false,
+      reason:
+        `Provider "${adapter.provider}" does not support proof statement version "${statementVersion}"`
+    };
+  }
+
+  return {
+    supported: true,
+
+    provider:
+      adapter.provider,
+
+    proofSystem:
+      adapter.proofSystem,
+
+    operation,
+
+    statementVersion
+  };
+}
+
+/**
+ * Phorva Provider Routing v1
+ *
+ * Discovers providers that can handle a proof request.
+ * Provider selection remains deterministic and provider-neutral.
+ */
+function findCompatibleProverProviders({
+  proofStatement,
+  operation = "prove"
+}) {
+  const compatible = [];
+
+  for (const provider of Object.keys(proverAdapters)) {
+    const adapter =
+      proverAdapters[provider];
+
+    try {
+      validateProverAdapter({
+        provider,
+        adapter
+      });
+
+      const capabilities =
+        checkProverCapabilities({
+          adapter,
+          proofStatement,
+          operation
+        });
+
+      if (capabilities.supported) {
+        compatible.push({
+          provider,
+          proofSystem:
+            adapter.proofSystem,
+          capabilities:
+            adapter.capabilities
+        });
+      }
+    } catch (error) {
+      // Invalid providers are excluded from routing.
+    }
+  }
+
+  return compatible;
+}
+
+function selectProverProvider({
+  proofStatement,
+  operation = "prove",
+  preferredProvider = null
+}) {
+  if (!proofStatement) {
+    throw new Error(
+      "proofStatement is required"
+    );
+  }
+
+  const compatibleProviders =
+    findCompatibleProverProviders({
+      proofStatement,
+      operation
+    });
+
+  if (
+    preferredProvider
+  ) {
+    const preferred =
+      compatibleProviders.find(
+        provider =>
+          provider.provider ===
+          preferredProvider
+      );
+
+    if (!preferred) {
+      throw new Error(
+        `Preferred prover provider "${preferredProvider}" does not support this request`
+      );
+    }
+
+    return {
+      selected: preferred,
+      candidates:
+        compatibleProviders
+    };
+  }
+
+  if (
+    compatibleProviders.length === 0
+  ) {
+    throw new Error(
+      "No compatible prover provider found"
+    );
+  }
+
+  return {
+    selected:
+      compatibleProviders[0],
+    candidates:
+      compatibleProviders
+  };
 }
 
 const proverAdapters = {
@@ -4219,6 +4417,22 @@ function verifyProofArtifact({
       valid: false,
       error:
         error.message
+    };
+  }
+
+  const capabilities =
+    checkProverCapabilities({
+      adapter,
+      proofStatement:
+        proverRequest?.proofInput,
+      operation: "verify"
+    });
+
+  if (!capabilities.supported) {
+    return {
+      valid: false,
+      error:
+        capabilities.reason
     };
   }
 
