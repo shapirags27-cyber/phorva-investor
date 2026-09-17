@@ -4069,6 +4069,14 @@ const proverAdapters = {
     provider: "mock",
     proofSystem: "MOCK-SHA256",
 
+    capabilities: {
+      proving: true,
+      verification: true,
+      statementVersions: [
+        "phorva-proof-v1"
+      ]
+    },
+
     prove({
       proverRequest
     }) {
