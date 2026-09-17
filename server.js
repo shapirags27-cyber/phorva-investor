@@ -4451,6 +4451,104 @@ function verifyMockProofArtifact({
   };
 }
 
+/**
+ * Phorva Proof Artifact Integrity v1
+ *
+ * Ensures a provider proof is cryptographically and
+ * semantically bound to the exact prover request.
+ */
+function validateProofArtifactIntegrity({
+  proverRequest,
+  proof
+}) {
+  if (!proverRequest) {
+    return {
+      valid: false,
+      error:
+        "proverRequest is required"
+    };
+  }
+
+  if (!proof) {
+    return {
+      valid: false,
+      error:
+        "proof is required"
+    };
+  }
+
+  const expectedProvider =
+    proverRequest.provider ?? null;
+
+  const actualProvider =
+    proof.provider ?? null;
+
+  if (
+    !expectedProvider ||
+    !actualProvider ||
+    actualProvider !== expectedProvider
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof provider binding mismatch"
+    };
+  }
+
+  const expectedProofSystem =
+    proverAdapters[
+      expectedProvider
+    ]?.proofSystem ?? null;
+
+  const actualProofSystem =
+    proof.proofSystem ?? null;
+
+  if (
+    !expectedProofSystem ||
+    actualProofSystem !==
+      expectedProofSystem
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof system binding mismatch"
+    };
+  }
+
+  const expectedStatementCommitment =
+    proverRequest.statement?.commitment ??
+    null;
+
+  const actualStatementCommitment =
+    proof.statementCommitment ??
+    null;
+
+  if (
+    !expectedStatementCommitment ||
+    actualStatementCommitment !==
+      expectedStatementCommitment
+  ) {
+    return {
+      valid: false,
+      error:
+        "Proof statement commitment binding mismatch"
+    };
+  }
+
+  return {
+    valid: true,
+
+    provider:
+      actualProvider,
+
+    proofSystem:
+      actualProofSystem,
+
+    statementCommitment:
+      actualStatementCommitment
+  };
+}
+
 function verifyProofArtifact({
   proverRequest,
   proof
@@ -4495,6 +4593,16 @@ function verifyProofArtifact({
       error:
         capabilities.reason
     };
+  }
+
+  const integrity =
+    validateProofArtifactIntegrity({
+      proverRequest,
+      proof
+    });
+
+  if (!integrity.valid) {
+    return integrity;
   }
 
   return adapter.verify({
