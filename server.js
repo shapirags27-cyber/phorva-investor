@@ -4177,6 +4177,15 @@ function findCompatibleProverProviders({
       proverAdapters[provider];
 
     try {
+      const availability =
+        adapter.availability || {};
+
+      if (
+        availability.enabled !== true ||
+        availability.status !== "available"
+      ) {
+        continue;
+      }
       validateProverAdapter({
         provider,
         adapter
@@ -4320,6 +4329,11 @@ const proverAdapters = {
       statementVersions: [
         "phorva-proof-v1"
       ]
+    },
+
+    availability: {
+      enabled: true,
+      status: "available"
     },
 
     prove({
