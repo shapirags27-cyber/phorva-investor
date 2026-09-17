@@ -2181,6 +2181,114 @@ const proofCarryingExecutionTests = [
   }
 ];
 
+
+const proofBoundaryTests = [
+  {
+    name: "Genuine proof statement and commitment accepted by /prove",
+    async run() {
+      const source = await postJson("/prove-execution", {
+        executions: [
+          buildGraphExecution()
+        ]
+      });
+
+      const result = await postJson("/prove", {
+        proofStatement: source.proofStatement,
+        proofCommitment: source.proofCommitment,
+        provider: "mock"
+      });
+
+      return (
+        result.version === "phorva-prover-response-v1" &&
+        result.provider === "mock" &&
+        result.request?.version === "phorva-prover-request-v1" &&
+        result.proof?.proofSystem === "MOCK-SHA256" &&
+        result.proof?.status === "PROOF_GENERATED"
+      );
+    }
+  },
+
+  {
+    name: "Fake proof commitment rejected by /prove",
+    async run() {
+      const source = await postJson("/prove-execution", {
+        executions: [
+          buildGraphExecution()
+        ]
+      });
+
+      const result = await postJson("/prove", {
+        proofStatement: source.proofStatement,
+        proofCommitment: {
+          algorithm: "SHA-256",
+          commitment:
+            "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        provider: "mock"
+      });
+
+      return (
+        typeof result.error === "string" &&
+        result.error ===
+          "Proof commitment does not match Phorva proof statement"
+      );
+    }
+  },
+
+  {
+    name: "Modified proof statement rejected by original commitment",
+    async run() {
+      const source = await postJson("/prove-execution", {
+        executions: [
+          buildGraphExecution()
+        ]
+      });
+
+      const modifiedStatement =
+        JSON.parse(
+          JSON.stringify(source.proofStatement)
+        );
+
+      modifiedStatement.intent.amount = "999999";
+
+      const result = await postJson("/prove", {
+        proofStatement: modifiedStatement,
+        proofCommitment: source.proofCommitment,
+        provider: "mock"
+      });
+
+      return (
+        typeof result.error === "string" &&
+        result.error ===
+          "Proof commitment does not match Phorva proof statement"
+      );
+    }
+  },
+
+  {
+    name: "Unsupported prover provider rejected by /prove",
+    async run() {
+      const source = await postJson("/prove-execution", {
+        executions: [
+          buildGraphExecution()
+        ]
+      });
+
+      const result = await postJson("/prove", {
+        proofStatement: source.proofStatement,
+        proofCommitment: source.proofCommitment,
+        provider: "unsupported-provider"
+      });
+
+      return (
+        typeof result.error === "string" &&
+        result.error ===
+          "Unsupported prover provider: unsupported-provider"
+      );
+    }
+  }
+];
+
 const proofVerificationTests = [
   {
     name: "Valid proof",
@@ -2601,6 +2709,29 @@ async function run() {
     `Proof-carrying tests: ${proofCarryingPassed}/${proofCarryingExecutionTests.length} passed`
   );
 
+
+  let proofBoundaryPassed = 0;
+
+  for (const test of proofBoundaryTests) {
+    try {
+      const passed = await test.run();
+
+      if (passed) {
+        console.log(`✓ ${test.name}`);
+        proofBoundaryPassed++;
+      } else {
+        console.log(`✗ ${test.name}`);
+      }
+    } catch (error) {
+      console.log(`✗ ${test.name}`);
+      console.log(`  ${error.message}`);
+    }
+  }
+
+  console.log(
+    `Proof-boundary tests: ${proofBoundaryPassed}/${proofBoundaryTests.length} passed`
+  );
+
 for (const test of proofVerificationTests) {
     try {
       const success = await test.run();
@@ -2623,7 +2754,8 @@ for (const test of proofVerificationTests) {
     proofStatementPassed +
     pureVerificationPassed +
     proofPassed +
-    proofCarryingPassed;
+    proofCarryingPassed +
+    proofBoundaryPassed;
 
   const totalTests =
     allTests.length +
@@ -2631,7 +2763,8 @@ for (const test of proofVerificationTests) {
     proofStatementTests.length +
     pureVerificationTests.length +
     proofVerificationTests.length +
-    proofCarryingExecutionTests.length;
+    proofCarryingExecutionTests.length +
+    proofBoundaryTests.length;
 
   console.log(
     "\n========================================"
