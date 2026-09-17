@@ -3844,6 +3844,28 @@ function buildVerifiedPhorvaProofContext({
   };
 }
 
+function createProverRequestId(
+  proverRequest
+) {
+  const canonicalJson =
+    JSON.stringify(
+      canonicalizeProofValue(
+        proverRequest
+      )
+    );
+
+  const requestHash =
+    crypto
+      .createHash("sha256")
+      .update(
+        canonicalJson,
+        "utf8"
+      )
+      .digest("hex");
+
+  return "0x" + requestHash;
+}
+
 function buildProverRequest({
   proofStatement,
   proofCommitment,
@@ -3885,12 +3907,13 @@ function buildProverRequest({
     );
   }
 
-  return canonicalizeProofValue({
-    version: "phorva-prover-request-v1",
+  const proverRequest =
+    canonicalizeProofValue({
+      version: "phorva-prover-request-v1",
 
-    provider,
+      provider,
 
-    statement: {
+      statement: {
       version:
         proofStatement.version ?? null,
 
@@ -3901,9 +3924,18 @@ function buildProverRequest({
         proofCommitment.algorithm ?? null
     },
 
-    proofInput:
-      proofStatement
-  });
+      proofInput:
+        proofStatement
+    });
+
+  return {
+    ...proverRequest,
+
+    requestId:
+      createProverRequestId(
+        proverRequest
+      )
+  };
 }
 
 function createMockProofArtifact(
