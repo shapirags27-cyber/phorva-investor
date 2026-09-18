@@ -5470,6 +5470,111 @@ app.post("/verify-proof", (req, res) => {
   });
 });
 
+
+/*
+ * Phorva Proof-Carrying Execution Verification API v1
+ *
+ * Provider-routed verification boundary for complete
+ * proof-carrying executions produced by /prove-execution.
+ */
+app.post("/verify-execution", (req, res) => {
+  const {
+    proverRequest,
+    proof,
+    preferredProvider = null,
+    providerOrder = []
+  } = req.body || {};
+
+  if (!proverRequest) {
+    return res.status(400).json({
+      valid: false,
+      error:
+        "proverRequest is required"
+    });
+  }
+
+  if (!proof) {
+    return res.status(400).json({
+      valid: false,
+      error:
+        "proof is required"
+    });
+  }
+
+  try {
+    const proofStatement =
+      proverRequest.proofInput;
+
+    if (!proofStatement) {
+      return res.status(400).json({
+        valid: false,
+        error:
+          "proverRequest.proofInput is required"
+      });
+    }
+
+    const routing =
+      selectProverProvider({
+        proofStatement,
+        operation: "verify",
+        preferredProvider,
+        providerOrder
+      });
+
+    const selectedProvider =
+      routing.selected.provider;
+
+    const proofProvider =
+      proof?.provider ??
+      proverRequest?.provider ??
+      null;
+
+    if (
+      proofProvider &&
+      proofProvider !== selectedProvider
+    ) {
+      return res.status(400).json({
+        valid: false,
+        provider: selectedProvider,
+        routingPolicy:
+          routing.policy,
+        compatibleProviders:
+          routing.candidates,
+        error:
+          "Proof provider does not match selected verifier provider"
+      });
+    }
+
+    const verification =
+      verifyProofArtifact({
+        proverRequest,
+        proof
+      });
+
+    return res.json({
+      version:
+        "phorva-execution-verification-v1",
+
+      provider:
+        selectedProvider,
+
+      routingPolicy:
+        routing.policy,
+
+      compatibleProviders:
+        routing.candidates,
+
+      ...verification
+    });
+  } catch (error) {
+    return res.status(400).json({
+      valid: false,
+      error:
+        error.message
+    });
+  }
+});
+
 app.post("/execution-graph", (req, res) => {
   const {
     executions,

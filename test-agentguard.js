@@ -2505,6 +2505,213 @@ const proofExecutionRoutingTests = [
   }
 ];
 
+
+const verifyExecutionTests = [
+  {
+    name: "Verify execution accepts valid proof-carrying execution",
+    async run() {
+      const source =
+        await postJson("/prove-execution", {
+          executions: [
+            buildGraphExecution()
+          ]
+        });
+
+      const result =
+        await postJson("/verify-execution", {
+          proverRequest:
+            source.proverRequest,
+          proof:
+            source.proof
+        });
+
+      return (
+        result.version ===
+          "phorva-execution-verification-v1" &&
+        result.valid === true &&
+        result.provider === "mock" &&
+        result.routingPolicy?.mode ===
+          "deterministic-fallback" &&
+        result.receiptVerification?.valid === true
+      );
+    }
+  },
+
+  {
+    name: "Verify execution respects preferred provider",
+    async run() {
+      const source =
+        await postJson("/prove-execution", {
+          executions: [
+            buildGraphExecution()
+          ]
+        });
+
+      const result =
+        await postJson("/verify-execution", {
+          proverRequest:
+            source.proverRequest,
+          proof:
+            source.proof,
+          preferredProvider: "mock"
+        });
+
+      return (
+        result.valid === true &&
+        result.provider === "mock" &&
+        result.routingPolicy?.mode ===
+          "preferred" &&
+        result.routingPolicy?.preferredProvider ===
+          "mock"
+      );
+    }
+  },
+
+  {
+    name: "Verify execution supports ordered provider routing",
+    async run() {
+      const source =
+        await postJson("/prove-execution", {
+          executions: [
+            buildGraphExecution()
+          ]
+        });
+
+      const result =
+        await postJson("/verify-execution", {
+          proverRequest:
+            source.proverRequest,
+          proof:
+            source.proof,
+          providerOrder: [
+            "mock"
+          ]
+        });
+
+      return (
+        result.valid === true &&
+        result.provider === "mock" &&
+        result.routingPolicy?.mode ===
+          "ordered" &&
+        result.routingPolicy?.selectedProvider ===
+          "mock"
+      );
+    }
+  },
+
+  {
+    name: "Verify execution rejects tampered proof",
+    async run() {
+      const source =
+        await postJson("/prove-execution", {
+          executions: [
+            buildGraphExecution()
+          ]
+        });
+
+      const result =
+        await postJson("/verify-execution", {
+          proverRequest:
+            source.proverRequest,
+          proof: {
+            ...source.proof,
+            proof: "0xdeadbeef"
+          }
+        });
+
+      return result.valid === false;
+    }
+  },
+
+  {
+    name: "Verify execution rejects incompatible preferred provider",
+    async run() {
+      const source =
+        await postJson("/prove-execution", {
+          executions: [
+            buildGraphExecution()
+          ]
+        });
+
+      const result =
+        await postJson("/verify-execution", {
+          proverRequest:
+            source.proverRequest,
+          proof:
+            source.proof,
+          preferredProvider:
+            "unsupported-provider"
+        });
+
+      return (
+        result.valid === false &&
+        result.error ===
+          'Preferred prover provider "unsupported-provider" does not support this request'
+      );
+    }
+  },
+
+  {
+    name: "Verify execution rejects proof provider mismatch",
+    async run() {
+      const source =
+        await postJson("/prove-execution", {
+          executions: [
+            buildGraphExecution()
+          ]
+        });
+
+      const result =
+        await postJson("/verify-execution", {
+          proverRequest:
+            source.proverRequest,
+          proof: {
+            ...source.proof,
+            provider: "other-provider"
+          }
+        });
+
+      return (
+        result.valid === false &&
+        result.error ===
+          "Proof provider does not match selected verifier provider"
+      );
+    }
+  },
+
+  {
+    name: "Verify execution preserves independently verified receipt",
+    async run() {
+      const source =
+        await postJson("/prove-execution", {
+          executions: [
+            buildGraphExecution()
+          ]
+        });
+
+      const result =
+        await postJson("/verify-execution", {
+          proverRequest:
+            source.proverRequest,
+          proof:
+            source.proof
+        });
+
+      return (
+        result.valid === true &&
+        result.receipt?.version ===
+          "phorva-proof-receipt-v1" &&
+        result.receiptCommitment?.commitment &&
+        result.receiptVerification?.valid === true &&
+        result.receiptVerification?.requestId ===
+          source.proverRequest.requestId &&
+        result.receiptVerification?.statementCommitment ===
+          source.proverRequest.statement.commitment
+      );
+    }
+  }
+];
+
 const proofVerificationTests = [
   {
     name: "Valid proof",
@@ -3033,6 +3240,33 @@ async function run() {
     `Proof-execution routing tests: ${proofExecutionRoutingPassed}/${proofExecutionRoutingTests.length} passed`
   );
 
+
+  let verifyExecutionPassed = 0;
+
+  console.log("\n========================================");
+  console.log("      VERIFY EXECUTION TESTS");
+  console.log("========================================\n");
+
+  for (const test of verifyExecutionTests) {
+    try {
+      const success = await test.run();
+
+      if (success) {
+        verifyExecutionPassed++;
+        console.log(`✓ ${test.name}`);
+      } else {
+        console.log(`✗ ${test.name}`);
+      }
+    } catch (error) {
+      console.log(`✗ ${test.name}`);
+      console.log(`  Error: ${error.message}`);
+    }
+  }
+
+  console.log(
+    `Verify-execution tests: ${verifyExecutionPassed}/${verifyExecutionTests.length} passed`
+  );
+
 for (const test of proofVerificationTests) {
     try {
       const success = await test.run();
@@ -3058,7 +3292,8 @@ for (const test of proofVerificationTests) {
     proofCarryingPassed +
     proofBoundaryPassed +
     providerRoutingPassed +
-    proofExecutionRoutingPassed;
+    proofExecutionRoutingPassed +
+    verifyExecutionPassed;
 
   const totalTests =
     allTests.length +
@@ -3069,7 +3304,8 @@ for (const test of proofVerificationTests) {
     proofCarryingExecutionTests.length +
     proofBoundaryTests.length +
     providerRoutingTests.length +
-    proofExecutionRoutingTests.length;
+    proofExecutionRoutingTests.length +
+    verifyExecutionTests.length;
 
   console.log(
     "\n========================================"
