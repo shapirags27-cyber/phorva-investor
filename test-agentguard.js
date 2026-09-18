@@ -1952,7 +1952,7 @@ const proofCarryingExecutionTests = [
         result.proverRequest?.version ===
           "phorva-prover-request-v1" &&
         result.proof?.proofSystem ===
-          "MOCK-SHA256" &&
+          "PHORVA-LOCAL-TEST-SHA256" &&
         result.proof?.status ===
           "PROOF_GENERATED"
       );
@@ -2346,7 +2346,7 @@ const providerRoutingTests = [
   },
 
   {
-    name: "Compatible proof statement selects mock provider",
+    name: "Compatible proof statement selects deterministic provider",
     async run() {
       const result =
         await postJson("/providers", {
@@ -2366,12 +2366,12 @@ const providerRoutingTests = [
         ) &&
         result.compatibleProviders.some(
           provider =>
-            provider.provider === "mock" &&
+            provider.provider === "local-test" &&
             provider.proofSystem ===
-              "MOCK-SHA256"
+              "PHORVA-LOCAL-TEST-SHA256"
         ) &&
         result.selectedProvider?.provider ===
-          "mock"
+          "local-test"
       );
     }
   },
@@ -2454,11 +2454,11 @@ const proofExecutionRoutingTests = [
         });
 
       return (
-        result.provider === "mock" &&
+        result.provider === "local-test" &&
         result.routingPolicy?.mode ===
           "deterministic-fallback" &&
         result.routingPolicy?.selectedProvider ===
-          "mock"
+          "local-test"
       );
     }
   },
@@ -2529,7 +2529,7 @@ const verifyExecutionTests = [
         result.version ===
           "phorva-execution-verification-v1" &&
         result.valid === true &&
-        result.provider === "mock" &&
+        result.provider === "local-test" &&
         result.routingPolicy?.mode ===
           "deterministic-fallback" &&
         result.receiptVerification?.valid === true
@@ -2544,7 +2544,8 @@ const verifyExecutionTests = [
         await postJson("/prove-execution", {
           executions: [
             buildGraphExecution()
-          ]
+          ],
+          preferredProvider: "mock"
         });
 
       const result =
@@ -2574,7 +2575,8 @@ const verifyExecutionTests = [
         await postJson("/prove-execution", {
           executions: [
             buildGraphExecution()
-          ]
+          ],
+          preferredProvider: "mock"
         });
 
       const result =
@@ -2707,6 +2709,202 @@ const verifyExecutionTests = [
           source.proverRequest.requestId &&
         result.receiptVerification?.statementCommitment ===
           source.proverRequest.statement.commitment
+      );
+    }
+  }
+];
+
+
+const providerAdapterTests = [
+  {
+    name: "Provider status exposes local-test capabilities",
+    async run() {
+      const result =
+        await getJson("/provider-status");
+
+      const provider =
+        result.providers?.find(
+          item =>
+            item.provider ===
+            "local-test"
+        );
+
+      return (
+        provider?.proofSystem ===
+          "PHORVA-LOCAL-TEST-SHA256" &&
+        provider?.capabilities?.proving ===
+          true &&
+        provider?.capabilities?.verification ===
+          true &&
+        provider?.capabilities?.statementVersions
+          ?.includes("phorva-proof-v1") &&
+        provider?.availability?.enabled ===
+          true &&
+        provider?.availability?.status ===
+          "available"
+      );
+    }
+  },
+
+  {
+    name: "Preferred local-test provider is selected",
+    async run() {
+      const result =
+        await postJson("/providers", {
+          proofStatement: {
+            version:
+              "phorva-proof-v1"
+          },
+          operation: "prove",
+          preferredProvider:
+            "local-test"
+        });
+
+      return (
+        result.selectedProvider?.provider ===
+          "local-test" &&
+        result.selectedProvider?.proofSystem ===
+          "PHORVA-LOCAL-TEST-SHA256" &&
+        result.routingPolicy?.mode ===
+          "preferred"
+      );
+    }
+  },
+
+  {
+    name: "Proof execution can use local-test provider",
+    async run() {
+      const result =
+        await postJson(
+          "/prove-execution",
+          {
+            executions: [
+              buildGraphExecution()
+            ],
+            preferredProvider:
+              "local-test"
+          }
+        );
+
+      return (
+        result.provider ===
+          "local-test" &&
+        result.proof?.provider ===
+          "local-test" &&
+        result.proof?.proofSystem ===
+          "PHORVA-LOCAL-TEST-SHA256" &&
+        result.routingPolicy?.mode ===
+          "preferred"
+      );
+    }
+  },
+
+  {
+    name: "Local-test proof verifies through provider routing",
+    async run() {
+      const source =
+        await postJson(
+          "/prove-execution",
+          {
+            executions: [
+              buildGraphExecution()
+            ],
+            preferredProvider:
+              "local-test"
+          }
+        );
+
+      const result =
+        await postJson(
+          "/verify-execution",
+          {
+            proverRequest:
+              source.proverRequest,
+            proof:
+              source.proof,
+            preferredProvider:
+              "local-test"
+          }
+        );
+
+      return (
+        result.valid === true &&
+        result.provider ===
+          "local-test" &&
+        result.receiptVerification
+          ?.valid === true
+      );
+    }
+  },
+
+  {
+    name: "Local-test proof cannot be verified as mock",
+    async run() {
+      const source =
+        await postJson(
+          "/prove-execution",
+          {
+            executions: [
+              buildGraphExecution()
+            ],
+            preferredProvider:
+              "local-test"
+          }
+        );
+
+      const result =
+        await postJson(
+          "/verify-execution",
+          {
+            proverRequest:
+              source.proverRequest,
+            proof:
+              source.proof,
+            preferredProvider:
+              "mock"
+          }
+        );
+
+      return (
+        result.valid === false &&
+        result.error ===
+          "Proof provider does not match selected verifier provider"
+      );
+    }
+  },
+
+  {
+    name: "Mock proof cannot be verified as local-test",
+    async run() {
+      const source =
+        await postJson(
+          "/prove-execution",
+          {
+            executions: [
+              buildGraphExecution()
+            ],
+            preferredProvider:
+              "mock"
+          }
+        );
+
+      const result =
+        await postJson(
+          "/verify-execution",
+          {
+            proverRequest:
+              source.proverRequest,
+            proof:
+              source.proof,
+            preferredProvider:
+              "local-test"
+          }
+        );
+
+      return (
+        result.valid === false &&
+        result.error ===
+          "Proof provider does not match selected verifier provider"
       );
     }
   }
@@ -3267,6 +3465,33 @@ async function run() {
     `Verify-execution tests: ${verifyExecutionPassed}/${verifyExecutionTests.length} passed`
   );
 
+
+let providerAdapterPassed = 0;
+
+console.log("\n========================================");
+console.log("      SECOND PROVIDER ADAPTER TESTS");
+console.log("========================================\n");
+
+for (const test of providerAdapterTests) {
+  try {
+    const success = await test.run();
+
+    if (success) {
+      providerAdapterPassed++;
+      console.log(`✓ ${test.name}`);
+    } else {
+      console.log(`✗ ${test.name}`);
+    }
+  } catch (error) {
+    console.log(`✗ ${test.name}`);
+    console.log(`  Error: ${error.message}`);
+  }
+}
+
+console.log(
+  `Second-provider adapter tests: ${providerAdapterPassed}/${providerAdapterTests.length} passed`
+);
+
 for (const test of proofVerificationTests) {
     try {
       const success = await test.run();
@@ -3293,7 +3518,8 @@ for (const test of proofVerificationTests) {
     proofBoundaryPassed +
     providerRoutingPassed +
     proofExecutionRoutingPassed +
-    verifyExecutionPassed;
+    verifyExecutionPassed +
+    providerAdapterPassed;
 
   const totalTests =
     allTests.length +
@@ -3305,7 +3531,8 @@ for (const test of proofVerificationTests) {
     proofBoundaryTests.length +
     providerRoutingTests.length +
     proofExecutionRoutingTests.length +
-    verifyExecutionTests.length;
+    verifyExecutionTests.length +
+    providerAdapterTests.length;
 
   console.log(
     "\n========================================"

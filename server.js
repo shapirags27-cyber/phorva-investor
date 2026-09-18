@@ -4397,6 +4397,160 @@ const proverAdapters = {
         proof
       });
     }
+  },
+
+  "local-test": {
+    provider: "local-test",
+    proofSystem: "PHORVA-LOCAL-TEST-SHA256",
+
+    capabilities: {
+      proving: true,
+      verification: true,
+      statementVersions: [
+        "phorva-proof-v1"
+      ]
+    },
+
+    availability: {
+      enabled: true,
+      status: "available"
+    },
+
+    prove({
+      proverRequest
+    }) {
+      const canonicalJson =
+        JSON.stringify(
+          canonicalizeProofValue(
+            proverRequest
+          )
+        );
+
+      const proofHash =
+        crypto
+          .createHash("sha256")
+          .update(
+            "PHORVA-LOCAL-TEST|" +
+              canonicalJson,
+            "utf8"
+          )
+          .digest("hex");
+
+      return {
+        provider: "local-test",
+        proofSystem:
+          "PHORVA-LOCAL-TEST-SHA256",
+        status: "PROOF_GENERATED",
+        proof:
+          "0x" + proofHash,
+        statementCommitment:
+          proverRequest.statement.commitment,
+        algorithm: "SHA-256"
+      };
+    },
+
+    verify({
+      proverRequest,
+      proof
+    }) {
+      if (!proverRequest) {
+        return {
+          valid: false,
+          error:
+            "proverRequest is required"
+        };
+      }
+
+      if (!proof) {
+        return {
+          valid: false,
+          error:
+            "proof is required"
+        };
+      }
+
+      if (
+        proof.provider !==
+        "local-test"
+      ) {
+        return {
+          valid: false,
+          error:
+            "Unsupported proof provider"
+        };
+      }
+
+      if (
+        proof.proofSystem !==
+        "PHORVA-LOCAL-TEST-SHA256"
+      ) {
+        return {
+          valid: false,
+          error:
+            "Unsupported proof system"
+        };
+      }
+
+      if (!proof.statementCommitment) {
+        return {
+          valid: false,
+          error:
+            "proof.statementCommitment is required"
+        };
+      }
+
+      const expectedStatementCommitment =
+        proverRequest.statement?.commitment ??
+        null;
+
+      if (
+        proof.statementCommitment !==
+        expectedStatementCommitment
+      ) {
+        return {
+          valid: false,
+          error:
+            "Proof statement commitment mismatch"
+        };
+      }
+
+      const canonicalJson =
+        JSON.stringify(
+          canonicalizeProofValue(
+            proverRequest
+          )
+        );
+
+      const expectedProof =
+        "0x" +
+        crypto
+          .createHash("sha256")
+          .update(
+            "PHORVA-LOCAL-TEST|" +
+              canonicalJson,
+            "utf8"
+          )
+          .digest("hex");
+
+      const valid =
+        proof.proof ===
+        expectedProof;
+
+      return {
+        valid,
+        provider:
+          proof.provider,
+        proofSystem:
+          proof.proofSystem,
+        statementCommitment:
+          proof.statementCommitment,
+        expectedProof,
+        actualProof:
+          proof.proof,
+        algorithm:
+          "SHA-256"
+      };
+    }
   }
 };
 
