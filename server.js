@@ -1337,7 +1337,7 @@ function buildAuthorizationProofSpec({
     analysis.decodedParameters || {};
 
   const proofStatement = {
-    version: "agentguard-proof-v1",
+    version: "phorva-proof-v1",
 
     subject: {
       agent:
