@@ -1132,6 +1132,16 @@ function verifyExecutionType(intent, analysis) {
     return decodedFunction.category === "approval";
   }
 
+  if (intent?.type === "transfer") {
+    return (
+      decodedFunction.category === "transfer" &&
+      (
+        decodedFunction.selector === "0xa9059cbb" ||
+        decodedFunction.selector === "0x23b872dd"
+      )
+    );
+  }
+
   return false;
 }
 function analyzeTransaction(tx, intent) {
@@ -1324,6 +1334,7 @@ function canonicalizeProofValue(value) {
 }
 
 function buildAuthorizationProofSpec({
+  agent = null,
   transaction,
   intent,
   policy,
@@ -1341,8 +1352,9 @@ function buildAuthorizationProofSpec({
 
     subject: {
       agent:
-        intent.agent ??
-        transaction.agent ??
+        agent ??
+        intent?.agent ??
+        transaction?.agent ??
         null
     },
 
@@ -1743,7 +1755,8 @@ function verifyExecutionAuthorization({
     intent.assetAddress;
 
   const actualAssetAddress =
-    action.type === "approval"
+    action.type === "approval" ||
+    action.type === "transfer"
       ? transaction.to
       : (
           Array.isArray(decodedParameters.path) &&
@@ -1830,19 +1843,25 @@ function verifyExecutionAuthorization({
   const isApprovalAction =
     action.type === "approval";
 
+  const isTransferAction =
+    action.type === "transfer";
+
   const parameterMatched =
     amountParameterMatched &&
-    spenderMatched &&
     assetAddressMatched &&
     (
-      isApprovalAction ||
-      (
-        recipientMatched &&
-        pathMatched &&
-        amountOutMinMatched &&
-        payerIsUserMatched &&
-        allowRevertMatched
-      )
+      isApprovalAction
+        ? spenderMatched
+        : isTransferAction
+          ? recipientMatched
+          : (
+              spenderMatched &&
+              recipientMatched &&
+              pathMatched &&
+              amountOutMinMatched &&
+              payerIsUserMatched &&
+              allowRevertMatched
+            )
     );
 
   const executionTypeMatched =
@@ -2095,14 +2114,27 @@ function buildVerificationTrace({
   const isApproval =
     analysis.normalizedAction?.action === "approval";
 
-  if (isApproval) {
-    for (const id of [
-      "recipient",
-      "path",
-      "amount_out_min",
-      "payer",
-      "allow_revert"
-    ]) {
+  const isTransfer =
+    analysis.normalizedAction?.action === "transfer";
+
+  if (isApproval || isTransfer) {
+    const notApplicableChecks = isApproval
+      ? [
+          "recipient",
+          "path",
+          "amount_out_min",
+          "payer",
+          "allow_revert"
+        ]
+      : [
+          "spender",
+          "path",
+          "amount_out_min",
+          "payer",
+          "allow_revert"
+        ];
+
+    for (const id of notApplicableChecks) {
       const check =
         trace.find(item => item.id === id);
 
@@ -3234,6 +3266,7 @@ function createVerificationTraceCommitment(
 }
 
 function buildPhorvaProofStatement({
+  agent = null,
   intent,
   executionGraph,
   executionGraphCommitment,
@@ -3295,6 +3328,13 @@ function buildPhorvaProofStatement({
 
   return canonicalizeProofValue({
     version: "phorva-proof-v1",
+
+    subject: {
+      agent:
+        agent ??
+        intent?.agent ??
+        null
+    },
 
     intent: {
       type: intent?.type ?? null,
@@ -3585,6 +3625,10 @@ app.post("/proof-statement", (req, res) => {
   try {
     const proofStatement =
       buildPhorvaProofStatement({
+        agent:
+          intent?.agent ??
+          null,
+
         intent,
         executionGraph,
         executionGraphCommitment,
@@ -3793,6 +3837,11 @@ function buildVerifiedPhorvaProofContext({
 
   const proofStatement =
     buildPhorvaProofStatement({
+      agent:
+        executions[0]?.agent ??
+        intent?.agent ??
+        null,
+
       intent:
         intent ??
         executions[0]?.intent ??
@@ -5920,6 +5969,11 @@ app.post("/execution-graph", (req, res) => {
 
     const phorvaProofStatement =
     buildPhorvaProofStatement({
+      agent:
+        executions[0]?.agent ??
+        executions[0]?.intent?.agent ??
+        null,
+
       intent:
         executions[0]?.intent ?? null,
 
@@ -6197,6 +6251,7 @@ app.post("/authorize", (req, res) => {
 
     const proofSpecification =
       buildAuthorizationProofSpec({
+        agent,
         transaction,
         intent,
         policy,
@@ -6253,7 +6308,13 @@ app.post("/authorize", (req, res) => {
         parameters: analysis.decodedParameters
       },
 
-      risk: analysis.risk,
+      risk: (
+        analysis.risk === "CRITICAL"
+          ? "CRITICAL"
+          : !policyPassed
+            ? "HIGH"
+            : analysis.risk
+      ),
 
       verdict: {
         policy: policyPassed ? "PASSED" : "FAILED",
