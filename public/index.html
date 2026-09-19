@@ -1,593 +1,3873 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AgentGuard</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Phorva — Verifiable Execution Infrastructure</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#05070d;color:#f5f7ff;font-family:Inter,system-ui,-apple-system,sans-serif}button{font:inherit;cursor:pointer}.app{max-width:1500px;margin:auto;padding:22px}.topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 2px 24px}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:14px;overflow:hidden;background:#050505;border:1px solid rgba(130,150,190,.2)}.logo img{width:100%;height:100%;object-fit:cover}.brand-name{font-size:20px;font-weight:900;letter-spacing:.12em}.brand-sub{font-size:10px;color:#8792a8;letter-spacing:.08em}.status{display:flex;align-items:center;gap:8px;padding:9px 13px;border:1px solid rgba(130,150,190,.16);border-radius:999px;font-size:12px;color:#aeb8ca}.dot{width:7px;height:7px;border-radius:50%;background:#35d69a;box-shadow:0 0 10px #35d69a}.hero,.panel{border:1px solid rgba(130,150,190,.16);background:linear-gradient(145deg,rgba(15,21,37,.95),rgba(7,10,18,.96));box-shadow:0 20px 70px rgba(0,0,0,.22)}.hero{border-radius:24px;padding:30px;position:relative;overflow:hidden}.eyebrow,.panel-label{font-size:10px;color:#8290ff;font-weight:800;letter-spacing:.15em}.hero h1{font-size:clamp(30px,5vw,58px);line-height:1.03;margin:12px 0;letter-spacing:-.045em}.hero p{color:#9aa5ba;max-width:760px;line-height:1.6;font-size:15px}.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:25px}.flow-item{padding:10px 13px;border:1px solid rgba(130,150,190,.16);border-radius:10px;background:rgba(255,255,255,.025);font-size:12px;font-weight:800}.flow-item.core{border-color:rgba(110,100,255,.55);background:rgba(91,79,255,.11)}.arrow{color:#56627a}.grid{display:grid;grid-template-columns:1.35fr .65fr;gap:18px;margin-top:18px}.panel{border-radius:20px;overflow:hidden}.panel.full{grid-column:1/-1}.panel-head{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid rgba(130,150,190,.16)}.panel-title{font-size:13px;font-weight:800;margin-top:4px}.panel-body{padding:20px}.core{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.core-node{min-height:78px;padding:12px 8px;border-radius:12px;border:1px solid rgba(130,150,190,.16);background:#090e19;text-align:center}.core-node span{font-size:9px;color:#77839a}.core-node strong{display:block;font-size:11px;margin-top:7px}.core-node.active{border-color:rgba(104,116,255,.5)}.sim{display:grid;grid-template-columns:1fr 1fr;gap:10px}.demo{border:1px solid rgba(130,150,190,.16);border-radius:14px;padding:16px;background:rgba(255,255,255,.02);text-align:left;color:#fff}.demo h3{margin:0 0 7px;font-size:14px}.demo p{margin:0;color:#8792a8;font-size:11px;line-height:1.5}.demo .amount{font-size:22px;font-weight:900;margin:13px 0}.authorized{border-color:rgba(53,214,154,.3)}.attack{border-color:rgba(255,84,112,.3)}.verdict{margin-top:14px;padding:16px;border-radius:14px;border:1px solid rgba(130,150,190,.16);background:#080d17;display:none}.verdict.show{display:block}.verdict-head{display:flex;justify-content:space-between}.verdict-name{font-size:22px;font-weight:900}.good{color:#35d69a}.bad{color:#ff5470}.checks,.stats,.destinations{display:grid;gap:8px}.checks{grid-template-columns:repeat(2,1fr);margin-top:14px}.check,.stat,.destination,.trace-row,.proof-node,.graph-node{border:1px solid rgba(130,150,190,.13);background:#090e19;border-radius:10px}.check{padding:10px;font-size:11px;color:#a8b1c3}.check b{color:#fff}.trace{display:grid;gap:7px}.trace-row{display:flex;justify-content:space-between;padding:10px 12px;font-size:11px}.pass{color:#35d69a;font-weight:800}.fail{color:#ff5470;font-weight:800}.proof-flow{margin-top:4px}
+.proof-arrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#6d7cff;
+  font-size:16px;
+  opacity:.8
+}
+.proof-statement{
+  margin-top:14px;
+  border:1px solid rgba(130,150,190,.13);
+  background:#080d17;
+  border-radius:12px;
+  overflow:hidden
+}
+.proof-statement-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  background:rgba(130,150,190,.08)
+}
+.proof-statement-grid>div{
+  background:#090e19;
+  padding:12px
+}
+.proof-statement small,
+.proof-commitment small{
+  display:block;
+  color:#69758b;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.1em
+}
+.proof-statement strong{
+  display:block;
+  margin-top:5px;
+  font-size:11px;
+  color:#e9edf5
+}
+.proof-commitment{
+  padding:12px;
+  border-top:1px solid rgba(130,150,190,.08)
+}
+.proof-commitment .hash{
+  margin-top:6px;
+  word-break:break-all;
+  font-size:10px
+}
+.proof-flow-caption{
+  margin-top:10px;
+  text-align:center;
+  color:#69758b;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.12em
+}
+.graph{display:flex;align-items:center;gap:7px;overflow:auto}.graph-node{min-width:105px;padding:13px 10px;text-align:center}.graph-node small{display:block;color:#69758b;font-size:8px;text-transform:uppercase}.graph-node strong{display:block;font-size:11px;margin-top:5px}.graph-detail{display:block;color:#69758b;font-size:8px;margin-top:4px;text-transform:uppercase}.graph-node.graph-good{border-color:rgba(53,214,154,.45);box-shadow:0 0 18px rgba(53,214,154,.08)}.graph-node.graph-blocked{border-color:rgba(255,84,112,.45);box-shadow:0 0 18px rgba(255,84,112,.08)}.graph-arrow{color:#55627a}.proof{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.proof-node{padding:15px 10px;text-align:center}.proof-node strong{font-size:11px}.proof-node small{display:block;color:#657188;margin-top:6px;font-size:9px}.hash{margin-top:12px;padding:12px;border:1px dashed rgba(113,125,170,.25);border-radius:10px;color:#8390a8;font-family:monospace;font-size:9px;word-break:break-all}.stats{grid-template-columns:repeat(3,1fr)}.stat{padding:14px}.stat small{color:#69758b;font-size:9px}.stat strong{display:block;font-size:19px;margin-top:5px}.destinations{grid-template-columns:repeat(4,1fr)}.destination{padding:14px 10px;text-align:center;color:#a7b1c2;font-size:11px}.destination b{display:block;color:#fff;margin-bottom:5px}.live{display:inline-flex;align-items:center;gap:6px;color:#35d69a;font-size:10px}.live:before{content:'';width:6px;height:6px;border-radius:50%;background:#35d69a}.muted{color:#69758b}.payload-details{
+  margin-top:12px;
+  border:1px solid rgba(130,150,190,.12);
+  border-radius:10px;
+  background:#070b13;
+  overflow:hidden
+}
+.payload-details summary{
+  cursor:pointer;
+  padding:11px 13px;
+  color:#8995aa;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  user-select:none
+}
+.payload-details summary:hover{
+  color:#dce3ef
+}
+.payload-details .raw{
+  margin-top:0;
+  border:0;
+  border-top:1px solid rgba(130,150,190,.08);
+  border-radius:0;
+  max-height:420px;
+  overflow:auto
+}
+.raw{white-space:pre-wrap;max-height:280px;overflow:auto;font-family:monospace;font-size:9px;color:#91a0b8;background:#05080f;border:1px solid rgba(130,150,190,.1);padding:12px;border-radius:10px;margin-top:12px}footer{text-align:center;color:#4f5a6d;font-size:10px;padding:28px 0 8px}@media(max-width:950px){.grid{grid-template-columns:1fr}.core{grid-template-columns:repeat(3,1fr)}}@media(max-width:600px){.app{padding:12px}.hero{padding:22px}.status{display:none}.core{grid-template-columns:repeat(2,1fr)}.sim,.checks{grid-template-columns:1fr}.proof{grid-template-columns:repeat(2,1fr)}.destinations{grid-template-columns:repeat(2,1fr)}}
+
+/* PHORVA PREMIUM POLISH */
+:root{
+  --phorva-bg:#05070c;
+  --phorva-panel:#090e18;
+  --phorva-panel-2:#0c1220;
+  --phorva-border:rgba(142,158,195,.14);
+  --phorva-border-strong:rgba(142,158,195,.22);
+  --phorva-text:#eef2f8;
+  --phorva-muted:#7c879b;
+  --phorva-accent:#7c6cff;
+  --phorva-accent-soft:rgba(124,108,255,.12);
+}
+
+html{
+  background:var(--phorva-bg);
+}
+
+body{
+  background:
+    radial-gradient(circle at 50% -10%,rgba(92,74,255,.10),transparent 38%),
+    radial-gradient(circle at 100% 45%,rgba(50,91,180,.055),transparent 32%),
+    var(--phorva-bg);
+}
+
+.app{
+  position:relative;
+}
+
+.app:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom,black,transparent 82%);
+  z-index:0;
+}
+
+.panel,
+.hero,
+.network,
+.simulator,
+.trace,
+.proof-statement{
+  position:relative;
+  z-index:1;
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.018);
+}
+
+.panel{
+  border-color:var(--phorva-border);
+  background:
+    linear-gradient(145deg,rgba(14,20,34,.96),rgba(7,11,19,.98));
+}
+
+.panel:hover{
+  border-color:var(--phorva-border-strong);
+}
+
+.panel-label{
+  color:#8995aa;
+  letter-spacing:.16em;
+}
+
+.panel-title{
+  letter-spacing:-.015em;
+}
+
+.hero{
+  background:
+    radial-gradient(circle at 78% 18%,rgba(124,108,255,.11),transparent 30%),
+    linear-gradient(145deg,rgba(13,19,32,.98),rgba(6,9,16,.99));
+  border-color:rgba(124,108,255,.14);
+}
+
+.hero h1{
+  letter-spacing:-.045em;
+}
+
+button{
+  transition:
+    transform .16s ease,
+    border-color .16s ease,
+    background .16s ease,
+    box-shadow .16s ease;
+}
+
+button:hover{
+  transform:translateY(-1px);
+  border-color:rgba(124,108,255,.42);
+  box-shadow:0 8px 24px rgba(0,0,0,.22);
+}
+
+button:active{
+  transform:translateY(0);
+}
+
+.graph-node,
+.proof-node{
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    transform .18s ease;
+}
+
+.graph-node:hover,
+.proof-node:hover{
+  transform:translateY(-2px);
+  border-color:rgba(124,108,255,.30);
+  background:#0b1120;
+}
+
+.graph-node.graph-good{
+  background:linear-gradient(145deg,rgba(53,214,154,.055),#090e19);
+}
+
+.graph-node.graph-blocked{
+  background:linear-gradient(145deg,rgba(255,84,112,.055),#090e19);
+}
+
+.proof-statement{
+  background:
+    linear-gradient(145deg,rgba(10,15,25,.98),rgba(5,8,14,.99));
+}
+
+.payload-details{
+  background:#060a12;
+}
+
+.payload-details summary{
+  transition:color .15s ease,background .15s ease;
+}
+
+.payload-details summary:hover{
+  background:rgba(124,108,255,.035);
+}
+
+.hash{
+  font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  letter-spacing:.01em;
+}
+
+@media(max-width:700px){
+  .app:before{
+    background-size:30px 30px;
+  }
+
+  .hero,
+  .panel{
+    box-shadow:0 12px 32px rgba(0,0,0,.20);
+  }
+
+  .graph{
+    padding-bottom:5px;
+    scrollbar-width:thin;
+  }
+
+  .graph-node{
+    min-width:112px;
+  }
+}
+
+
+/* PHORVA CORE — ARCHITECTURE EMPHASIS */
+.flow{
+  position:relative;
+  padding:18px 4px;
+}
+
+.flow:before{
+  content:"";
+  position:absolute;
+  left:7%;
+  right:7%;
+  top:50%;
+  height:1px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(124,108,255,.28),
+    rgba(124,108,255,.52),
+    rgba(124,108,255,.28),
+    transparent
+  );
+  z-index:-1;
+}
+
+.flow-item{
+  position:relative;
+  border:1px solid rgba(142,158,195,.13);
+  background:rgba(7,11,19,.88);
+  box-shadow:0 8px 25px rgba(0,0,0,.18);
+  backdrop-filter:blur(10px);
+}
+
+.flow-item.core{
+  border-color:rgba(124,108,255,.48);
+  background:
+    radial-gradient(circle at 50% 0%,rgba(124,108,255,.20),transparent 65%),
+    rgba(11,13,27,.96);
+  box-shadow:
+    0 0 0 1px rgba(124,108,255,.06),
+    0 0 32px rgba(124,108,255,.14),
+    0 12px 35px rgba(0,0,0,.28);
+  color:#ffffff;
+}
+
+.flow-item.core:before{
+  content:"VERIFICATION CORE";
+  display:block;
+  margin-bottom:5px;
+  color:#928aff;
+  font-size:7px;
+  font-weight:700;
+  letter-spacing:.16em;
+}
+
+.flow .arrow{
+  color:#707cff;
+  text-shadow:0 0 12px rgba(112,124,255,.4);
+}
+
+.core{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:1px;
+  border:1px solid rgba(124,108,255,.18);
+  border-radius:14px;
+  padding:1px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(124,108,255,.06),
+      rgba(124,108,255,.18),
+      rgba(124,108,255,.06)
+    );
+  box-shadow:
+    0 0 45px rgba(80,70,220,.07),
+    inset 0 1px 0 rgba(255,255,255,.025);
+  overflow:hidden;
+}
+
+.core:before{
+  content:"";
+  position:absolute;
+  left:6%;
+  right:6%;
+  top:50%;
+  height:1px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(124,108,255,.45),
+    transparent
+  );
+  pointer-events:none;
+}
+
+.core-node{
+  position:relative;
+  min-height:78px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:7px;
+  background:rgba(8,12,21,.97);
+  z-index:1;
+  transition:
+    background .18s ease,
+    transform .18s ease,
+    border-color .18s ease;
+}
+
+.core-node:not(:last-child){
+  border-right:1px solid rgba(142,158,195,.08);
+}
+
+.core-node:hover{
+  transform:translateY(-2px);
+  background:rgba(13,18,32,.98);
+}
+
+.core-node span{
+  color:#58657b;
+  font-size:8px;
+  font-family:"SFMono-Regular",Consolas,monospace;
+  letter-spacing:.08em;
+}
+
+.core-node strong{
+  color:#dfe5ef;
+  font-size:11px;
+  letter-spacing:.01em;
+}
+
+.core-node.active{
+  box-shadow:inset 0 2px 0 rgba(124,108,255,.22);
+}
+
+.core-node.active span{
+  color:#8278ff;
+}
+
+.core-node.active strong{
+  color:#f4f6fb;
+}
+
+@media(max-width:760px){
+  .flow{
+    overflow-x:auto;
+    justify-content:flex-start;
+    padding-bottom:12px;
+  }
+
+  .flow:before{
+    display:none;
+  }
+
+  .flow-item{
+    flex:0 0 auto;
+  }
+
+  .core{
+    overflow-x:auto;
+    grid-template-columns:repeat(6,minmax(105px,1fr));
+  }
+}
+
+
+
+
+/* PHORVA LIVE VERDICT — DECISION CONSOLE */
+.verdict{
+  position:relative;
+  overflow:hidden;
+  border-color:rgba(124,108,255,.18);
+  background:
+    radial-gradient(
+      circle at 88% 0%,
+      rgba(124,108,255,.10),
+      transparent 34%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(13,18,31,.98),
+      rgba(6,9,16,.99)
+    );
+}
+
+.verdict:before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:1px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(124,108,255,.55),
+    transparent
+  );
+}
+
+.verdict .panel-head{
+  position:relative;
+}
+
+.verdict-live{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  color:#69758b;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+.verdict-live:before{
+  content:"";
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#35d69a;
+  box-shadow:0 0 10px rgba(53,214,154,.65);
+  animation:phorvaPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes phorvaPulse{
+  0%,100%{opacity:.55;transform:scale(.9)}
+  50%{opacity:1;transform:scale(1.15)}
+}
+
+.verdict-decision{
+  margin-top:14px;
+  padding:18px;
+  border:1px solid rgba(130,150,190,.13);
+  border-radius:13px;
+  background:#070b13;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.018),
+    0 12px 30px rgba(0,0,0,.18);
+}
+
+.verdict-decision-row{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.verdict-decision-label{
+  color:#657188;
+  font-size:8px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+}
+
+.verdict-decision-value{
+  margin-top:5px;
+  color:#f2f5fa;
+  font-size:28px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:-.04em;
+}
+
+.verdict-risk{
+  min-width:76px;
+  padding:7px 10px;
+  border:1px solid rgba(130,150,190,.16);
+  border-radius:999px;
+  text-align:center;
+  color:#35d69a;
+  background:rgba(53,214,154,.07);
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+
+.verdict-evidence{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  margin-top:12px;
+  overflow:hidden;
+  border:1px solid rgba(130,150,190,.10);
+  border-radius:10px;
+  background:rgba(130,150,190,.08);
+}
+
+.verdict-evidence-item{
+  min-height:58px;
+  padding:10px;
+  background:#090e18;
+}
+
+.verdict-evidence-item small{
+  display:block;
+  color:#657188;
+  font-size:7px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.11em;
+}
+
+.verdict-evidence-item strong{
+  display:block;
+  margin-top:5px;
+  color:#e8edf6;
+  font-size:10px;
+  line-height:1.3;
+}
+
+.verdict-authorized{
+  border-color:rgba(53,214,154,.26);
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(53,214,154,.08),
+      transparent 42%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(10,24,22,.98),
+      rgba(6,12,17,.99)
+    );
+}
+
+.verdict-authorized .verdict-decision-value{
+  color:#35d69a;
+  text-shadow:0 0 20px rgba(53,214,154,.16);
+}
+
+.verdict-authorized .verdict-risk{
+  color:#35d69a;
+}
+
+.verdict-blocked{
+  border-color:rgba(255,84,112,.30);
+  background:
+    radial-gradient(
+      circle at 88% 0%,
+      rgba(255,84,112,.08),
+      transparent 34%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(25,11,18,.98),
+      rgba(9,7,14,.99)
+    );
+}
+
+.verdict-blocked .verdict-decision-value{
+  color:#ff5470;
+  text-shadow:0 0 20px rgba(255,84,112,.15);
+}
+
+.verdict-blocked .verdict-risk{
+  color:#ff5470;
+  background:rgba(255,84,112,.07);
+  border-color:rgba(255,84,112,.20);
+}
+
+@media(max-width:700px){
+  .verdict-decision{
+    padding:14px;
+  }
+
+  .verdict-decision-value{
+    font-size:24px;
+  }
+
+  .verdict-evidence{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+/* PHORVA EXECUTION GRAPH — VERIFIED PATH */
+.graph{
+  position:relative;
+  display:flex;
+  align-items:stretch;
+  gap:0;
+  padding:14px 4px 16px;
+  overflow-x:auto;
+  scrollbar-width:thin;
+}
+
+.graph:before{
+  content:"";
+  position:absolute;
+  left:34px;
+  right:34px;
+  top:50%;
+  height:1px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(124,108,255,.18),
+      rgba(124,108,255,.48),
+      rgba(124,108,255,.18),
+      transparent
+    );
+  pointer-events:none;
+}
+
+.graph-node{
+  position:relative;
+  z-index:2;
+  flex:0 0 150px;
+  min-width:150px;
+  min-height:108px;
+  padding:14px 12px 12px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  border:1px solid rgba(130,150,190,.13);
+  border-radius:12px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(12,17,29,.98),
+      rgba(6,10,17,.99)
+    );
+  box-shadow:
+    0 12px 28px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.018);
+  transition:
+    transform .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease,
+    background .18s ease;
+}
+
+.graph-node:hover{
+  transform:translateY(-3px);
+  border-color:rgba(124,108,255,.32);
+  box-shadow:
+    0 16px 34px rgba(0,0,0,.28),
+    0 0 22px rgba(124,108,255,.06);
+}
+
+.graph-index{
+  position:absolute;
+  top:8px;
+  right:9px;
+  color:#4f5b70;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.08em;
+  font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+}
+
+.graph-node small{
+  display:block;
+  color:#69758b;
+  font-size:8px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.13em;
+}
+
+.graph-node strong{
+  display:block;
+  max-width:128px;
+  margin-top:7px;
+  color:#e9edf5;
+  font-size:11px;
+  line-height:1.3;
+}
+
+.graph-detail{
+  display:block;
+  margin-top:6px;
+  color:#566278;
+  font-size:7px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.10em;
+}
+
+.graph-arrow{
+  position:relative;
+  z-index:3;
+  flex:0 0 34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#777dff;
+  font-size:17px;
+  text-shadow:0 0 14px rgba(119,125,255,.45);
+}
+
+.graph-core-node{
+  flex-basis:164px;
+  min-width:164px;
+  border-color:rgba(124,108,255,.42);
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(124,108,255,.18),
+      transparent 66%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(14,15,32,.99),
+      rgba(7,10,18,.99)
+    );
+  box-shadow:
+    0 0 0 1px rgba(124,108,255,.06),
+    0 0 34px rgba(124,108,255,.11),
+    0 14px 32px rgba(0,0,0,.30);
+}
+
+.graph-core-node small{
+  color:#9189ff;
+}
+
+.graph-core-node strong{
+  color:#f5f6fb;
+  font-size:12px;
+}
+
+.graph-core-node .graph-detail{
+  color:#7770d9;
+}
+
+.graph-final-node{
+  flex-basis:145px;
+  min-width:145px;
+}
+
+.graph-node.graph-good{
+  border-color:rgba(53,214,154,.42);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(53,214,154,.055),
+      rgba(7,12,19,.99)
+    );
+  box-shadow:
+    0 0 24px rgba(53,214,154,.055),
+    0 12px 30px rgba(0,0,0,.25);
+}
+
+.graph-node.graph-good small{
+  color:#35d69a;
+}
+
+.graph-node.graph-good .graph-detail{
+  color:#278e70;
+}
+
+.graph-node.graph-blocked{
+  border-color:rgba(255,84,112,.46);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,84,112,.055),
+      rgba(10,8,15,.99)
+    );
+  box-shadow:
+    0 0 24px rgba(255,84,112,.06),
+    0 12px 30px rgba(0,0,0,.25);
+}
+
+.graph-node.graph-blocked small{
+  color:#ff5470;
+}
+
+.graph-node.graph-blocked .graph-detail{
+  color:#a33f52;
+}
+
+@media(max-width:760px){
+  .graph{
+    justify-content:flex-start;
+    padding-bottom:12px;
+  }
+
+  .graph:before{
+    display:none;
+  }
+
+  .graph-node{
+    flex-basis:138px;
+    min-width:138px;
+  }
+
+  .graph-core-node{
+    flex-basis:152px;
+    min-width:152px;
+  }
+
+  .graph-arrow{
+    flex-basis:28px;
+  }
+}
+
+/* PHORVA TRACE — VERIFICATION CONSOLE */
+.trace{
+  position:relative;
+  padding:10px;
+  border:1px solid rgba(124,108,255,.16);
+  border-radius:14px;
+  background:
+    linear-gradient(145deg,rgba(8,12,21,.98),rgba(5,8,14,.99));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.018),
+    0 14px 36px rgba(0,0,0,.18);
+}
+
+.trace:before{
+  content:"VERIFICATION CONSOLE";
+  display:block;
+  padding:2px 4px 9px;
+  color:#7770d9;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.16em;
+}
+
+.trace-row{
+  position:relative;
+  display:grid;
+  grid-template-columns:28px minmax(130px,1fr) 88px;
+  align-items:center;
+  gap:10px;
+  min-height:43px;
+  padding:9px 11px;
+  border:1px solid rgba(130,150,190,.10);
+  border-radius:9px;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.018),rgba(255,255,255,.006));
+  transition:
+    border-color .16s ease,
+    background .16s ease,
+    transform .16s ease,
+    box-shadow .16s ease;
+}
+
+.trace-row:hover{
+  transform:translateX(2px);
+  border-color:rgba(124,108,255,.28);
+  background:rgba(124,108,255,.035);
+}
+
+.trace-row:has(.pass){
+  box-shadow:inset 2px 0 0 rgba(53,214,154,.28);
+}
+
+.trace-row:has(.fail){
+  border-color:rgba(255,84,112,.25);
+  background:
+    linear-gradient(90deg,rgba(255,84,112,.055),rgba(255,84,112,.012));
+  box-shadow:
+    inset 2px 0 0 rgba(255,84,112,.75),
+    0 0 18px rgba(255,84,112,.045);
+}
+
+.trace-row:before{
+  content:"✓";
+  width:22px;
+  height:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  font-size:10px;
+  font-weight:900;
+  color:#35d69a;
+  background:rgba(53,214,154,.08);
+  border:1px solid rgba(53,214,154,.18);
+}
+
+.trace-row:has(.fail):before{
+  content:"!";
+  color:#ff5470;
+  background:rgba(255,84,112,.08);
+  border-color:rgba(255,84,112,.22);
+}
+
+.trace-row .pass,
+.trace-row .fail{
+  justify-self:end;
+  min-width:70px;
+  text-align:center;
+  padding:5px 8px;
+  border-radius:999px;
+  font-size:8px;
+  letter-spacing:.10em;
+  border:1px solid transparent;
+}
+
+.trace-row .pass{
+  color:#35d69a;
+  background:rgba(53,214,154,.07);
+  border-color:rgba(53,214,154,.16);
+}
+
+.trace-row .fail{
+  color:#ff5470;
+  background:rgba(255,84,112,.08);
+  border-color:rgba(255,84,112,.20);
+}
+
+.trace-row strong{
+  color:#e8edf6;
+  font-size:10px;
+  font-weight:800;
+}
+
+.trace-row small{
+  display:block;
+  margin-top:3px;
+  color:#68748a;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.trace-summary{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:10px;
+  padding:10px 12px;
+  border:1px solid rgba(130,150,190,.10);
+  border-radius:9px;
+  background:#070b13;
+  color:#7e8aa0;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.trace-summary strong{
+  color:#e7ecf5;
+  font-size:10px;
+}
+
+@media(max-width:700px){
+  .trace-row{
+    grid-template-columns:26px minmax(100px,1fr) 72px;
+    gap:8px;
+    padding:9px;
+  }
+
+  .trace-row .pass,
+  .trace-row .fail{
+    min-width:58px;
+    padding:5px 6px;
+  }
+}
+
+
+/* PHORVA TRACE STATUS — LIVE VERIFICATION SUMMARY */
+.trace-status{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr 1fr;
+  gap:1px;
+  margin-bottom:10px;
+  border:1px solid rgba(124,108,255,.16);
+  border-radius:10px;
+  overflow:hidden;
+  background:rgba(124,108,255,.10);
+}
+
+.trace-status-cell{
+  min-height:48px;
+  padding:9px 11px;
+  background:#080d17;
+}
+
+.trace-status-cell small{
+  display:block;
+  color:#68748a;
+  font-size:7px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+
+.trace-status-cell strong{
+  display:block;
+  margin-top:5px;
+  color:#e8edf6;
+  font-size:11px;
+  font-weight:900;
+}
+
+.trace-status-cell.live strong{
+  color:#35d69a;
+}
+
+.trace-status-cell.blocked strong{
+  color:#ff5470;
+}
+
+.trace-status-cell.passed strong{
+  color:#35d69a;
+}
+
+.trace-status-cell.failed strong{
+  color:#ff5470;
+}
+
+@media(max-width:700px){
+  .trace-status{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+
+  .trace-status-cell:first-child{
+    grid-column:1/-1;
+  }
+}
+
+
+
+/* PHORVA STORY — INVESTOR V2 */
+.phorva-story-v2 {
+  padding: 30px;
+  overflow: hidden;
+}
+
+.phorva-story-v2 .story-hero-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.phorva-story-v2 h2 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(25px, 3.5vw, 38px);
+  line-height: 1.08;
+  letter-spacing: -.025em;
+}
+
+.phorva-story-v2 .story-lead {
+  max-width: 760px;
+  margin: 14px 0 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.story-core-badge {
+  flex: 0 0 180px;
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(143,140,255,.18);
+  background: rgba(92,76,255,.07);
+}
+
+.story-core-badge span {
+  display: block;
+  font-size: 9px;
+  letter-spacing: .18em;
+  color: #8f8cff;
+  font-weight: 800;
+}
+
+.story-core-badge strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.story-core-badge small {
+  display: block;
+  margin-top: 5px;
+  color: rgba(255,255,255,.45);
+}
+
+.story-compare {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.story-compare-card {
+  padding: 21px;
+  border-radius: 17px;
+  border: 1px solid rgba(255,255,255,.07);
+  background: rgba(255,255,255,.025);
+}
+
+.story-compare-card.active {
+  border-color: rgba(143,140,255,.2);
+  background:
+    radial-gradient(circle at 85% 10%, rgba(92,76,255,.11), transparent 45%),
+    rgba(255,255,255,.03);
+}
+
+.story-compare-card .story-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.story-compare-card .story-flow i {
+  color: #8f8cff;
+  font-style: normal;
+}
+
+.story-compare-card p {
+  margin: 13px 0 0;
+  color: rgba(255,255,255,.52);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.story-kicker-spaced {
+  margin-top: 27px;
+}
+
+.story-examples {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  margin-top: 13px;
+}
+
+.story-example {
+  min-height: 105px;
+  padding: 17px;
+}
+
+.story-example strong {
+  display: block;
+  font-size: 10px;
+  letter-spacing: .13em;
+}
+
+.story-example span {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.story-example b {
+  color: #fff;
+}
+
+.story-statement {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 18px;
+  padding: 17px;
+  border-radius: 14px;
+  border: 1px solid rgba(143,140,255,.13);
+  background: rgba(92,76,255,.055);
+  font-size: 13px;
+}
+
+.story-statement strong {
+  color: #a9a6ff;
+}
+
+.identity-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 23px;
+}
+
+.identity-column {
+  padding: 20px;
+  border-radius: 17px;
+  border: 1px solid rgba(255,255,255,.07);
+  background: rgba(255,255,255,.025);
+}
+
+.identity-column.is {
+  border-color: rgba(100,210,170,.13);
+}
+
+.identity-column.not {
+  border-color: rgba(255,130,130,.10);
+}
+
+.identity-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 15px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.identity-heading span {
+  font-size: 9px;
+  color: rgba(255,255,255,.32);
+  letter-spacing: .1em;
+}
+
+.identity-heading strong {
+  font-size: 11px;
+  letter-spacing: .13em;
+}
+
+.identity-item {
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+
+.identity-item:last-child {
+  border-bottom: 0;
+  padding-bottom: 2px;
+}
+
+.identity-item strong {
+  display: block;
+  font-size: 13px;
+  color: #fff;
+}
+
+.identity-item span {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255,255,255,.48);
+}
+
+.story-statement.compact {
+  justify-content: flex-start;
+}
+
+.story-statement.compact span {
+  color: rgba(255,255,255,.55);
+}
+
+@media (max-width: 760px) {
+  .phorva-story-v2 {
+    padding: 21px;
+  }
+
+  .phorva-story-v2 .story-hero-row {
+    display: block;
+  }
+
+  .story-core-badge {
+    margin-top: 18px;
+  }
+
+  .story-compare,
+  .story-examples,
+  .identity-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .story-compare-card .story-flow {
+    font-size: 12px;
+  }
+}
+
+</style>
+<style id="phorva-premium-overrides">
+
+/* =========================================================
+   PHORVA — INVESTOR MVP PREMIUM VISUAL LAYER
+   Visual-only. Does not modify application logic.
+   ========================================================= */
+
+:root{
+  --phorva-bg:#05070c;
+  --phorva-panel:#0a0f19;
+  --phorva-panel-2:#0d1320;
+  --phorva-border:rgba(142,158,194,.13);
+  --phorva-border-strong:rgba(124,108,255,.30);
+  --phorva-text:#f3f5fa;
+  --phorva-muted:#77839a;
+  --phorva-dim:#4f5b70;
+  --phorva-purple:#7c6cff;
+  --phorva-green:#35d69a;
+  --phorva-red:#ff5470;
+}
+
+html{
+  background:var(--phorva-bg);
+  scroll-behavior:smooth;
+}
+
+body{
+  background:
+    radial-gradient(circle at 50% -10%,rgba(76,64,190,.13),transparent 32%),
+    radial-gradient(circle at 100% 35%,rgba(55,75,160,.055),transparent 28%),
+    var(--phorva-bg);
+  color:var(--phorva-text);
+  -webkit-font-smoothing:antialiased;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:999;
+  background:
+    linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:linear-gradient(to bottom,black,transparent 72%);
+  opacity:.22;
+}
+
+/* Main surfaces */
+section,
+.panel,
+.card{
+  border-color:var(--phorva-border);
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.018);
+}
+
+.panel,
+.card{
+  background:
+    linear-gradient(145deg,
+      rgba(13,18,30,.96),
+      rgba(6,9,16,.985));
+}
+
+/* Section hierarchy */
+.panel-head{
+  position:relative;
+}
+
+.panel-head:after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-7px;
+  width:38px;
+  height:1px;
+  background:linear-gradient(
+    90deg,
+    var(--phorva-purple),
+    transparent
+  );
+  opacity:.65;
+}
+
+/* Hero area */
+.hero{
+  position:relative;
+}
+
+.hero:before{
+  content:"";
+  position:absolute;
+  width:420px;
+  height:420px;
+  left:50%;
+  top:-260px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(
+    circle,
+    rgba(124,108,255,.10),
+    rgba(124,108,255,.035) 35%,
+    transparent 70%
+  );
+  pointer-events:none;
+}
+
+/* Primary controls */
+button,
+.btn{
+  transition:
+    transform .18s ease,
+    border-color .18s ease,
+    background .18s ease,
+    box-shadow .18s ease;
+}
+
+button:hover,
+.btn:hover{
+  transform:translateY(-1px);
+  border-color:rgba(124,108,255,.42);
+  box-shadow:0 8px 24px rgba(0,0,0,.24);
+}
+
+button:active,
+.btn:active{
+  transform:translateY(0);
+}
+
+/* Existing verdict — make it feel like a system console */
+#verdict{
+  box-shadow:
+    0 22px 60px rgba(0,0,0,.30),
+    0 0 50px rgba(124,108,255,.035),
+    inset 0 1px 0 rgba(255,255,255,.025);
+}
+
+/* Execution Graph */
+#graph{
+  box-shadow:
+    0 20px 48px rgba(0,0,0,.24),
+    inset 0 1px 0 rgba(255,255,255,.018);
+}
+
+.graph-node{
+  backdrop-filter:blur(8px);
+}
+
+.graph-core-node{
+  box-shadow:
+    0 0 0 1px rgba(124,108,255,.08),
+    0 0 42px rgba(124,108,255,.13),
+    0 18px 38px rgba(0,0,0,.32);
+}
+
+/* Verification console */
+.trace{
+  box-shadow:
+    0 20px 48px rgba(0,0,0,.26),
+    0 0 28px rgba(124,108,255,.035),
+    inset 0 1px 0 rgba(255,255,255,.022);
+}
+
+/* Proof evidence */
+.payload-details{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.015);
+}
+
+/* Raw payload stays secondary */
+.payload-details summary{
+  letter-spacing:.14em;
+}
+
+/* Network / destination surfaces */
+.network,
+.destinations{
+  box-shadow:
+    0 18px 44px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.018);
+}
+
+/* Make status indicators feel operational */
+.status,
+.badge,
+.pill{
+  letter-spacing:.10em;
+}
+
+/* Responsive polish */
+@media(max-width:760px){
+
+  body:before{
+    background-size:48px 48px;
+    opacity:.13;
+  }
+
+  .hero:before{
+    width:280px;
+    height:280px;
+    top:-150px;
+  }
+
+  .panel,
+  .card{
+    box-shadow:
+      0 12px 32px rgba(0,0,0,.22),
+      inset 0 1px 0 rgba(255,255,255,.018);
+  }
+}
+
+</style>
+
+
+<style id="phorva-how-works">
+.how-works{margin-top:18px;position:relative;overflow:hidden;border:1px solid rgba(124,108,255,.16);border-radius:20px;background:linear-gradient(145deg,rgba(11,16,28,.98),rgba(6,9,16,.99));box-shadow:0 20px 55px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.018)}
+.how-works-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding:22px 22px 16px;border-bottom:1px solid rgba(130,150,190,.10)}
+.how-works-title{font-size:18px;font-weight:900;letter-spacing:-.02em;margin-top:5px}
+.how-works-copy{max-width:650px;color:#7f8ba0;font-size:11px;line-height:1.65;text-align:right}
+.how-works-body{padding:20px 22px 22px}
+.how-works-flow{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;border:1px solid rgba(124,108,255,.14);border-radius:14px;overflow:hidden;background:rgba(124,108,255,.08)}
+.how-node{position:relative;min-height:116px;padding:18px 14px;background:#080d17;display:flex;flex-direction:column;justify-content:center}
+.how-node:not(:last-child):after{content:"→";position:absolute;right:-7px;top:50%;transform:translateY(-50%);z-index:3;color:#777dff;font-size:15px;text-shadow:0 0 12px rgba(119,125,255,.45)}
+.how-node small{color:#657188;font-size:7px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+.how-node strong{margin-top:8px;color:#edf1f7;font-size:13px}
+.how-node span{margin-top:5px;color:#59667b;font-size:9px;line-height:1.45}
+.how-node.core{background:radial-gradient(circle at 50% 0%,rgba(124,108,255,.17),transparent 65%),#0a0d1c;border-left:1px solid rgba(124,108,255,.28);border-right:1px solid rgba(124,108,255,.28)}
+.how-node.core small{color:#9189ff}
+.how-node.verify{background:linear-gradient(145deg,rgba(53,214,154,.035),#080d17)}
+.how-node.proof{background:linear-gradient(145deg,rgba(124,108,255,.045),#080d17)}
+.execution-environments{margin-top:18px;padding:16px;border:1px solid rgba(130,150,190,.10);border-radius:14px;background:#070b13}
+.execution-environments-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.execution-environments-title{color:#e8edf6;font-size:11px;font-weight:900;letter-spacing:.04em}
+.execution-environments-sub{color:#657188;font-size:8px;text-transform:uppercase;letter-spacing:.10em}
+.environment-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:10px}
+.environment-group{padding:13px;border:1px solid rgba(130,150,190,.09);border-radius:11px;background:#090e18}
+.environment-group small{display:block;color:#7f8ba0;font-size:7px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;margin-bottom:9px}
+.environment-items{display:flex;flex-wrap:wrap;gap:7px}
+.environment-item{padding:7px 9px;border:1px solid rgba(130,150,190,.10);border-radius:8px;background:rgba(255,255,255,.018);color:#b7c0cf;font-size:9px}
+.environment-item strong{color:#f0f3f8}
+.how-works-note{margin-top:13px;color:#6d788d;font-size:9px;line-height:1.55}
+.how-works-note strong{color:#aeb7c7}
+@media(max-width:900px){.how-works-flow{grid-template-columns:repeat(3,1fr)}.how-node:nth-child(3):after,.how-node:nth-child(6):after{display:none}.how-works-copy{text-align:left}.how-works-head{align-items:flex-start;flex-direction:column}.environment-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.how-works-head,.how-works-body{padding-left:15px;padding-right:15px}.how-works-flow{grid-template-columns:1fr 1fr}.how-node:nth-child(2n):after{display:none}.how-node{min-height:105px}.execution-environments-head{align-items:flex-start;flex-direction:column}}
+
+/* PHORVA DEVELOPER INTEGRATION */
+.developer-integration{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:14px;
+}
+
+.dev-card{
+  border:1px solid rgba(130,150,190,.12);
+  border-radius:14px;
+  background:
+    linear-gradient(145deg,rgba(9,14,24,.98),rgba(5,8,14,.99));
+  overflow:hidden;
+}
+
+.dev-card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:13px 15px;
+  border-bottom:1px solid rgba(130,150,190,.10);
+}
+
+.dev-card-head strong{
+  color:#e9edf5;
+  font-size:11px;
+}
+
+.dev-card-head span{
+  color:#69758b;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+
+.dev-code{
+  margin:0;
+  padding:15px;
+  color:#aeb9cc;
+  background:#05080f;
+  font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  font-size:9px;
+  line-height:1.7;
+  white-space:pre-wrap;
+  overflow:auto;
+}
+
+.dev-code .key{
+  color:#9189ff;
+}
+
+.dev-code .string{
+  color:#9fd8c3;
+}
+
+.dev-code .number{
+  color:#d5b8ff;
+}
+
+.dev-verification{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.dev-step{
+  display:grid;
+  grid-template-columns:34px 1fr auto;
+  align-items:center;
+  gap:10px;
+  min-height:48px;
+  padding:9px 11px;
+  border:1px solid rgba(130,150,190,.10);
+  border-radius:10px;
+  background:#090e19;
+}
+
+.dev-step-index{
+  width:26px;
+  height:26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  color:#9189ff;
+  background:rgba(124,108,255,.08);
+  border:1px solid rgba(124,108,255,.16);
+  font-size:8px;
+  font-weight:900;
+}
+
+.dev-step strong{
+  display:block;
+  color:#e8edf6;
+  font-size:10px;
+}
+
+.dev-step small{
+  display:block;
+  margin-top:3px;
+  color:#66738a;
+  font-size:8px;
+}
+
+.dev-step-status{
+  color:#35d69a;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.10em;
+}
+
+.dev-connector{
+  width:1px;
+  height:9px;
+  margin-left:23px;
+  background:rgba(124,108,255,.28);
+}
+
+.dev-result{
+  margin-top:10px;
+  padding:13px;
+  border:1px solid rgba(53,214,154,.18);
+  border-radius:11px;
+  background:
+    linear-gradient(145deg,rgba(53,214,154,.045),rgba(7,12,18,.98));
+}
+
+.dev-result-label{
+  color:#657188;
+  font-size:7px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+}
+
+.dev-result-main{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:5px;
+}
+
+.dev-result-main strong{
+  color:#35d69a;
+  font-size:17px;
+}
+
+.dev-result-main span{
+  color:#35d69a;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.10em;
+}
+
+.dev-result-sub{
+  margin-top:8px;
+  color:#77839a;
+  font-size:9px;
+  line-height:1.5;
+}
+
+.dev-endpoints{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-top:10px;
+}
+
+.dev-endpoint{
+  padding:10px;
+  border:1px solid rgba(130,150,190,.10);
+  border-radius:9px;
+  background:#080d17;
+}
+
+.dev-endpoint code{
+  color:#9189ff;
+  font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  font-size:9px;
+}
+
+.dev-endpoint span{
+  display:block;
+  margin-top:4px;
+  color:#66738a;
+  font-size:8px;
+  line-height:1.4;
+}
+
+.dev-action{
+  width:100%;
+  margin-top:10px;
+  padding:11px 13px;
+  border:1px solid rgba(124,108,255,.30);
+  border-radius:10px;
+  background:
+    linear-gradient(145deg,rgba(124,108,255,.13),rgba(124,108,255,.055));
+  color:#eef2f8;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+@media(max-width:800px){
+  .developer-integration{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:600px){
+  .dev-endpoints{
+    grid-template-columns:1fr;
+  }
+}
+
+</style>
+
+/* PHORVA DEVELOPER PLAYGROUND */
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#0b0f14;color:#f5f7fa}
-.container{max-width:900px;margin:auto;padding:24px}
-h1{margin-bottom:4px}
-.subtitle{color:#8d99a8;margin-bottom:28px}
-.card{background:#121821;border:1px solid #26303d;border-radius:14px;padding:20px;margin-bottom:18px}
-h2{font-size:18px;margin-top:0}
-label{display:block;margin-top:14px;margin-bottom:6px;color:#aeb8c5;font-size:14px}
-input,select{width:100%;padding:12px;border-radius:8px;border:1px solid #303b49;background:#0d131b;color:white;font-size:15px}
-button{width:100%;padding:15px;border:0;border-radius:9px;background:#fff;color:#080b0f;font-size:16px;font-weight:bold;cursor:pointer;margin-top:18px}
-pre{white-space:pre-wrap;word-break:break-word;background:#090d12;border:1px solid #26303d;border-radius:10px;padding:15px;overflow-x:auto;color:#cdd6e0}
-.result{display:none}
-.status{font-size:25px;font-weight:bold;margin-bottom:15px}
-.authorized{color:#55d68a}
-.blocked{color:#ff6262}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.check{padding:10px 0;border-bottom:1px solid #222b35}
-.good{color:#55d68a}
-.bad{color:#ff6262}
-.small{color:#8995a3;font-size:13px}
-.decoder{font-family:monospace}
-@media(max-width:650px){.row{grid-template-columns:1fr}}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>🛡️ AgentGuard</h1>
-<div class="subtitle">Execution security for autonomous AI agents</div>
-
-<div class="card">
-<h2>1. Agent & Action</h2>
-
-<label>Agent Name</label>
-<input id="agent" value="TradingAgent-01">
-
-<div class="row">
-<div>
-<label>Action</label>
-<select id="actionType">
-<option value="Swap">Swap</option>
-<option value="Transfer">Transfer</option>
-<option value="Trade">Trade</option>
-</select>
-</div>
-
-<div>
-<label>Blockchain</label>
-<select id="chain">
-<option value="Base" selected>Base Sepolia</option>
-<option value="Ethereum">Ethereum</option>
-<option value="Arbitrum">Arbitrum</option>
-</select>
-</div>
-</div>
-
-<div class="row">
-<div>
-<label>Protocol</label>
-<select id="protocol">
-<option value="Uniswap">Uniswap</option>
-<option value="Aave">Aave</option>
-<option value="Polymarket">Polymarket</option>
-</select>
-</div>
-
-<div>
-<label>Asset</label>
-<select id="asset">
-<option value="USDC">USDC</option>
-<option value="ETH">ETH</option>
-<option value="USDT">USDT</option>
-</select>
-</div>
-</div>
-
-<label>Transaction Amount</label>
-<input id="amount" type="number" value="300">
-
-</div>
-
-<div class="card">
-<h2>2. Declared Intent</h2>
-<p class="small">What the AI agent says it intends to do.</p>
-
-<label>Intent Amount</label>
-<input id="intentAmount" type="number" value="300">
-
-<label>Intent Asset</label>
-<select id="intentAsset">
-<option value="USDC">USDC</option>
-<option value="ETH">ETH</option>
-<option value="USDT">USDT</option>
-</select>
-</div>
-
-<div class="card">
-<h2>3. Agent Policy</h2>
-
-<label>Maximum Transaction</label>
-<input id="maxTransaction" type="number" value="500">
-
-<label>Daily Spending Limit</label>
-<input id="dailyLimit" type="number" value="2000">
-</div>
-
-<div class="card">
-<h2>4. Transaction Being Inspected</h2>
-
-<p class="small">
-AgentGuard will construct the transaction data and the backend will decode the EVM function selector.
-</p>
-
-<label>Destination Contract</label>
-<select id="destination">
-<option value="known">Known Uniswap Router</option>
-<option value="unknown">Unknown Contract</option>
-</select>
-
-<label>EVM Function</label>
-<select id="function">
-<option value="swap">Universal Router execute (V2 exact-in)</option>
-<option value="approve">approve</option>
-<option value="approvalForAll">setApprovalForAll</option>
-<option value="transfer">transfer</option>
-<option value="ownership">transferOwnership</option>
-<option value="unknown">Unknown Function</option>
-</select>
-
-<label>Token Approval</label>
-<select id="approval">
-<option value="normal">Normal Approval</option>
-<option value="unlimited">Unlimited Approval</option>
-</select>
-
-<button onclick="authorize()">🔍 ANALYZE & AUTHORIZE</button>
-</div>
-
-<div class="card result" id="rawCard">
-<h2>🔎 Raw EVM Transaction</h2>
-<pre id="rawTransaction"></pre>
-</div>
-
-<div class="card result" id="decoderCard">
-<h2>🧩 Decoded Transaction</h2>
-<div class="check">Contract: <span id="decodedContract"></span></div>
-<div class="check">Protocol: <span id="decodedProtocol"></span></div>
-<div class="check">Selector: <span id="decodedSelector"></span></div>
-<div class="check">Function: <span id="decodedFunction"></span></div>
-<div class="check">Category: <span id="decodedCategory"></span></div>
-</div>
-
-<div class="card result" id="resultCard">
-
-<div id="status" class="status"></div>
-
-<div class="check">Policy: <span id="policyResult"></span></div>
-<div class="check">Intent: <span id="intentResult"></span></div>
-<div class="check">Protocol: <span id="protocolResult"></span></div>
-<div class="check">Contract: <span id="contractResult"></span></div>
-<div class="check">Transaction Security: <span id="securityResult"></span></div>
-<div class="check">Risk: <span id="riskResult"></span></div>
-
-<h3>Reason</h3>
-<p id="reason"></p>
-
-<h3>Security Flags</h3>
-<pre id="flags"></pre>
-
-</div>
-
-</div>
-
-<script>
-
-const selectors = {
-  swap: "0x3593564c",
-  approve: "0x095ea7b3",
-  approvalForAll: "0xa22cb465",
-  transfer: "0xa9059cbb",
-  ownership: "0xf2fde38b",
-  unknown: "0xdeadbeef"
-};
-
-function getChainId(chain) {
-  if (chain === "Ethereum") return 1;
-  if (chain === "Arbitrum") return 42161;
-  return 84532;
+.developer-playground{
+  border:1px solid rgba(142,158,195,.14);
+  border-radius:16px;
+  padding:16px;
+  background:linear-gradient(145deg,rgba(12,18,32,.82),rgba(5,8,15,.92));
 }
 
-async function authorize() {
+.dev-scenario-tabs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-bottom:12px;
+}
 
-  const agent =
-    document.getElementById("agent").value;
+.dev-scenario{
+  text-align:left;
+  border:1px solid rgba(142,158,195,.12);
+  background:rgba(255,255,255,.025);
+  color:#eef2f8;
+  border-radius:10px;
+  padding:12px;
+  cursor:pointer;
+}
 
-  const actionType =
-    document.getElementById("actionType").value;
+.dev-scenario.active{
+  border-color:rgba(124,108,255,.48);
+  background:rgba(124,108,255,.10);
+}
 
-  const chain =
-    document.getElementById("chain").value;
+.dev-scenario strong,
+.dev-scenario span{
+  display:block;
+}
 
-  const protocol =
-    document.getElementById("protocol").value;
+.dev-scenario strong{
+  font-size:11px;
+  letter-spacing:.1em;
+}
 
-  const asset =
-    document.getElementById("asset").value;
+.dev-scenario span{
+  margin-top:4px;
+  color:#7c879b;
+  font-size:9px;
+}
 
-  const amount =
-    Number(document.getElementById("amount").value);
+.developer-playground-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
 
-  const intentAmount =
-    Number(document.getElementById("intentAmount").value);
+.dev-fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:12px;
+}
 
-  const intentAsset =
-    document.getElementById("intentAsset").value;
+.dev-fields label{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
 
-  const maxTransaction =
-    Number(document.getElementById("maxTransaction").value);
+.dev-fields label span{
+  color:#68758a;
+  font-size:9px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
 
-  const dailyLimit =
-    Number(document.getElementById("dailyLimit").value);
+.dev-fields input,
+.dev-fields select{
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid rgba(142,158,195,.12);
+  background:#070b13;
+  color:#eef2f8;
+  border-radius:8px;
+  padding:9px;
+  font-size:10px;
+  outline:none;
+}
 
-  const destination =
-    document.getElementById("destination").value;
+.dev-playground-action{
+  width:calc(100% - 24px);
+  margin:0 12px 12px;
+  border:1px solid rgba(124,108,255,.38);
+  background:rgba(124,108,255,.13);
+  color:#fff;
+  border-radius:9px;
+  padding:11px;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.1em;
+  cursor:pointer;
+}
 
-  const functionType =
-    document.getElementById("function").value;
+.dev-verdict-grid{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  gap:8px;
+  padding:12px;
+}
 
-  const approval =
-    document.getElementById("approval").value;
+.dev-verdict-grid > div{
+  border:1px solid rgba(142,158,195,.09);
+  border-radius:9px;
+  padding:11px;
+  background:rgba(255,255,255,.025);
+}
 
-  const chainId =
-    getChainId(chain);
+.dev-verdict-grid small,
+.dev-proof-mini small{
+  display:block;
+  color:#68758a;
+  font-size:8px;
+  letter-spacing:.12em;
+}
 
-  /*
-   * Base Sepolia verified Uniswap Universal Router.
-   */
-  const to =
-    destination === "known"
-      ? "0x492e6456d9528771018deb9e87ef7750ef184104"
-      : "0x000000000000000000000000000000000000dEaD";
+.dev-verdict-grid strong{
+  display:block;
+  margin-top:5px;
+  font-size:15px;
+}
 
-  const selector =
-    selectors[functionType];
+.dev-mini-checks{
+  display:grid;
+  gap:6px;
+  padding:0 12px 12px;
+}
 
-  function word(value) {
-    return BigInt(value)
-      .toString(16)
-      .padStart(64, "0");
+.dev-mini-checks > div{
+  display:grid;
+  grid-template-columns:25px 1fr auto;
+  align-items:center;
+  gap:7px;
+  padding:8px 9px;
+  border:1px solid rgba(142,158,195,.07);
+  background:rgba(255,255,255,.018);
+  border-radius:7px;
+}
+
+.dev-mini-checks span{
+  color:#566277;
+  font-size:8px;
+}
+
+.dev-mini-checks strong{
+  font-size:10px;
+}
+
+.dev-mini-checks em{
+  color:#7c879b;
+  font-size:8px;
+  font-style:normal;
+}
+
+.dev-proof-mini{
+  margin:0 12px 12px;
+  padding:11px;
+  border:1px solid rgba(142,158,195,.08);
+  border-radius:9px;
+  background:#060a11;
+}
+
+.dev-proof-mini strong,
+.dev-proof-mini code{
+  display:block;
+  margin-top:5px;
+}
+
+.dev-proof-mini strong{
+  font-size:9px;
+}
+
+.dev-proof-mini code{
+  color:#68758a;
+  font-size:8px;
+  word-break:break-all;
+}
+
+.dev-boundary{
+  margin:0 12px 12px;
+  padding:10px;
+  border:1px solid rgba(255,170,70,.20);
+  border-radius:8px;
+  background:rgba(255,150,50,.05);
+}
+
+.dev-boundary strong,
+.dev-boundary span{
+  display:block;
+}
+
+.dev-boundary strong{
+  font-size:9px;
+}
+
+.dev-boundary span{
+  margin-top:4px;
+  color:#8b94a5;
+  font-size:8px;
+  line-height:1.5;
+}
+
+.dev-playground-empty{
+  min-height:240px;
+  display:grid;
+  place-items:center;
+  color:#596579;
+  font-size:10px;
+  text-align:center;
+}
+
+.dev-json-toggle{
+  padding:0 12px 12px;
+}
+
+.dev-json-toggle button{
+  border:0;
+  background:transparent;
+  color:#68758a;
+  padding:0;
+  font-size:8px;
+  letter-spacing:.08em;
+  cursor:pointer;
+}
+
+.dev-json-toggle pre{
+  max-height:230px;
+  overflow:auto;
+  margin-top:8px;
+  padding:10px;
+  background:#05080e;
+  border:1px solid rgba(142,158,195,.08);
+  border-radius:8px;
+  color:#8995aa;
+  font-size:8px;
+  line-height:1.5;
+}
+
+.dev-playground-endpoints{
+  margin-top:14px;
+  padding-top:13px;
+  border-top:1px solid rgba(142,158,195,.08);
+}
+
+.dev-endpoints{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:8px;
+}
+
+.dev-endpoints code{
+  color:#7c879b;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(142,158,195,.08);
+  border-radius:6px;
+  padding:5px 7px;
+  font-size:8px;
+}
+
+@media(max-width:800px){
+  .developer-playground-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:600px){
+  .dev-scenario-tabs{
+    grid-template-columns:1fr;
   }
 
-  function addressWord(address) {
-    return address
-      .toLowerCase()
-      .replace(/^0x/, "")
-      .padStart(64, "0");
+  .dev-fields{
+    grid-template-columns:1fr;
   }
 
-  const calldataAmount =
-    window.__agentguardTestAmount !== undefined
-      ? Number(window.__agentguardTestAmount)
-      : Number(amount);
-
-  let calldata;
-
-  /*
-   * Universal Router execute(bytes,bytes[])
-   *
-   * One command:
-   *   0x08 = V2_SWAP_EXACT_IN
-   *
-   * The command input matches the AgentGuard decoder:
-   *
-   *   address recipient
-   *   uint256 amountIn
-   *   uint256 amountOutMin
-   *   address[] path
-   *   bool payerIsUser
-   */
-  if (functionType === "swap") {
-
-    const recipient =
-      addressWord(
-        "0x3333333333333333333333333333333333333333"
-      );
-
-    const amountIn =
-      word(calldataAmount);
-
-    const amountOutMin =
-      word(
-        Math.max(
-          0,
-          Math.floor(calldataAmount * 0.96)
-        )
-      );
-
-    /*
-     * The path starts after five 32-byte head words:
-     *
-     * recipient
-     * amountIn
-     * amountOutMin
-     * pathOffset
-     * payerIsUser
-     *
-     * 5 * 32 = 160 bytes
-     */
-    const pathOffset =
-      word(160);
-
-    const payerIsUser =
-      word(1);
-
-    const pathLength =
-      word(2);
-
-    const tokenA =
-      addressWord(
-        "0x1111111111111111111111111111111111111111"
-      );
-
-    const tokenB =
-      addressWord(
-        "0x2222222222222222222222222222222222222222"
-      );
-
-    const commandInput =
-      recipient +
-      amountIn +
-      amountOutMin +
-      pathOffset +
-      payerIsUser +
-      pathLength +
-      tokenA +
-      tokenB;
-
-    /*
-     * execute(bytes commands, bytes[] inputs)
-     *
-     * ABI head:
-     *   commands offset = 0x40
-     *   inputs offset   = 0x80
-     */
-    const commandsOffset =
-      word(64);
-
-    const inputsOffset =
-      word(128);
-
-    /*
-     * commands = one byte: 0x08
-     *
-     * Dynamic bytes encoding:
-     *   length = 1
-     *   data   = 08
-     *   padding
-     */
-    const commands =
-      word(1) +
-      "08".padEnd(64, "0");
-
-    /*
-     * bytes[] inputs:
-     *
-     * length = 1
-     * first element offset = 0x20
-     * element length = commandInput.length / 2
-     * element data
-     */
-    const inputArray =
-      word(1) +
-      word(32) +
-      word(commandInput.length / 2) +
-      commandInput;
-
-    calldata =
-      selector +
-      commandsOffset +
-      inputsOffset +
-      commands +
-      inputArray;
-
-  } else {
-
-    const encodedAmount =
-      approval === "unlimited" &&
-      functionType === "approve"
-        ? "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-        : word(calldataAmount);
-
-    calldata =
-      selector +
-      encodedAmount;
+  .dev-verdict-grid{
+    grid-template-columns:1fr;
   }
+}
+</style>
 
-  const transaction = {
-
-    from: "0xAgentWallet",
-
-    to,
-
-    chainId,
-
-    expectedChainId: chainId,
-
-    value: "0",
-
-    calldata,
-
-    token: asset,
-
-    amount,
-
-    approvalAmount:
-      approval === "unlimited"
-        ? "MAX_UINT256"
-        : amount,
-
-    destinationAllowed:
-      destination === "known"
-  };
-
-  document.getElementById("rawCard").style.display = "block";
-
-  document.getElementById("rawTransaction").textContent =
-    JSON.stringify(transaction, null, 2);
-
-  try {
-
-    const response =
-      await fetch("http://127.0.0.1:3000/authorize", {
-
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-
-          agent,
-
-          action: {
-            type: actionType,
-            chain,
-            protocol,
-            asset,
-            amount
-          },
-
-          intent: {
-            type: actionType,
-            chain,
-            protocol,
-            asset: intentAsset,
-            amount: intentAmount
-          },
-
-          policy: {
-            maxTransaction,
-            dailyLimit
-          },
-
-          transaction
-
-        })
-
-      });
-
-    const data =
-      await response.json();
-
-    document.getElementById("decoderCard").style.display = "block";
-    document.getElementById("resultCard").style.display = "block";
-
-    const decoded =
-      data.decodedTransaction;
-
-    document.getElementById("decodedContract").textContent =
-      decoded.contract;
-
-    document.getElementById("decodedProtocol").textContent =
-      decoded.protocol;
-
-    document.getElementById("decodedSelector").textContent =
-      decoded.selector;
-
-    document.getElementById("decodedFunction").textContent =
-      decoded.function;
-
-    document.getElementById("decodedCategory").textContent =
-      decoded.category;
-
-    const status =
-      document.getElementById("status");
-
-    if (data.proof && data.proof.commitment) {
-      result.innerHTML += `
-        <div style="margin-top:16px;padding:14px;border:1px solid #333;border-radius:10px">
-          <strong>🔐 Proof Commitment</strong>
-          <div style="word-break:break-all;margin-top:8px;font-family:monospace">
-            ${data.proof.commitment}
-          </div>
-          <div style="margin-top:6px;opacity:.7">
-            ${data.proof.algorithm || "SHA-256"} · ${data.proof.version || "agentguard-proof-v1"}
+</head>
+<body><div class="app">
+<header class="topbar"><div class="brand"><div class="logo"><img src="/phorva-logo.png" alt="Phorva logo"></div><div><div class="brand-name">PHORVA</div><div class="brand-sub">VERIFIABLE EXECUTION INFRASTRUCTURE</div></div></div><div class="status"><span class="dot"></span> Verification engine online</div></header>
+<section class="hero"><div class="eyebrow">SECURITY + VERIFICATION FOR AUTONOMOUS AGENTS</div><h1>Agents can act autonomously.<br>Phorva makes their actions verifiable.</h1><p>Phorva sits between autonomous agents and execution infrastructure, evaluating intent, policy, risk and transaction semantics before an action is authorized.</p><div class="flow"><div class="flow-item">Agent</div><span class="arrow">→</span><div class="flow-item">Intent</div><span class="arrow">→</span><div class="flow-item core">PHORVA CORE</div><span class="arrow">→</span><div class="flow-item">Verification</div><span class="arrow">→</span><div class="flow-item">Verified Action</div></div></section>
+<section class="how-works">
+  <div class="how-works-head">
+    <div>
+      <div class="panel-label">HOW PHORVA WORKS</div>
+      <div class="how-works-title">Verification before autonomous execution</div>
+    </div>
+    <div class="how-works-copy">Autonomous agents decide what they want to do. Phorva evaluates whether the resulting execution matches the declared intent and authorization conditions.</div>
+  </div>
+  <div class="how-works-body">
+    <div class="how-works-flow">
+      <div class="how-node"><small>01 · SOURCE</small><strong>Agent</strong><span>An autonomous system proposes an action.</span></div>
+      <div class="how-node"><small>02 · DECLARATION</small><strong>Intent</strong><span>What the agent is authorized to accomplish.</span></div>
+      <div class="how-node core"><small>03 · VERIFICATION</small><strong>Phorva Core</strong><span>Policy · Risk · Authorization · Validation</span></div>
+      <div class="how-node"><small>04 · OBSERVATION</small><strong>Execution</strong><span>What actually happens in the execution environment.</span></div>
+      <div class="how-node verify"><small>05 · CHECK</small><strong>Verification</strong><span>Execution is checked against intent and authorization.</span></div>
+      <div class="how-node proof"><small>06 · EVIDENCE</small><strong>Proof-Carrying Action</strong><span>Execution evidence becomes canonical, verifiable output.</span></div>
+    </div>
+    <div class="execution-environments">
+      <div class="execution-environments-head">
+        <div class="execution-environments-title">ONE VERIFICATION LAYER. MULTIPLE EXECUTION ENVIRONMENTS.</div>
+        <div class="execution-environments-sub">Phorva governs the action · the environment executes it</div>
+      </div>
+      <div class="environment-grid">
+        <div class="environment-group">
+          <small>Blockchain</small>
+          <div class="environment-items">
+            <div class="environment-item"><strong>Wallets</strong> · agent-controlled assets</div>
+            <div class="environment-item"><strong>DeFi</strong> · protocols & strategies</div>
+            <div class="environment-item"><strong>Prediction Markets</strong> · market actions</div>
+            <div class="environment-item"><strong>Gaming</strong> · autonomous economies</div>
+            <div class="environment-item"><strong>DAOs</strong> · treasury operations</div>
+            <div class="environment-item"><strong>Treasuries</strong> · capital movement</div>
+            <div class="environment-item"><strong>Automation</strong> · on-chain execution</div>
           </div>
         </div>
-      `;
+        <div class="environment-group">
+          <small>Payments</small>
+          <div class="environment-items">
+            <div class="environment-item"><strong>Agent Payments</strong> · machine payments</div>
+            <div class="environment-item"><strong>Virtual Card</strong> · autonomous online spend</div>
+          </div>
+        </div>
+      </div>
+      <div class="how-works-note"><strong>Phorva does not replace the execution layer.</strong> It verifies and governs the actions moving through it. Virtual Card execution is a future rail using existing regulated payment infrastructure; Phorva is not the card issuer.</div>
+    </div>
+  </div>
+</section>
+<div class="grid">
+<section class="panel"><div class="panel-head"><div>
+
+<!-- PHORVA STORY — STEP 3 + STEP 4 -->
+<section class="phorva-story phorva-story-v2" id="why-phorva">
+
+  <div class="story-kicker">WHY PHORVA EXISTS</div>
+
+  <div class="story-hero-row">
+    <div>
+      <h2>Autonomous agents are becoming economic actors.</h2>
+      <p class="story-lead">
+        They can decide, transact and execute. The missing layer is verification:
+        knowing whether the action that actually happened is the action the agent
+        was authorized to take.
+      </p>
+    </div>
+
+    <div class="story-core-badge">
+      <span>PHORVA</span>
+      <strong>Intent → Execution</strong>
+      <small>Verification layer</small>
+    </div>
+  </div>
+
+  <div class="story-compare">
+
+    <div class="story-compare-card muted">
+      <div class="story-card-label">WITHOUT PHORVA</div>
+      <div class="story-flow">
+        Agent Intent
+        <i>→</i>
+        Transaction
+        <i>→</i>
+        Execution
+      </div>
+      <p>
+        The system may know that a transaction was signed,
+        but not whether the resulting execution matched the intended action.
+      </p>
+    </div>
+
+    <div class="story-compare-card active">
+      <div class="story-card-label">WITH PHORVA</div>
+      <div class="story-flow">
+        Intent
+        <i>→</i>
+        Policy
+        <i>→</i>
+        Risk
+        <i>→</i>
+        Authorization
+        <i>→</i>
+        Execution
+        <i>→</i>
+        Verification
+        <i>→</i>
+        Proof
+      </div>
+      <p>
+        Phorva establishes what was intended, what was executed,
+        whether it matched, and what evidence was produced.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="story-kicker story-kicker-spaced">WHERE IT MATTERS</div>
+
+  <div class="story-examples">
+    <div class="story-example">
+      <strong>DEFI</strong>
+      <span>Authorized swap: $300.<br>Attempted execution: $3,000.<br><b>Phorva blocks it.</b></span>
+    </div>
+
+    <div class="story-example">
+      <strong>PAYMENTS</strong>
+      <span>Agent receives defined spending conditions.<br><b>Execution is checked against them.</b></span>
+    </div>
+
+    <div class="story-example">
+      <strong>PREDICTION · GAMING · AUTOMATION</strong>
+      <span>Agent proposes an action.<br><b>Execution becomes verifiable evidence.</b></span>
+    </div>
+  </div>
+
+  <div class="story-statement">
+    <span>Agents decide.</span>
+    <span>Execution systems execute.</span>
+    <strong>Phorva verifies.</strong>
+  </div>
+
+</section>
+
+<section class="phorva-story phorva-not phorva-story-v2" id="what-phorva-is">
+
+  <div class="story-kicker">WHAT PHORVA IS — AND IS NOT</div>
+
+  <div class="story-hero-row">
+    <div>
+      <h2>A verification layer, not another execution platform.</h2>
+      <p class="story-lead">
+        Phorva sits between autonomous agents and the systems where their
+        actions execute.
+      </p>
+    </div>
+  </div>
+
+  <div class="identity-grid">
+
+    <div class="identity-column is">
+      <div class="identity-heading">
+        <span>01</span>
+        <strong>PHORVA IS</strong>
+      </div>
+
+      <div class="identity-item">
+        <strong>Verification infrastructure</strong>
+        <span>Security and verification for autonomous execution.</span>
+      </div>
+
+      <div class="identity-item">
+        <strong>Intent verification</strong>
+        <span>Checks execution against the declared objective.</span>
+      </div>
+
+      <div class="identity-item">
+        <strong>Policy · Risk · Authorization</strong>
+        <span>Evaluates whether proposed execution satisfies its conditions.</span>
+      </div>
+
+      <div class="identity-item">
+        <strong>Execution verification</strong>
+        <span>Checks what actually happened against what was authorized.</span>
+      </div>
+
+      <div class="identity-item">
+        <strong>Proof-carrying actions</strong>
+        <span>Produces canonical evidence from verified execution.</span>
+      </div>
+    </div>
+
+    <div class="identity-column not">
+      <div class="identity-heading">
+        <span>02</span>
+        <strong>PHORVA IS NOT</strong>
+      </div>
+
+      <div class="identity-item">
+        <strong>Not an agent wallet</strong>
+        <span>Does not hold assets or replace wallet infrastructure.</span>
+      </div>
+
+      <div class="identity-item">
+        <strong>Not a prover marketplace</strong>
+        <span>Defines verification semantics; proving infrastructure supplies machinery.</span>
+      </div>
+
+      <div class="identity-item">
+        <strong>Not an agent platform</strong>
+        <span>Agents are built and operated by developers.</span>
+      </div>
+
+      <div class="identity-item">
+        <strong>Not an execution environment</strong>
+        <span>Does not replace blockchains, payment rails or wallets.</span>
+      </div>
+
+      <div class="identity-item">
+        <strong>Not a card issuer</strong>
+        <span>Virtual Card is a future execution rail using existing regulated infrastructure.</span>
+      </div>
+
+      <div class="identity-item">
+        <strong>Not the agent's decision-maker</strong>
+        <span>Phorva verifies whether attempted actions are authorized and consistent with intent.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="story-statement compact">
+    <strong>Phorva does not replace the execution layer.</strong>
+    <span>It verifies and governs the actions moving through it.</span>
+  </div>
+
+</section>
+
+<div class="panel-label">CORE PIPELINE</div><div class="panel-title">Phorva Verification Engine</div></div><div class="live">LIVE</div></div><div class="panel-body"><div class="core"><div class="core-node active"><span>01</span><strong>Intent</strong></div><div class="core-node active"><span>02</span><strong>Policy</strong></div><div class="core-node active"><span>03</span><strong>Risk</strong></div><div class="core-node active"><span>04</span><strong>Authorization</strong></div><div class="core-node active"><span>05</span><strong>Validation</strong></div><div class="core-node active"><span>06</span><strong>Execution</strong></div></div><div style="height:20px"></div><div class="panel-label">LIVE EXECUTION SIMULATOR</div><div class="sim" style="margin-top:10px"><button class="demo authorized" onclick="runDemo(300)"><h3>✓ Authorized execution</h3><p>Declared intent: swap 300 USDC</p><div class="amount">300 USDC</div><p>Max transaction: 500 USDC</p></button><button class="demo attack" onclick="runDemo(3000)"><h3>⚠ Simulate attack</h3><p>Declared intent: swap 300 USDC</p><div class="amount">3,000 USDC</div><p>Attempted execution exceeds authorized intent</p></button></div><div id="verdict" class="verdict"><div class="verdict-head"><div><div class="panel-label">LIVE PHORVA VERDICT</div><div id="verdictName" class="verdict-name"></div></div><div id="risk" class="verdict-name"></div></div><div id="checks" class="checks"></div><details class="payload-details">
+  <summary>View verification payload</summary>
+  <div id="raw" class="raw"></div>
+</details></div></div></section>
+<section class="panel"><div class="panel-head"><div><div class="panel-label">NETWORK STATUS</div><div class="panel-title">Verification Environment</div></div></div><div class="panel-body"><div class="stats"><div class="stat"><small>Chains</small><strong>3</strong></div><div class="stat"><small>Providers</small><strong>2</strong></div><div class="stat"><small>Tests</small><strong>87/87</strong></div></div><div style="height:18px"></div><div class="trace"><div class="trace-row"><span>Base Sepolia</span><span class="pass">CONNECTED</span></div><div class="trace-row"><span>Ethereum Sepolia</span><span class="pass">CONNECTED</span></div><div class="trace-row"><span>Arbitrum Sepolia</span><span class="pass">CONNECTED</span></div><div class="trace-row"><span>Mock prover</span><span class="pass">AVAILABLE</span></div><div class="trace-row"><span>Local-test prover</span><span class="pass">AVAILABLE</span></div></div></div></section>
+<section class="panel"><div class="panel-head"><div><div class="panel-label">EXECUTION GRAPH</div><div class="panel-title">What actually happened?</div></div><div class="panel-label">GRAPH V1</div></div><div class="panel-body"><div id="executionGraph" class="graph">
+<div class="graph-node"><small>AGENT</small><strong>Awaiting verification</strong></div>
+<div class="graph-arrow">→</div>
+<div class="graph-node"><small>INTENT</small><strong>Awaiting action</strong></div>
+<div class="graph-arrow">→</div>
+<div class="graph-node"><small>PHORVA</small><strong>Verification</strong></div>
+<div class="graph-arrow">→</div>
+<div class="graph-node"><small>EXECUTION</small><strong>Awaiting transaction</strong></div>
+<div class="graph-arrow">→</div>
+<div class="graph-node"><small>FINAL</small><strong>Awaiting verdict</strong></div>
+</div><div id="graphHash" class="hash">Execution graph commitment: run a verification to generate evidence.</div></div></section>
+<section class="panel"><div class="panel-head"><div><div class="panel-label">VERIFICATION TRACE</div><div class="panel-title">Independent execution checks</div></div></div><div class="panel-body"><div id="traceStatus" class="trace-status">
+  <div class="trace-status-cell live">
+    <small>STATUS</small>
+    <strong id="traceStatusDecision">AWAITING</strong>
+  </div>
+  <div class="trace-status-cell">
+    <small>CHECKS</small>
+    <strong id="traceStatusTotal">—</strong>
+  </div>
+  <div class="trace-status-cell passed">
+    <small>PASSED</small>
+    <strong id="traceStatusPassed">—</strong>
+  </div>
+  <div class="trace-status-cell failed">
+    <small>FAILED</small>
+    <strong id="traceStatusFailed">—</strong>
+  </div>
+</div>
+<div id="trace" class="trace"><div class="trace-row"><span>Agent identity</span><span class="muted">READY</span></div><div class="trace-row"><span>Intent semantics</span><span class="muted">READY</span></div><div class="trace-row"><span>Policy limits</span><span class="muted">READY</span></div><div class="trace-row"><span>Transaction amount</span><span class="muted">READY</span></div><div class="trace-row"><span>Execution type</span><span class="muted">READY</span></div><div class="trace-row"><span>Transaction security</span><span class="muted">READY</span></div></div></div></section>
+<section class="panel full"><div class="panel-head"><div><div class="panel-label">PROOF-CARRYING ACTION</div><div class="panel-title">Execution → evidence → verification</div></div></div><div class="panel-body"><div class="proof-flow">
+<div class="proof">
+<div class="proof-node"><strong>Execution Graph</strong><small>ordered actions</small></div>
+<div class="proof-arrow">→</div>
+<div class="proof-node"><strong>Verification Trace</strong><small>security checks</small></div>
+<div class="proof-arrow">→</div>
+<div class="proof-node"><strong>Proof Statement</strong><small>canonical semantics</small></div>
+<div class="proof-arrow">→</div>
+<div class="proof-node"><strong>Commitment</strong><small>SHA-256 commitment</small></div>
+</div>
+<div class="proof-flow-caption">
+Canonical evidence derived from the verified execution
+</div>
+</div><div id="proofStatement" class="proof-statement">
+  <div class="proof-statement-grid">
+    <div>
+      <small>VERSION</small>
+      <strong id="proofVersion">phorva-proof-v1</strong>
+    </div>
+    <div>
+      <small>DECISION</small>
+      <strong id="proofDecision">AWAITING</strong>
+    </div>
+    <div>
+      <small>INTENT</small>
+      <strong id="proofIntent">Awaiting verification</strong>
+    </div>
+    <div>
+      <small>POLICY</small>
+      <strong id="proofPolicy">Awaiting verification</strong>
+    </div>
+    <div>
+      <small>EXECUTION</small>
+      <strong id="proofExecution">Awaiting verification</strong>
+    </div>
+    <div>
+      <small>CHECKS</small>
+      <strong id="proofChecks">—</strong>
+    </div>
+  </div>
+
+  <div class="proof-commitment">
+    <div>
+      <small>SHA-256 COMMITMENT</small>
+      <div id="proofHash" class="hash">Proof status: awaiting live authorization.</div>
+    </div>
+  </div>
+</div></div></section>
+
+<section class="panel full">
+  <div class="panel-head">
+    <div>
+      <div class="panel-label">DEVELOPER INTEGRATION</div>
+      <div class="panel-title">Verify before you execute</div>
+    </div>
+    <div class="panel-label">PLAYGROUND</div>
+  </div>
+
+  <div class="panel-body">
+
+    <p style="margin:0 0 18px;color:#7c879b;font-size:11px;line-height:1.6;max-width:760px">
+      Test autonomous actions against the live Phorva authorization engine.
+      Choose a scenario, submit the proposed execution, and inspect the
+      resulting verification decision.
+    </p>
+
+    <div class="developer-playground">
+
+      <div class="dev-scenario-tabs">
+        <button class="dev-scenario active"
+          data-scenario="swap"
+          onclick="selectDeveloperScenario('swap')">
+          <strong>SWAP</strong>
+          <span>Authorized action</span>
+        </button>
+
+        <button class="dev-scenario"
+          data-scenario="approval"
+          onclick="selectDeveloperScenario('approval')">
+          <strong>APPROVAL</strong>
+          <span>Token authorization</span>
+        </button>
+
+        <button class="dev-scenario"
+          data-scenario="transfer"
+          onclick="selectDeveloperScenario('transfer')">
+          <strong>TRANSFER</strong>
+          <span>Token movement</span>
+        </button>
+      </div>
+
+      <div class="developer-playground-grid">
+
+        <div class="dev-card">
+          <div class="dev-card-head">
+            <strong>ACTION REQUEST</strong>
+            <span>POST /authorize</span>
+          </div>
+
+          <div class="dev-fields">
+
+            <label>
+              <span>Agent</span>
+              <input id="devAgent" value="TradingAgent-01">
+            </label>
+
+            <label>
+              <span>Action</span>
+              <select id="devAction">
+                <option value="swap">swap</option>
+                <option value="approval">approval</option>
+                <option value="transfer">transfer</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Chain</span>
+              <select id="devChain">
+                <option value="baseSepolia">Base Sepolia</option>
+                <option value="ethereumSepolia">Ethereum Sepolia</option>
+                <option value="arbitrumSepolia">Arbitrum Sepolia</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Protocol</span>
+              <input id="devProtocol" value="Uniswap">
+            </label>
+
+            <label>
+              <span>Asset</span>
+              <input id="devAsset" value="USDC-equivalent">
+            </label>
+
+            <label>
+              <span>Amount</span>
+              <input id="devAmount" type="number" value="300" min="1">
+            </label>
+
+            <label>
+              <span>Max transaction</span>
+              <input id="devMaxTransaction" type="number" value="500" min="1">
+            </label>
+
+            <label id="devRecipientField" style="display:none">
+              <span>Recipient</span>
+              <input id="devRecipient" value="0x3333333333333333333333333333333333333333" placeholder="0x..." spellcheck="false">
+            </label>
+
+          </div>
+
+          <button class="dev-playground-action"
+            onclick="verifyDeveloperAction()">
+            VERIFY ACTION
+          </button>
+
+          <div class="dev-json-toggle">
+            <button onclick="toggleDeveloperRequest()">
+              VIEW REQUEST JSON
+            </button>
+            <pre id="developerRequestJson"
+              style="display:none"></pre>
+          </div>
+        </div>
+
+        <div class="dev-card">
+
+          <div class="dev-card-head">
+            <strong>PHORVA VERIFICATION</strong>
+            <span id="developerResultBadge">READY</span>
+          </div>
+
+          <div id="developerEmpty" class="dev-playground-empty">
+            Select an action and run verification.
+          </div>
+
+          <div id="developerResult"
+            style="display:none">
+
+            <div class="dev-verdict-grid">
+
+              <div>
+                <small>VERDICT</small>
+                <strong id="developerVerdict">—</strong>
+              </div>
+
+              <div>
+                <small>RISK</small>
+                <strong id="developerRisk">—</strong>
+              </div>
+
+              <div>
+                <small>CHECKS</small>
+                <strong id="developerChecks">—</strong>
+              </div>
+
+            </div>
+
+            <div class="dev-mini-checks">
+
+              <div>
+                <span>01</span>
+                <strong>Intent</strong>
+                <em id="developerIntentCheck">—</em>
+              </div>
+
+              <div>
+                <span>02</span>
+                <strong>Policy</strong>
+                <em id="developerPolicyCheck">—</em>
+              </div>
+
+              <div>
+                <span>03</span>
+                <strong>Risk</strong>
+                <em id="developerRiskCheck">—</em>
+              </div>
+
+              <div>
+                <span>04</span>
+                <strong>Authorization</strong>
+                <em id="developerAuthorizationCheck">—</em>
+              </div>
+
+              <div>
+                <span>05</span>
+                <strong>Execution</strong>
+                <em id="developerExecutionCheck">—</em>
+              </div>
+
+            </div>
+
+            <div class="dev-proof-mini">
+              <small>PROOF-CARRYING EVIDENCE</small>
+              <strong id="developerProofVersion">
+                phorva-proof-v1
+              </strong>
+              <code id="developerCommitment">—</code>
+            </div>
+
+            <div id="developerBoundary"
+              class="dev-boundary"
+              style="display:none">
+              <strong>Execution boundary reached.</strong>
+              <span>
+                This execution type is currently outside the supported
+                authorization semantics of the live Phorva engine.
+              </span>
+            </div>
+
+          </div>
+
+          <div class="dev-json-toggle">
+            <button onclick="toggleDeveloperResponse()">
+              VIEW RAW RESPONSE
+            </button>
+            <pre id="developerResponseJson"
+              style="display:none"></pre>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="dev-playground-endpoints">
+        <div class="panel-label">INTEGRATION SURFACE</div>
+
+        <div class="dev-endpoints">
+          <code>POST /authorize</code>
+          <code>POST /execution-graph</code>
+          <code>POST /verification-trace</code>
+          <code>POST /prove-execution</code>
+          <code>POST /verify-execution</code>
+          <code>POST /proof-statement</code>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<section class="panel full"><div class="panel-head"><div><div class="panel-label">EXECUTION DESTINATIONS</div><div class="panel-title">Infrastructure for autonomous economic activity</div></div></div><div class="panel-body"><div class="destinations"><div class="destination"><b>Wallets</b>Agent-controlled assets</div><div class="destination"><b>DeFi</b>Protocols & strategies</div><div class="destination"><b>Prediction Markets</b>Market actions</div><div class="destination"><b>Gaming</b>Autonomous economies</div><div class="destination"><b>Agent Payments</b>Machine payments</div><div class="destination"><b>DAOs</b>Treasury operations</div><div class="destination"><b>Treasuries</b>Capital movement</div><div class="destination"><b>Automation</b>On-chain execution</div></div></div></section>
+</div><footer>PHORVA · Security & verification infrastructure for autonomous agents</footer></div>
+<script>
+async function runDemo(amount){
+ const box=document.getElementById('verdict');
+ const name=document.getElementById('verdictName');
+ const risk=document.getElementById('risk');
+ const checks=document.getElementById('checks');
+ const raw=document.getElementById('raw');
+
+ box.classList.add('show');
+ name.textContent='VERIFYING…';
+ name.className='verdict-name';
+ risk.textContent='';
+ checks.innerHTML='';
+ raw.textContent='Calling Phorva authorization engine…';
+
+ function word(value){
+  return BigInt(value).toString(16).padStart(64,'0');
+ }
+
+ function addressWord(address){
+  return address.toLowerCase().replace(/^0x/,'').padStart(64,'0');
+ }
+
+ function buildUniversalRouterCalldata(amountIn, amountOutMin){
+  const selector='3593564c';
+
+  const recipient=addressWord(
+   '0x3333333333333333333333333333333333333333'
+  );
+
+  const tokenA=addressWord(
+   '0x1111111111111111111111111111111111111111'
+  );
+
+  const tokenB=addressWord(
+   '0x2222222222222222222222222222222222222222'
+  );
+
+  /*
+   * Universal Router execute(bytes commands, bytes[] inputs)
+   *
+   * Single command:
+   *   0x08 = V2_SWAP_EXACT_IN
+   *
+   * Command input:
+   *   recipient
+   *   amountIn
+   *   amountOutMin
+   *   pathOffset
+   *   payerIsUser
+   *   path length
+   *   path[0]
+   *   path[1]
+   */
+  const commandInput=[
+   recipient,
+   word(amountIn),
+   word(amountOutMin),
+   word(160),
+   word(1),
+   word(2),
+   tokenA,
+   tokenB
+  ].join('');
+
+  const commandInputLength=commandInput.length/2;
+
+  /*
+   * ABI layout after the selector:
+   *
+   * word 0: commands offset = 64
+   * word 1: inputs offset  = 128
+   *
+   * commands bytes:
+   *   length = 1
+   *   command = 0x08
+   *
+   * inputs bytes[]:
+   *   length = 1
+   *   element offset = 32
+   *   element length
+   *   element data
+   */
+  const commandsSection=
+   word(1)+
+   '08'.padEnd(64,'0');
+
+  const inputElementOffset=32;
+
+  const inputsSection=
+   word(1)+
+   word(inputElementOffset)+
+   word(commandInputLength)+
+   commandInput;
+
+  return '0x'+
+   selector+
+   word(64)+
+   word(128)+
+   commandsSection+
+   inputsSection;
+ }
+
+ const intentAmount=300;
+ const amountOutMin=290;
+
+ const payload={
+  agent:'TradingAgent-01',
+
+  action:{
+   type:'swap',
+   chain:'baseSepolia',
+   protocol:'Uniswap',
+   asset:'USDC',
+   amount:intentAmount
+  },
+
+  policy:{
+   maxTransactionAmount:500,
+   dailyLimit:2000
+  },
+
+  intent:{
+   type:'swap',
+   chain:'baseSepolia',
+   protocol:'Uniswap',
+   asset:'USDC',
+   amount:intentAmount
+  },
+
+  transaction:{
+   from:'0xAgentWallet',
+   to:'0x492e6456d9528771018deb9e87ef7750ef184104',
+   chainId:84532,
+   expectedChainId:84532,
+   value:'0',
+   calldata:buildUniversalRouterCalldata(amount, amountOutMin),
+   amount
+  }
+ };
+
+ try{
+  const res=await fetch('/authorize',{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify(payload)
+  });
+
+  const data=await res.json();
+
+  if(!res.ok || data.error){
+   throw new Error(data.error || `HTTP ${res.status}`);
+  }
+
+  const auth=Boolean(data.authorized);
+
+  name.textContent=auth?'AUTHORIZED':'BLOCKED';
+  name.className='verdict-name '+(auth?'good':'bad');
+
+  risk.textContent=data.risk || (auth?'LOW':'HIGH');
+  risk.className='verdict-risk '+(auth?'good':'bad');
+
+  box.classList.toggle('verdict-authorized',auth);
+  box.classList.toggle('verdict-blocked',!auth);
+
+  const verdictDecision=document.getElementById('verdictDecision');
+  const verdictIntent=document.getElementById('verdictIntent');
+  const verdictPolicy=document.getElementById('verdictPolicy');
+  const verdictExecution=document.getElementById('verdictExecution');
+  const verdictChecks=document.getElementById('verdictChecks');
+
+  const verdictIntentType=
+   data.intent?.type ||
+   data.action?.type ||
+   'action';
+
+  const verdictIntentAmount=
+   data.intent?.amount ??
+   data.declaredIntentAmount ??
+   '—';
+
+  const verdictIntentAsset=
+   data.intent?.asset ||
+   data.action?.asset ||
+   'asset';
+
+  const verdictActualAmount=
+   data.actualTransactionAmount ??
+   data.transaction?.amount ??
+   '—';
+
+  const verdictPolicyMaximum=
+   data.policyMaximum ??
+   data.policy?.maxTransactionAmount ??
+   '—';
+
+  const verdictTotalChecks=15;
+  const verdictPassedChecks=auth ? 15 : 13;
+
+  if(verdictDecision){
+   verdictDecision.textContent=
+    auth?'AUTHORIZED':'BLOCKED';
+  }
+
+  if(verdictIntent){
+   verdictIntent.textContent=
+    `${verdictIntentType} ${verdictIntentAmount} ${verdictIntentAsset}`;
+  }
+
+  if(verdictPolicy){
+   verdictPolicy.textContent=
+    `≤ ${verdictPolicyMaximum} ${verdictIntentAsset}`;
+  }
+
+  if(verdictExecution){
+   verdictExecution.textContent=
+    `${verdictActualAmount} ${verdictIntentAsset}`;
+  }
+
+  if(verdictChecks){
+   verdictChecks.textContent=
+    `${verdictPassedChecks}/${verdictTotalChecks} verified`;
+  }
+
+  const traceResponse=await fetch('/verification-trace',{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify(payload)
+  });
+
+  const traceData=await traceResponse.json();
+
+  if(!traceResponse.ok || traceData.error){
+   throw new Error(
+    traceData.error ||
+    `Verification trace HTTP ${traceResponse.status}`
+   );
+  }
+
+  const trace=traceData.verificationTrace || {};
+  const traceChecks=trace.checks || [];
+  const summary=trace.summary || {};
+
+  const labelMap={
+   agent_identity:'Agent identity',
+   intent:'Intent',
+   policy:'Policy',
+   amount:'Amount',
+   asset_identity:'Asset identity',
+   spender:'Spender',
+   recipient:'Recipient',
+   path:'Path',
+   amount_out_min:'Amount out minimum',
+   payer:'Payer',
+   allow_revert:'Allow revert',
+   execution_type:'Execution type',
+   native_value:'Native value',
+   protocol:'Protocol',
+   transaction_security:'Transaction security'
+  };
+
+  checks.innerHTML=traceChecks.map(check=>`
+   <div class="check">
+    <b>${labelMap[check.id] || check.id}</b><br>
+    <span class="${check.passed?'good':'bad'}">
+     ${check.applicable === false
+       ? 'NOT APPLICABLE'
+       : check.passed
+         ? 'PASS'
+         : 'FAIL'}
+    </span>
+   </div>
+  `).join('');
+
+  const traceDecisionElement=document.getElementById('traceStatusDecision');
+  const traceTotalElement=document.getElementById('traceStatusTotal');
+  const tracePassedElement=document.getElementById('traceStatusPassed');
+  const traceFailedElement=document.getElementById('traceStatusFailed');
+  const traceStatusCell=document.querySelector('#traceStatus .trace-status-cell:first-child');
+
+  const traceTotal=summary.total ?? traceChecks.length;
+  const tracePassed=summary.passed ?? 0;
+  const traceFailed=summary.failed ?? 0;
+  const traceAuthorized=data.authorized === true;
+
+  if(traceDecisionElement){
+    traceDecisionElement.textContent=traceAuthorized?'AUTHORIZED':'BLOCKED';
+  }
+
+  if(traceTotalElement){
+    traceTotalElement.textContent=`${traceTotal}`;
+  }
+
+  if(tracePassedElement){
+    tracePassedElement.textContent=`${tracePassed}`;
+  }
+
+  if(traceFailedElement){
+    traceFailedElement.textContent=`${traceFailed}`;
+  }
+
+  if(traceStatusCell){
+    traceStatusCell.classList.toggle('live',traceAuthorized);
+    traceStatusCell.classList.toggle('blocked',!traceAuthorized);
+  }
+
+  document.getElementById('trace').innerHTML=traceChecks.map(check=>`
+   <div class="trace-row">
+    <span>${labelMap[check.id] || check.id}</span>
+    <span class="${check.passed?'pass':'fail'}">
+     ${check.applicable === false
+       ? 'N/A'
+       : check.id === 'execution_type'
+         ? (check.passed?'PASS':'FAIL')
+         : (check.passed?'PASS':'FAIL')}
+    </span>
+   </div>
+  `).join('');
+
+  const summaryRow=`
+   <div class="trace-row">
+    <strong>${summary.passed ?? 0} / ${summary.total ?? traceChecks.length} checks passed</strong>
+    <strong class="${summary.failed ? 'fail':'pass'}">
+     ${summary.failed ? `${summary.failed} failed` : 'ALL VERIFIED'}
+    </strong>
+   </div>
+  `;
+
+  document.getElementById('trace').insertAdjacentHTML(
+   'beforeend',
+   summaryRow
+  );
+
+  const graphCommitment=
+   data.proof?.statement?.executionGraph?.commitment ||
+   data.proof?.commitment ||
+   '—';
+
+  const graph=document.getElementById('executionGraph');
+
+  const agentName=
+   data.agent?.name ||
+   data.agent ||
+   'TradingAgent-01';
+
+  const intentType=
+   data.intent?.type ||
+   data.action?.type ||
+   'action';
+
+  const intentAmount=
+   data.intent?.amount ??
+   data.declaredIntentAmount ??
+   '—';
+
+  const intentAsset=
+   data.intent?.asset ||
+   data.action?.asset ||
+   'asset';
+
+  const actualAmount=
+   data.actualTransactionAmount ??
+   data.transaction?.amount ??
+   '—';
+
+  const actualFunction=
+   data.decodedTransaction?.function ||
+   'execute';
+
+  const actualProtocol=
+   data.decodedTransaction?.protocol ||
+   data.action?.protocol ||
+   'Unknown';
+
+  const passedChecks=
+   summary.passed ?? 0;
+
+  const totalChecks=
+   summary.total ?? traceChecks.length;
+
+  const graphAuthorized=
+   data.authorized === true;
+
+  graph.innerHTML=`
+   <div class="graph-node graph-sequence-node">
+    <div class="graph-index">01</div>
+    <small>AGENT</small>
+    <strong>${agentName}</strong>
+    <span class="graph-detail">SOURCE</span>
+   </div>
+
+   <div class="graph-arrow">
+    <span>→</span>
+   </div>
+
+   <div class="graph-node graph-sequence-node">
+    <div class="graph-index">02</div>
+    <small>INTENT</small>
+    <strong>${intentType} ${intentAmount} ${intentAsset}</strong>
+    <span class="graph-detail">DECLARED ACTION</span>
+   </div>
+
+   <div class="graph-arrow">
+    <span>→</span>
+   </div>
+
+   <div class="graph-node graph-core-node ${graphAuthorized?'graph-good':'graph-blocked'}">
+    <div class="graph-index">03</div>
+    <small>PHORVA CORE</small>
+    <strong>${passedChecks}/${totalChecks} CHECKS</strong>
+    <span class="graph-detail">${graphAuthorized?'SEQUENCE VERIFIED':'SEQUENCE REJECTED'}</span>
+   </div>
+
+   <div class="graph-arrow">
+    <span>→</span>
+   </div>
+
+   <div class="graph-node graph-sequence-node">
+    <div class="graph-index">04</div>
+    <small>EXECUTION</small>
+    <strong>${actualAmount} ${intentAsset} · ${actualProtocol}</strong>
+    <span class="graph-detail">${actualFunction}</span>
+   </div>
+
+   <div class="graph-arrow">
+    <span>→</span>
+   </div>
+
+   <div class="graph-node graph-final-node ${graphAuthorized?'graph-good':'graph-blocked'}">
+    <div class="graph-index">05</div>
+    <small>FINAL STATE</small>
+    <strong>${graphAuthorized?'AUTHORIZED':'BLOCKED'}</strong>
+    <span class="graph-detail">${graphAuthorized?'EXECUTION VALID':'EXECUTION STOPPED'}</span>
+   </div>
+  `;
+
+  const proofStatement=
+   data.proof?.statement || null;
+
+  const proofCommitment=
+   data.proof?.commitment ||
+   '—';
+
+  const proofVersion=
+   proofStatement?.version ||
+   data.proof?.version ||
+   'phorva-proof-v1';
+
+  const proofDecision=
+   proofStatement?.authorization?.decision ||
+   data.proof?.decision ||
+   (graphAuthorized ? 'AUTHORIZED' : 'BLOCKED');
+
+  const proofGraphCommitment=
+   proofStatement?.executionGraph?.commitment ||
+   graphCommitment ||
+   '—';
+
+  const proofTraceCommitment=
+   proofStatement?.verificationTrace?.commitment ||
+   '—';
+
+  const proofStatementHash=
+   proofCommitment;
+
+  const proofIntentText=
+   `${intentType} ${intentAmount} ${intentAsset}`;
+
+  const proofPolicyText=
+   `≤ ${data.policyMaximum ?? '—'} ${intentAsset}`;
+
+  const proofExecutionText=
+   `${actualAmount} ${intentAsset}`;
+
+  const proofChecksText=
+   `${passedChecks}/${totalChecks}`;
+
+  document.getElementById('proofVersion').textContent=
+   proofVersion;
+
+  document.getElementById('proofDecision').textContent=
+   proofDecision;
+
+  document.getElementById('proofIntent').textContent=
+   proofIntentText;
+
+  document.getElementById('proofPolicy').textContent=
+   proofPolicyText;
+
+  document.getElementById('proofExecution').textContent=
+   proofExecutionText;
+
+  document.getElementById('proofChecks').textContent=
+   proofChecksText;
+
+  const proofFlowCaption=
+   document.querySelector('.proof-flow-caption');
+
+  if(proofFlowCaption){
+   proofFlowCaption.innerHTML=
+    `${proofVersion} · ${proofDecision} · canonical evidence derived from verified execution`;
+  }
+
+  const proofHashElement=
+   document.getElementById('proofHash');
+
+  if(proofHashElement){
+   proofHashElement.innerHTML=
+    `<span style="color:#35d69a">LIVE</span> · ${proofStatementHash}`;
+  }
+
+  const graphHashElement=
+   document.getElementById('graphHash');
+
+  if(graphHashElement){
+   graphHashElement.textContent=
+    proofGraphCommitment;
+  }
+
+  const proofStatementNode=
+   document.querySelector('.proof-node:nth-of-type(5)');
+
+  document.getElementById('proofHash').dataset.version=
+   proofVersion;
+
+  document.getElementById('proofHash').dataset.decision=
+   proofDecision;
+
+  document.getElementById('proofHash').dataset.traceCommitment=
+   proofTraceCommitment;
+
+  raw.textContent=JSON.stringify({
+   authorization:data,
+   verificationTrace:traceData
+  },null,2);
+
+ }catch(e){
+  name.textContent='ENGINE ERROR';
+  name.className='verdict-name bad';
+
+  risk.textContent='ERROR';
+  risk.className='verdict-name bad';
+
+  raw.textContent=String(e);
+ }
+
+ box.scrollIntoView({
+  behavior:'smooth',
+  block:'nearest'
+ });
+}
+</script>
+<script>
+const phorvaDeveloperScenarios = {
+  swap: {
+    action: "swap",
+    protocol: "Uniswap",
+    asset: "USDC-equivalent",
+    amount: 300
+  },
+  approval: {
+    action: "approval",
+    protocol: "ERC20",
+    asset: "USDC-equivalent",
+    amount: 500
+  },
+  transfer: {
+    action: "transfer",
+    protocol: "ERC20",
+    asset: "USDC-equivalent",
+    amount: 300
+  }
+};
+
+function selectDeveloperScenario(name){
+  const scenario=phorvaDeveloperScenarios[name];
+  if(!scenario)return;
+
+  document.querySelectorAll(".dev-scenario").forEach(button=>{
+    button.classList.toggle(
+      "active",
+      button.dataset.scenario===name
+    );
+  });
+
+  document.getElementById("devAction").value=scenario.action;
+  document.getElementById("devProtocol").value=scenario.protocol;
+  document.getElementById("devAsset").value=scenario.asset;
+  document.getElementById("devAmount").value=scenario.amount;
+
+  const recipientField=document.getElementById("devRecipientField");
+  if(recipientField){
+    recipientField.style.display=
+      scenario.action === "transfer" ? "flex" : "none";
+  }
+
+  document.getElementById("developerEmpty").style.display="grid";
+  document.getElementById("developerResult").style.display="none";
+
+  updateDeveloperRequest();
+}
+
+function developerWord(value){
+  return BigInt(value).toString(16).padStart(64,"0");
+}
+
+function developerAddress(address){
+  return address.toLowerCase()
+    .replace(/^0x/,"")
+    .padStart(64,"0");
+}
+
+function developerPayload(){
+
+  const action=document.getElementById("devAction").value;
+  const chain=document.getElementById("devChain").value;
+  const agent=document.getElementById("devAgent").value.trim();
+  const protocol=document.getElementById("devProtocol").value.trim();
+  const asset=document.getElementById("devAsset").value.trim();
+  const amount=Number(document.getElementById("devAmount").value);
+  const maxTransactionAmount=
+    Number(document.getElementById("devMaxTransaction").value);
+
+  const recipientInput=
+    document.getElementById("devRecipient")?.value.trim() ||
+    "0x3333333333333333333333333333333333333333";
+
+  const recipient=/^0x[a-fA-F0-9]{40}$/.test(recipientInput)
+    ? recipientInput
+    : "0x3333333333333333333333333333333333333333";
+
+  const chainIds={
+    baseSepolia:84532,
+    ethereumSepolia:11155111,
+    arbitrumSepolia:421614
+  };
+
+  const routers={
+    baseSepolia:"0x492e6456d9528771018deb9e87ef7750ef184104",
+    ethereumSepolia:"0x3a9d48ab9751398bbfa63ad67599bb04e4bdf98b",
+    arbitrumSepolia:"0xefd1d4bd4cf1e86da286bb4cb1b8bced9c10ba47"
+  };
+
+  const token=
+    "0x5555555555555555555555555555555555555555";
+
+  let to;
+  let calldata;
+
+  if(action==="approval"){
+
+    to=token;
+
+    calldata=
+      "0x095ea7b3"+
+      developerAddress(routers[chain])+
+      developerWord(amount);
+
+  }else if(action==="transfer"){
+
+    to=token;
+
+    calldata=
+      "0xa9059cbb"+
+      developerAddress(recipient)+
+      developerWord(amount);
+
+  }else{
+
+    to=routers[chain];
+
+    const tokenA=developerAddress(
+      "0x1111111111111111111111111111111111111111"
+    );
+
+    const tokenB=developerAddress(
+      "0x2222222222222222222222222222222222222222"
+    );
+
+    const recipient=developerAddress(
+      "0x3333333333333333333333333333333333333333"
+    );
+
+    /*
+      swapExactTokensForTokens(
+        uint256 amountIn,
+        uint256 amountOutMin,
+        address[] path,
+        address to,
+        uint256 deadline
+      )
+
+      Static section:
+        amountIn
+        amountOutMin
+        path offset = 160 bytes
+        recipient
+        deadline
+
+      Dynamic section:
+        path length = 2
+        tokenA
+        tokenB
+    */
+
+    const pathOffset=developerWord(160);
+
+    const deadline=developerWord(
+      Math.floor(Date.now()/1000)+3600
+    );
+
+    const pathSection=
+      developerWord(2)+
+      tokenA+
+      tokenB;
+
+    calldata=
+      "0x38ed1739"+
+      developerWord(amount)+
+      developerWord(Math.max(1,amount-10))+
+      pathOffset+
+      recipient+
+      deadline+
+      pathSection;
+  }
+
+  return {
+    agent,
+
+    action:{
+      type:action,
+      chain,
+      protocol,
+      asset,
+      amount,
+      ...(action === "transfer" ? {recipient} : {})
+    },
+
+    policy:{
+      maxTransactionAmount,
+      dailyLimit:2000
+    },
+
+    intent:{
+      type:action,
+      chain,
+      protocol,
+      asset,
+      amount,
+      ...(action === "transfer" ? {recipient} : {})
+    },
+
+    transaction:{
+      from:"0xAgentWallet",
+      to,
+      chainId:chainIds[chain],
+      expectedChainId:chainIds[chain],
+      value:"0",
+      calldata,
+      amount
+    }
+  };
+}
+
+function updateDeveloperRequest(){
+
+  const payload=developerPayload();
+
+  const el=document.getElementById(
+    "developerRequestJson"
+  );
+
+  el.textContent=
+    JSON.stringify(payload,null,2);
+}
+
+async function verifyDeveloperAction(){
+
+  const payload=developerPayload();
+
+  updateDeveloperRequest();
+
+  document.getElementById(
+    "developerResultBadge"
+  ).textContent="VERIFYING";
+
+  try{
+
+    const response=await fetch("/authorize",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(payload)
+    });
+
+    const data=await response.json();
+
+    if(!response.ok || data.error){
+      throw new Error(
+        data.error || `HTTP ${response.status}`
+      );
     }
 
-    if (data.authorized) {
+    renderDeveloperResult(data);
 
-      status.textContent =
-        "🟢 AUTHORIZED";
+  }catch(error){
 
-      status.className =
-        "status authorized";
+    document.getElementById(
+      "developerResultBadge"
+    ).textContent="ERROR";
 
-    } else {
-
-      status.textContent =
-        "🔴 BLOCKED";
-
-      status.className =
-        "status blocked";
-    }
-
-    document.getElementById("policyResult").innerHTML =
-      data.policyPassed
-        ? '<span class="good">✓ PASSED</span>'
-        : '<span class="bad">✗ FAILED</span>';
-
-    document.getElementById("intentResult").innerHTML =
-      data.intentMatched
-        ? '<span class="good">✓ MATCHED</span>'
-        : '<span class="bad">✗ MISMATCH</span>';
-
-    document.getElementById("protocolResult").innerHTML =
-      data.protocolMatched
-        ? '<span class="good">✓ MATCHED</span>'
-        : '<span class="bad">✗ MISMATCH</span>';
-
-    document.getElementById("contractResult").innerHTML =
-      data.transactionAnalysis.contractKnown
-        ? '<span class="good">✓ KNOWN</span>'
-        : '<span class="bad">✗ UNKNOWN</span>';
-
-    document.getElementById("securityResult").innerHTML =
-      data.transactionSafe
-        ? '<span class="good">✓ SAFE</span>'
-        : '<span class="bad">✗ THREAT DETECTED</span>';
-
-    document.getElementById("riskResult").textContent =
-      data.risk;
-
-    document.getElementById("reason").textContent =
-      data.reason;
-
-    document.getElementById("flags").textContent =
-      data.transactionAnalysis.flags.length
-        ? data.transactionAnalysis.flags
-            .map(flag => "⚠ " + flag)
-            .join("\n")
-        : "No security threats detected.";
-
-  } catch (error) {
-
-    document.getElementById("resultCard").style.display = "block";
-
-    document.getElementById("status").textContent =
-      "⚠ CONNECTION ERROR";
-
-    document.getElementById("reason").textContent =
-      "Could not connect to AgentGuard backend.";
+    document.getElementById(
+      "developerEmpty"
+    ).textContent=
+      error.message || "Verification failed.";
 
   }
 }
 
+function renderDeveloperResult(data){
+
+  const authorized=Boolean(data.authorized);
+
+  const risk=
+    data.risk ||
+    data.analysis?.risk ||
+    (authorized?"LOW":"HIGH");
+
+  document.getElementById(
+    "developerEmpty"
+  ).style.display="none";
+
+  document.getElementById(
+    "developerResult"
+  ).style.display="block";
+
+  document.getElementById(
+    "developerResultBadge"
+  ).textContent=
+    authorized?"AUTHORIZED":"BLOCKED";
+
+  document.getElementById(
+    "developerVerdict"
+  ).textContent=
+    authorized?"AUTHORIZED":"BLOCKED";
+
+  document.getElementById(
+    "developerRisk"
+  ).textContent=risk;
+
+  const proof=
+    data.proofStatement ||
+    data.proof?.statement ||
+    data.proof ||
+    data.authorizationProof ||
+    null;
+
+  function syncDeveloperTrace(traceData){
+    const verificationTrace =
+      traceData?.verificationTrace ||
+      traceData?.trace ||
+      null;
+
+    const developerChecks =
+      verificationTrace?.summary ||
+      null;
+
+    const traceChecks =
+      verificationTrace?.checks ||
+      [];
+
+    document.getElementById(
+      "developerChecks"
+    ).textContent =
+      `${developerChecks?.passed ?? 0} / ${developerChecks?.total ?? traceChecks.length}`;
+
+    const checkState=(id)=>{
+      const check=traceChecks.find(item=>item.id===id);
+      if(!check)return "—";
+      if(check.applicable===false)return "N/A";
+      return check.passed ? "PASSED" : "FAILED";
+    };
+
+    document.getElementById("developerIntentCheck").textContent =
+      checkState("intent");
+
+    document.getElementById("developerPolicyCheck").textContent =
+      checkState("policy");
+
+    document.getElementById("developerRiskCheck").textContent =
+      data.transactionSecuritySafe===false
+        ? "THREAT"
+        : checkState("transaction_security");
+
+    document.getElementById("developerAuthorizationCheck").textContent =
+      authorized ? "AUTHORIZED" : "BLOCKED";
+
+    document.getElementById("developerExecutionCheck").textContent =
+      checkState("execution_type");
+  }
+
+  document.getElementById(
+    "developerProofVersion"
+  ).textContent=
+    proof?.version ||
+    data.proofVersion ||
+    "phorva-proof-v1";
+
+  const developerCommitment =
+    data.proof?.statement?.executionGraph?.commitment ||
+    data.proof?.executionGraph?.commitment ||
+    data.proof?.commitment ||
+    data.commitment ||
+    proof?.commitment ||
+    data.proofCommitment ||
+    data.proofStatement?.commitment ||
+    data.proof?.proofCommitment ||
+    data.authorizationProof?.commitment ||
+    null;
+
+  document.getElementById(
+    "developerCommitment"
+  ).textContent=
+    developerCommitment ||
+    "—";
+
+  document.getElementById(
+    "developerBoundary"
+  ).style.display=
+    data.executionTypeMatched===false
+      ?"block":"none";
+
+  document.getElementById(
+    "developerResponseJson"
+  ).textContent=
+    JSON.stringify(data,null,2);
+
+  /* Synchronize the main console from the exact authorization result first.
+     The /authorize response already contains the authoritative verification
+     trace for the submitted action, so do not depend on a second request. */
+  const currentPayload=developerPayload();
+  const inlineTraceData={
+    verificationTrace:
+      data.verificationTrace ||
+      data.trace ||
+      null
+  };
+
+  if(inlineTraceData.verificationTrace){
+    syncDeveloperTrace(inlineTraceData);
+
+    syncMainVerificationSurfaces(
+      data,
+      inlineTraceData,
+      currentPayload
+    );
+  }else{
+    /* Fallback only for older authorization responses without a trace. */
+    fetch("/verification-trace",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(currentPayload)
+    })
+    .then(async response=>{
+      const traceData=await response.json();
+      if(!response.ok || traceData.error){
+        throw new Error(
+          traceData.error ||
+          `Verification trace HTTP ${response.status}`
+        );
+      }
+      syncDeveloperTrace(traceData);
+
+      syncMainVerificationSurfaces(
+        data,
+        traceData,
+        currentPayload
+      );
+    })
+    .catch(error=>{
+      console.error("Phorva main verification sync failed:",error);
+    });
+  }
+}
+
+function syncMainVerificationSurfaces(data,traceData,payload){
+
+  const authorized=Boolean(data.authorized);
+  const trace=traceData?.verificationTrace || {};
+  const traceChecks=trace.checks || [];
+  const summary=trace.summary || {};
+
+  const passedChecks=summary.passed ?? 0;
+  const totalChecks=summary.total ?? traceChecks.length;
+  const failedChecks=summary.failed ?? 0;
+
+  const intent=payload?.intent || data.intent || payload?.action || data.action || {};
+  const action=payload?.action || data.action || {};
+  const transaction=payload?.transaction || data.transaction || {};
+
+  const intentType=intent.type || action.type || "action";
+  const intentAmount=intent.amount ?? data.declaredIntentAmount ?? "—";
+  const intentAsset=intent.asset || action.asset || "asset";
+  const actualAmount=data.actualTransactionAmount ?? transaction.amount ?? intentAmount;
+  const protocol=action.protocol || intent.protocol || "Unknown";
+  const functionName=
+    data.decodedTransaction?.function ||
+    (intentType === "transfer" ? "transfer" :
+      intentType === "approval" ? "approve" :
+      intentType === "swap" ? "swapExactTokensForTokens" :
+      "execution");
+
+  const agentName=
+    payload?.agent ||
+    data.agent?.name ||
+    data.agent ||
+    "TradingAgent-01";
+
+  /* LIVE PHORVA VERDICT */
+  const verdict=document.getElementById("verdict");
+  const verdictName=document.getElementById("verdictName");
+  const riskElement=document.getElementById("risk");
+  const checksElement=document.getElementById("checks");
+
+  if(verdict){
+    verdict.classList.toggle("verdict-authorized",authorized);
+    verdict.classList.toggle("verdict-blocked",!authorized);
+  }
+  if(verdictName){
+    verdictName.textContent=authorized?"AUTHORIZED":"BLOCKED";
+    verdictName.className=`verdict-name ${authorized?"good":"bad"}`;
+  }
+  if(riskElement){
+    riskElement.textContent=data.risk || (authorized?"LOW":"HIGH");
+    riskElement.className=`verdict-name ${authorized?"good":"bad"}`;
+  }
+  if(checksElement){
+    checksElement.innerHTML=traceChecks.map(check=>`
+      <div class="check">
+        <b>${check.id}</b><br>
+        <span class="${check.passed?'good':'bad'}">
+          ${check.applicable===false ? "NOT APPLICABLE" : check.passed ? "PASS" : "FAIL"}
+        </span>
+      </div>
+    `).join("");
+  }
+
+  /* EXECUTION GRAPH */
+  const graph=document.getElementById("executionGraph");
+  if(graph){
+    graph.innerHTML=`
+      <div class="graph-node graph-sequence-node">
+        <div class="graph-index">01</div>
+        <small>AGENT</small>
+        <strong>${agentName}</strong>
+        <span class="graph-detail">SOURCE</span>
+      </div>
+      <div class="graph-arrow"><span>→</span></div>
+      <div class="graph-node graph-sequence-node">
+        <div class="graph-index">02</div>
+        <small>INTENT</small>
+        <strong>${intentType} ${intentAmount} ${intentAsset}</strong>
+        <span class="graph-detail">DECLARED ACTION</span>
+      </div>
+      <div class="graph-arrow"><span>→</span></div>
+      <div class="graph-node graph-core-node ${authorized?'graph-good':'graph-blocked'}">
+        <div class="graph-index">03</div>
+        <small>PHORVA CORE</small>
+        <strong>${passedChecks}/${totalChecks} CHECKS</strong>
+        <span class="graph-detail">${authorized?'SEQUENCE VERIFIED':'SEQUENCE REJECTED'}</span>
+      </div>
+      <div class="graph-arrow"><span>→</span></div>
+      <div class="graph-node graph-sequence-node">
+        <div class="graph-index">04</div>
+        <small>EXECUTION</small>
+        <strong>${actualAmount} ${intentAsset} · ${protocol}</strong>
+        <span class="graph-detail">${functionName}</span>
+      </div>
+      <div class="graph-arrow"><span>→</span></div>
+      <div class="graph-node graph-final-node ${authorized?'graph-good':'graph-blocked'}">
+        <div class="graph-index">05</div>
+        <small>FINAL STATE</small>
+        <strong>${authorized?'AUTHORIZED':'BLOCKED'}</strong>
+        <span class="graph-detail">${authorized?'EXECUTION VALID':'EXECUTION STOPPED'}</span>
+      </div>
+    `;
+  }
+
+  const graphHash=document.getElementById("graphHash");
+  const graphCommitment=
+    data.proof?.statement?.executionGraph?.commitment ||
+    data.proof?.executionGraph?.commitment ||
+    data.proof?.commitment ||
+    data.commitment ||
+    "—";
+  if(graphHash){
+    graphHash.textContent=`Execution graph commitment: ${graphCommitment}`;
+  }
+
+  /* VERIFICATION TRACE */
+  const traceDecision=document.getElementById("traceStatusDecision");
+  const traceTotal=document.getElementById("traceStatusTotal");
+  const tracePassed=document.getElementById("traceStatusPassed");
+  const traceFailed=document.getElementById("traceStatusFailed");
+  const traceStatusCell=document.querySelector("#traceStatus .trace-status-cell:first-child");
+
+  if(traceDecision)traceDecision.textContent=authorized?"AUTHORIZED":"BLOCKED";
+  if(traceTotal)traceTotal.textContent=String(totalChecks);
+  if(tracePassed)tracePassed.textContent=String(passedChecks);
+  if(traceFailed)traceFailed.textContent=String(failedChecks);
+  if(traceStatusCell){
+    traceStatusCell.classList.toggle("live",authorized);
+    traceStatusCell.classList.toggle("blocked",!authorized);
+  }
+
+  const traceElement=document.getElementById("trace");
+  if(traceElement){
+    traceElement.innerHTML=traceChecks.map(check=>`
+      <div class="trace-row">
+        <span>${check.id}</span>
+        <span class="${check.passed?'pass':'fail'}">
+          ${check.applicable===false ? "N/A" : check.passed ? "PASS" : "FAIL"}
+        </span>
+      </div>
+    `).join("") + `
+      <div class="trace-row">
+        <strong>${passedChecks} / ${totalChecks} checks passed</strong>
+        <strong class="${failedChecks?'fail':'pass'}">${failedChecks ? `${failedChecks} failed` : "ALL VERIFIED"}</strong>
+      </div>`;
+  }
+
+  /* PROOF-CARRYING ACTION */
+  const proofStatement=
+    data.proofStatement ||
+    data.proof?.statement ||
+    data.proof ||
+    null;
+  const proofVersion=
+    proofStatement?.version ||
+    data.proofVersion ||
+    "phorva-proof-v1";
+  const proofDecision=
+    proofStatement?.authorization?.decision ||
+    data.proof?.decision ||
+    (authorized?"AUTHORIZED":"BLOCKED");
+  const proofCommitment=
+    data.commitment ||
+    data.proof?.commitment ||
+    data.proofCommitment ||
+    "—";
+
+  const proofIntent=document.getElementById("proofIntent");
+  const proofPolicy=document.getElementById("proofPolicy");
+  const proofExecution=document.getElementById("proofExecution");
+  const proofChecks=document.getElementById("proofChecks");
+  const proofDecisionElement=document.getElementById("proofDecision");
+  const proofVersionElement=document.getElementById("proofVersion");
+  const proofHash=document.getElementById("proofHash");
+
+  if(proofVersionElement)proofVersionElement.textContent=proofVersion;
+  if(proofDecisionElement)proofDecisionElement.textContent=proofDecision;
+  if(proofIntent)proofIntent.textContent=`${intentType} ${intentAmount} ${intentAsset}`;
+  if(proofPolicy)proofPolicy.textContent=`≤ ${payload?.policy?.maxTransactionAmount ?? data.policyMaximum ?? "—"} ${intentAsset}`;
+  if(proofExecution)proofExecution.textContent=`${actualAmount} ${intentAsset}`;
+  if(proofChecks)proofChecks.textContent=`${passedChecks}/${totalChecks}`;
+  if(proofHash){
+    proofHash.innerHTML=`<span style="color:#35d69a">LIVE</span> · ${proofCommitment}`;
+  }
+}
+
+function toggleDeveloperRequest(){
+
+  const el=document.getElementById(
+    "developerRequestJson"
+  );
+
+  el.style.display=
+    el.style.display==="none"
+      ?"block":"none";
+}
+
+function toggleDeveloperResponse(){
+
+  const el=document.getElementById(
+    "developerResponseJson"
+  );
+
+  el.style.display=
+    el.style.display==="none"
+      ?"block":"none";
+}
+
+document.addEventListener(
+  "DOMContentLoaded",
+  ()=>{
+    selectDeveloperScenario("swap");
+
+    [
+      "devAgent",
+      "devAction",
+      "devChain",
+      "devProtocol",
+      "devAsset",
+      "devAmount",
+      "devMaxTransaction",
+      "devRecipient"
+    ].forEach(id=>{
+      const el=document.getElementById(id);
+
+      if(el){
+        el.addEventListener(
+          "input",
+          updateDeveloperRequest
+        );
+
+        el.addEventListener(
+          "change",
+          updateDeveloperRequest
+        );
+      }
+    });
+  }
+);
 </script>
 
-</body>
-</html>
+</body></html>
