@@ -2086,10 +2086,735 @@ button:active,
 }
 </style>
 
+
+<style>
+/* PHORVA INVESTOR MVP V3 — HERO */
+.investor-hero{
+  padding:42px 42px 34px;
+  min-height:420px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  background:
+    radial-gradient(circle at 78% 12%,rgba(124,108,255,.16),transparent 30%),
+    radial-gradient(circle at 15% 100%,rgba(48,91,180,.07),transparent 32%),
+    linear-gradient(145deg,rgba(13,19,32,.99),rgba(5,8,15,1));
+}
+
+.hero-kicker{
+  margin-top:15px;
+  color:#aeb7c9;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+
+.investor-hero h1{
+  max-width:980px;
+  margin-top:11px;
+}
+
+.investor-hero h1 span{
+  color:#aeb7ff;
+}
+
+.hero-lead{
+  max-width:820px !important;
+  margin-top:8px !important;
+  font-size:16px !important;
+  line-height:1.65 !important;
+  color:#a5afc1 !important;
+}
+
+.hero-flow-label{
+  margin-top:27px;
+  color:#626f87;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.investor-hero .flow{
+  margin-top:8px;
+}
+
+.investor-hero .flow-item{
+  min-height:43px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.investor-hero .flow-item.core{
+  min-width:145px;
+}
+
+.hero-principle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:23px;
+  padding-top:18px;
+  border-top:1px solid rgba(130,150,190,.10);
+  color:#67738a;
+  font-size:10px;
+  letter-spacing:.03em;
+}
+
+.hero-principle strong{
+  color:#f1f4fa;
+}
+
+@media(max-width:700px){
+  .investor-hero{
+    padding:28px 22px 24px;
+    min-height:auto;
+  }
+
+  .hero-lead{
+    font-size:14px !important;
+  }
+
+  .hero-principle{
+    flex-wrap:wrap;
+    gap:6px 9px;
+  }
+}
+</style>
+
+
+<style id="investor-story-v3">
+/* =========================================
+   INVESTOR MVP V3 — WHY PHORVA EXISTS
+   ========================================= */
+
+.investor-story{
+  position:relative;
+}
+
+.investor-story .story-hero-copy{
+  max-width:850px;
+}
+
+.investor-story .story-lead{
+  max-width:760px;
+}
+
+.investor-compare{
+  position:relative;
+}
+
+.investor-compare .story-compare-card{
+  min-height:230px;
+}
+
+.investor-compare .story-compare-card.active{
+  box-shadow:
+    0 0 0 1px rgba(120,90,255,.22),
+    0 24px 70px rgba(40,20,100,.18);
+}
+
+.investor-compare .story-flow{
+  line-height:1.8;
+}
+
+.phorva-story-proof{
+  margin-top:34px;
+  padding:28px;
+  border:1px solid rgba(120,110,255,.22);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(80,70,220,.12), transparent 35%),
+    linear-gradient(135deg, rgba(18,20,38,.96), rgba(9,10,20,.98));
+  box-shadow:
+    0 24px 70px rgba(0,0,0,.24),
+    inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+.proof-story-header{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:24px;
+  margin-bottom:26px;
+}
+
+.proof-story-header h3{
+  margin:7px 0 0;
+  font-size:clamp(24px,3vw,38px);
+  line-height:1.08;
+  letter-spacing:-.035em;
+}
+
+.proof-story-label{
+  padding:8px 12px;
+  border:1px solid rgba(120,110,255,.24);
+  border-radius:999px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.13em;
+  color:rgba(220,218,255,.72);
+  white-space:nowrap;
+}
+
+.proof-story-flow{
+  display:grid;
+  grid-template-columns:1fr auto 1fr auto 1fr;
+  align-items:center;
+  gap:16px;
+}
+
+.proof-story-step{
+  min-height:145px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:22px;
+  border-radius:17px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.025);
+}
+
+.proof-story-step small{
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.14em;
+  color:rgba(255,255,255,.45);
+  margin-bottom:9px;
+}
+
+.proof-story-step strong{
+  font-size:clamp(28px,4vw,44px);
+  line-height:1;
+  letter-spacing:-.045em;
+}
+
+.proof-story-step span{
+  margin-top:10px;
+  font-size:12px;
+  color:rgba(255,255,255,.52);
+}
+
+.proof-story-step.danger{
+  border-color:rgba(255,90,110,.22);
+  background:rgba(255,60,80,.045);
+}
+
+.proof-story-step.danger strong{
+  color:#ff8795;
+}
+
+.proof-story-step.blocked{
+  border-color:rgba(110,100,255,.30);
+  background:rgba(90,75,255,.07);
+}
+
+.proof-story-step.blocked strong{
+  color:#c3bcff;
+}
+
+.proof-story-arrow{
+  font-size:24px;
+  color:rgba(255,255,255,.25);
+}
+
+.proof-story-bottom{
+  margin-top:20px;
+  padding-top:18px;
+  border-top:1px solid rgba(255,255,255,.07);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-size:13px;
+  color:rgba(255,255,255,.55);
+}
+
+.proof-story-bottom b{
+  color:#ff8795;
+  font-size:18px;
+}
+
+.proof-story-bottom strong{
+  color:#c3bcff;
+  font-weight:700;
+}
+
+@media(max-width:800px){
+
+  .proof-story-header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .proof-story-label{
+    display:none;
+  }
+
+  .proof-story-flow{
+    grid-template-columns:1fr;
+  }
+
+  .proof-story-arrow{
+    text-align:center;
+    transform:rotate(90deg);
+  }
+
+  .proof-story-step{
+    min-height:120px;
+  }
+
+  .proof-story-bottom{
+    flex-wrap:wrap;
+    text-align:center;
+  }
+}
+</style>
+
+
+<style id="investor-simulator-v3">
+/* =========================================
+   INVESTOR MVP V3 — LIVE SIMULATOR
+   ========================================= */
+
+.investor-simulator-label{
+  display:flex !important;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.investor-simulator-label small{
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.14em;
+  color:rgba(150,145,255,.72);
+}
+
+.sim{
+  position:relative;
+}
+
+.sim .demo{
+  position:relative;
+  overflow:hidden;
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.sim .demo:hover{
+  transform:translateY(-2px);
+}
+
+.sim .demo.authorized{
+  border-color:rgba(100,220,170,.16);
+}
+
+.sim .demo.authorized:hover{
+  border-color:rgba(100,220,170,.36);
+  box-shadow:0 18px 45px rgba(30,180,120,.08);
+}
+
+.sim .demo.attack{
+  border-color:rgba(255,90,110,.16);
+}
+
+.sim .demo.attack:hover{
+  border-color:rgba(255,90,110,.36);
+  box-shadow:0 18px 45px rgba(255,50,80,.08);
+}
+
+.sim .demo h3{
+  letter-spacing:-.02em;
+}
+
+.sim .demo.authorized h3{
+  color:#a9f2d0;
+}
+
+.sim .demo.attack h3{
+  color:#ff9aa6;
+}
+
+.sim .demo .amount{
+  font-size:clamp(28px,4vw,42px);
+  font-weight:800;
+  letter-spacing:-.045em;
+  margin:10px 0;
+}
+
+.sim .demo p{
+  color:rgba(255,255,255,.54);
+}
+
+.sim .demo.authorized .amount{
+  color:#d7fff0;
+}
+
+.sim .demo.attack .amount{
+  color:#ff9aa6;
+}
+
+.investor-simulator-note{
+  margin:16px 0 0;
+  padding:13px 16px;
+  border-radius:13px;
+  border:1px solid rgba(120,110,255,.14);
+  background:rgba(100,90,255,.035);
+  color:rgba(255,255,255,.5);
+  font-size:12px;
+  line-height:1.55;
+}
+
+.investor-simulator-note strong{
+  color:rgba(220,216,255,.82);
+}
+
+@media(max-width:700px){
+  .investor-simulator-label{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:5px;
+  }
+}
+</style>
+
+
+<style id="investor-evidence-v3">
+/* =========================================
+   INVESTOR MVP V3 — VERIFICATION EVIDENCE
+   ========================================= */
+
+#execution-graph,
+#verification-trace,
+#proof-carrying-action{
+  position:relative;
+}
+
+/* Shared evidence-system framing */
+#execution-graph::before,
+#verification-trace::before,
+#proof-carrying-action::before{
+  content:"VERIFICATION EVIDENCE";
+  display:block;
+  margin-bottom:8px;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.18em;
+  color:rgba(145,138,255,.62);
+}
+
+/* Execution Graph */
+#execution-graph{
+  border-color:rgba(110,100,255,.16);
+}
+
+#execution-graph .panel-label{
+  font-size:12px;
+}
+
+#execution-graph .graph-title,
+#execution-graph h2{
+  letter-spacing:-.025em;
+}
+
+/* Verification Trace */
+#verification-trace{
+  border-color:rgba(110,100,255,.14);
+}
+
+#verification-trace .trace-summary,
+#verification-trace .verification-summary{
+  box-shadow:
+    0 0 0 1px rgba(110,100,255,.08),
+    0 14px 40px rgba(20,10,70,.12);
+}
+
+/* Proof section becomes the terminal evidence surface */
+#proof-carrying-action{
+  border-color:rgba(120,105,255,.22);
+  background:
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(100,85,255,.10),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(15,16,31,.98),
+      rgba(8,9,17,.98)
+    );
+  box-shadow:
+    0 24px 80px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+/* Proof metadata */
+#proof-carrying-action .proof-version,
+#proof-carrying-action .proof-decision{
+  letter-spacing:.08em;
+}
+
+/* Commitment treatment */
+#proof-carrying-action .commitment,
+#proof-carrying-action .proof-commitment,
+#proof-carrying-action [class*="commitment"]{
+  position:relative;
+  overflow:hidden;
+  border-color:rgba(130,115,255,.30);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(80,70,190,.08),
+      rgba(255,255,255,.018)
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.035),
+    0 14px 45px rgba(30,20,100,.12);
+}
+
+/* Hash text */
+#proof-carrying-action code{
+  word-break:break-all;
+}
+
+/* Make the evidence relationship explicit */
+#proof-carrying-action .proof-flow,
+#proof-carrying-action .proof-chain{
+  position:relative;
+}
+
+/* Responsive */
+@media(max-width:700px){
+
+  #execution-graph::before,
+  #verification-trace::before,
+  #proof-carrying-action::before{
+    margin-bottom:6px;
+  }
+
+  #proof-carrying-action code{
+    font-size:10px;
+    line-height:1.5;
+  }
+}
+</style>
+
+
+<style id="phorva-desktop-story-compact">
+/* =========================================================
+   PHORVA — DESKTOP STORY COMPACT
+   Desktop only. Mobile layout remains unchanged.
+   ========================================================= */
+
+@media (min-width: 761px){
+
+  /* Keep the What Phorva section dense enough for the
+     investor dashboard without removing information. */
+  #what-phorva.phorva-not{
+    padding: 22px;
+  }
+
+  #what-phorva.phorva-not .story-hero-row{
+    gap: 18px;
+  }
+
+  #what-phorva.phorva-not h2{
+    font-size: clamp(23px, 2.15vw, 32px);
+    line-height: 1.05;
+  }
+
+  #what-phorva.phorva-not .story-lead{
+    margin-top: 9px;
+    font-size: 12px;
+    line-height: 1.5;
+    max-width: 620px;
+  }
+
+  #what-phorva.phorva-not .identity-grid{
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  #what-phorva.phorva-not .identity-column{
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  #what-phorva.phorva-not .identity-heading{
+    gap: 8px;
+    padding-bottom: 10px;
+    margin-bottom: 2px;
+  }
+
+  #what-phorva.phorva-not .identity-heading span{
+    font-size: 8px;
+  }
+
+  #what-phorva.phorva-not .identity-heading strong{
+    font-size: 10px;
+  }
+
+  #what-phorva.phorva-not .identity-item{
+    padding: 9px 0;
+  }
+
+  #what-phorva.phorva-not .identity-item strong{
+    font-size: 11px;
+  }
+
+  #what-phorva.phorva-not .identity-item span{
+    margin-top: 3px;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  #what-phorva.phorva-not .story-statement{
+    margin-top: 12px;
+    padding: 12px 14px;
+    font-size: 11px;
+  }
+}
+</style>
+
+
+<style id="phorva-final-mobile-layout">
+/* FINAL RESPONSIVE LAYOUT FIX */
+
+html,
+body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+.app{
+  width:100%;
+  max-width:1500px;
+  margin:0 auto;
+}
+
+/* The main dashboard must stack on tablet/mobile.
+   Network Status is a sibling panel, not a permanent sidebar. */
+@media (max-width:1100px){
+  .grid{
+    grid-template-columns:1fr !important;
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  .grid > .panel{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+  }
+
+  .panel.full{
+    grid-column:1 !important;
+  }
+}
+
+/* Phone layout */
+@media (max-width:600px){
+  .app{
+    width:100%;
+    max-width:100%;
+    padding:12px;
+    overflow-x:hidden;
+  }
+
+  .grid{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:12px;
+    width:100% !important;
+  }
+
+  .grid > .panel,
+  .panel.full{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+  }
+
+  .panel-body{
+    min-width:0;
+  }
+
+  .story-compare,
+  .identity-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  .story-compare-card,
+  .identity-column{
+    width:100%;
+    min-width:0;
+  }
+
+  .story-flow{
+    flex-wrap:wrap;
+  }
+
+  .proof-story-flow{
+    flex-wrap:wrap;
+  }
+
+  .execution-environments{
+    width:100%;
+    min-width:0;
+  }
+
+  .environment-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  .destinations{
+    grid-template-columns:1fr 1fr !important;
+  }
+}
+</style>
+
 </head>
 <body><div class="app">
 <header class="topbar"><div class="brand"><div class="logo"><img src="/phorva-logo.png" alt="Phorva logo"></div><div><div class="brand-name">PHORVA</div><div class="brand-sub">VERIFIABLE EXECUTION INFRASTRUCTURE</div></div></div><div class="status"><span class="dot"></span> Verification engine online</div></header>
-<section class="hero"><div class="eyebrow">SECURITY + VERIFICATION FOR AUTONOMOUS AGENTS</div><h1>Agents can act autonomously.<br>Phorva makes their actions verifiable.</h1><p>Phorva sits between autonomous agents and execution infrastructure, evaluating intent, policy, risk and transaction semantics before an action is authorized.</p><div class="flow"><div class="flow-item">Agent</div><span class="arrow">→</span><div class="flow-item">Intent</div><span class="arrow">→</span><div class="flow-item core">PHORVA CORE</div><span class="arrow">→</span><div class="flow-item">Verification</div><span class="arrow">→</span><div class="flow-item">Verified Action</div></div></section>
+<section class="hero investor-hero">
+  <div class="eyebrow">SECURITY + VERIFICATION FOR AUTONOMOUS AGENTS</div>
+
+  <div class="hero-kicker">THE VERIFICATION LAYER BETWEEN AGENTS AND EXECUTION</div>
+
+  <h1>Agents can act autonomously.<br><span>Phorva makes their actions verifiable.</span></h1>
+
+  <p class="hero-lead">
+    Phorva determines whether the action an agent wants to take is actually
+    the action it is authorized to execute — and produces verifiable evidence
+    of the result.
+  </p>
+
+  <div class="hero-flow-label">FROM AGENT INTENT TO VERIFIED EXECUTION</div>
+
+  <div class="flow">
+    <div class="flow-item">Agent</div>
+    <span class="arrow">→</span>
+    <div class="flow-item">Intent</div>
+    <span class="arrow">→</span>
+    <div class="flow-item core">PHORVA CORE</div>
+    <span class="arrow">→</span>
+    <div class="flow-item">Verification</div>
+    <span class="arrow">→</span>
+    <div class="flow-item">Verified Execution</div>
+  </div>
+
+  <div class="hero-principle">
+    <span>Agents decide.</span>
+    <span>Execution systems execute.</span>
+    <strong>Phorva verifies.</strong>
+  </div>
+</section>
 <section class="how-works">
   <div class="how-works-head">
     <div>
@@ -2141,13 +2866,14 @@ button:active,
 <section class="panel"><div class="panel-head"><div>
 
 <!-- PHORVA STORY — STEP 3 + STEP 4 -->
-<section class="phorva-story phorva-story-v2" id="why-phorva">
+<section class="phorva-story phorva-story-v2 investor-story" id="why-phorva">
 
   <div class="story-kicker">WHY PHORVA EXISTS</div>
 
   <div class="story-hero-row">
-    <div>
+    <div class="story-hero-copy">
       <h2>Autonomous agents are becoming economic actors.</h2>
+
       <p class="story-lead">
         They can decide, transact and execute. The missing layer is verification:
         knowing whether the action that actually happened is the action the agent
@@ -2162,40 +2888,45 @@ button:active,
     </div>
   </div>
 
-  <div class="story-compare">
+  <div class="story-compare investor-compare">
 
     <div class="story-compare-card muted">
       <div class="story-card-label">WITHOUT PHORVA</div>
+
       <div class="story-flow">
-        Agent Intent
-        <i>→</i>
-        Transaction
-        <i>→</i>
-        Execution
+        <span>Agent Intent</span>
+        <b>→</b>
+        <span>Transaction</span>
+        <b>→</b>
+        <span>Execution</span>
       </div>
+
       <p>
         The system may know that a transaction was signed,
-        but not whether the resulting execution matched the intended action.
+        but not whether the resulting execution matched
+        the intended action.
       </p>
     </div>
 
     <div class="story-compare-card active">
       <div class="story-card-label">WITH PHORVA</div>
+
       <div class="story-flow">
-        Intent
-        <i>→</i>
-        Policy
-        <i>→</i>
-        Risk
-        <i>→</i>
-        Authorization
-        <i>→</i>
-        Execution
-        <i>→</i>
-        Verification
-        <i>→</i>
-        Proof
+        <span>Intent</span>
+        <b>→</b>
+        <span>Policy</span>
+        <b>→</b>
+        <span>Risk</span>
+        <b>→</b>
+        <span>Authorization</span>
+        <b>→</b>
+        <span>Execution</span>
+        <b>→</b>
+        <span>Verification</span>
+        <b>→</b>
+        <span>Proof</span>
       </div>
+
       <p>
         Phorva establishes what was intended, what was executed,
         whether it matched, and what evidence was produced.
@@ -2204,23 +2935,81 @@ button:active,
 
   </div>
 
+  <div class="phorva-story-proof">
+
+    <div class="proof-story-header">
+      <div>
+        <div class="story-kicker">THE VERIFICATION PROBLEM</div>
+        <h3>When execution does not match intent.</h3>
+      </div>
+
+      <div class="proof-story-label">LIVE PHORVA EXAMPLE</div>
+    </div>
+
+    <div class="proof-story-flow">
+
+      <div class="proof-story-step">
+        <small>DECLARED INTENT</small>
+        <strong>$300</strong>
+        <span>Authorized transaction</span>
+      </div>
+
+      <div class="proof-story-arrow">→</div>
+
+      <div class="proof-story-step danger">
+        <small>ATTEMPTED EXECUTION</small>
+        <strong>$3,000</strong>
+        <span>10× the authorized amount</span>
+      </div>
+
+      <div class="proof-story-arrow">→</div>
+
+      <div class="proof-story-step blocked">
+        <small>PHORVA VERDICT</small>
+        <strong>BLOCKED</strong>
+        <span>Policy + intent mismatch</span>
+      </div>
+
+    </div>
+
+    <div class="proof-story-bottom">
+      <span>Intent</span>
+      <b>≠</b>
+      <span>Execution</span>
+      <strong>→ Phorva rejects the action</strong>
+    </div>
+
+  </div>
+
   <div class="story-kicker story-kicker-spaced">WHERE IT MATTERS</div>
 
   <div class="story-examples">
+
     <div class="story-example">
       <strong>DEFI</strong>
-      <span>Authorized swap: $300.<br>Attempted execution: $3,000.<br><b>Phorva blocks it.</b></span>
+      <span>
+        Authorized swap: $300.<br>
+        Attempted execution: $3,000.<br>
+        <b>Phorva blocks it.</b>
+      </span>
     </div>
 
     <div class="story-example">
       <strong>PAYMENTS</strong>
-      <span>Agent receives defined spending conditions.<br><b>Execution is checked against them.</b></span>
+      <span>
+        Agent receives defined spending conditions.<br>
+        <b>Execution is checked against them.</b>
+      </span>
     </div>
 
     <div class="story-example">
       <strong>PREDICTION · GAMING · AUTOMATION</strong>
-      <span>Agent proposes an action.<br><b>Execution becomes verifiable evidence.</b></span>
+      <span>
+        Agent proposes an action.<br>
+        <b>Execution becomes verifiable evidence.</b>
+      </span>
     </div>
+
   </div>
 
   <div class="story-statement">
@@ -2325,7 +3114,15 @@ button:active,
 
 </section>
 
-<div class="panel-label">CORE PIPELINE</div><div class="panel-title">Phorva Verification Engine</div></div><div class="live">LIVE</div></div><div class="panel-body"><div class="core"><div class="core-node active"><span>01</span><strong>Intent</strong></div><div class="core-node active"><span>02</span><strong>Policy</strong></div><div class="core-node active"><span>03</span><strong>Risk</strong></div><div class="core-node active"><span>04</span><strong>Authorization</strong></div><div class="core-node active"><span>05</span><strong>Validation</strong></div><div class="core-node active"><span>06</span><strong>Execution</strong></div></div><div style="height:20px"></div><div class="panel-label">LIVE EXECUTION SIMULATOR</div><div class="sim" style="margin-top:10px"><button class="demo authorized" onclick="runDemo(300)"><h3>✓ Authorized execution</h3><p>Declared intent: swap 300 USDC</p><div class="amount">300 USDC</div><p>Max transaction: 500 USDC</p></button><button class="demo attack" onclick="runDemo(3000)"><h3>⚠ Simulate attack</h3><p>Declared intent: swap 300 USDC</p><div class="amount">3,000 USDC</div><p>Attempted execution exceeds authorized intent</p></button></div><div id="verdict" class="verdict"><div class="verdict-head"><div><div class="panel-label">LIVE PHORVA VERDICT</div><div id="verdictName" class="verdict-name"></div></div><div id="risk" class="verdict-name"></div></div><div id="checks" class="checks"></div><details class="payload-details">
+<div class="panel-label">CORE PIPELINE</div><div class="panel-title">Phorva Verification Engine</div></div><div class="live">LIVE</div></div><div class="panel-body"><div class="core"><div class="core-node active"><span>01</span><strong>Intent</strong></div><div class="core-node active"><span>02</span><strong>Policy</strong></div><div class="core-node active"><span>03</span><strong>Risk</strong></div><div class="core-node active"><span>04</span><strong>Authorization</strong></div><div class="core-node active"><span>05</span><strong>Validation</strong></div><div class="core-node active"><span>06</span><strong>Execution</strong></div></div><div style="height:20px"></div><div class="panel-label investor-simulator-label">
+  <span>LIVE EXECUTION SIMULATOR</span>
+  <small>SEE THE VERIFICATION LAYER IN ACTION</small>
+</div><div class="sim" style="margin-top:10px"><button class="demo authorized" onclick="runDemo(300)"><h3>✓ Authorized execution</h3><p>Declared intent: swap 300 USDC</p><div class="amount">300 USDC</div><p>Max transaction: 500 USDC</p></button><button class="demo attack" onclick="runDemo(3000)"><h3>⚠ Simulate attack</h3><p>Declared intent: swap 300 USDC</p><div class="amount">3,000 USDC</div><p>Attempted execution exceeds authorized intent</p></button></div>
+<div class="investor-simulator-note">
+  <strong>Same verification engine. Different execution outcome.</strong>
+  Click either scenario to run the action through Phorva and inspect the
+  resulting authorization, verification trace, execution graph and proof evidence below.
+</div><div id="verdict" class="verdict"><div class="verdict-head"><div><div class="panel-label">LIVE PHORVA VERDICT</div><div id="verdictName" class="verdict-name"></div></div><div id="risk" class="verdict-name"></div></div><div id="checks" class="checks"></div><details class="payload-details">
   <summary>View verification payload</summary>
   <div id="raw" class="raw"></div>
 </details></div></div></section>
@@ -3789,7 +4586,7 @@ function syncMainVerificationSurfaces(data,traceData,payload){
   const proofDecision=
     proofStatement?.authorization?.decision ||
     data.proof?.decision ||
-    (authorized?"AUTHORIZED":"BLOCKED");
+    (authorized ? "AUTHORIZED" : "BLOCKED");
   const proofCommitment=
     data.commitment ||
     data.proof?.commitment ||
@@ -3806,6 +4603,13 @@ function syncMainVerificationSurfaces(data,traceData,payload){
 
   if(proofVersionElement)proofVersionElement.textContent=proofVersion;
   if(proofDecisionElement)proofDecisionElement.textContent=proofDecision;
+
+  const proofFlowCaption=document.querySelector(".proof-flow-caption");
+  if(proofFlowCaption){
+    proofFlowCaption.innerHTML=
+      `${proofVersion} · ${proofDecision} · canonical evidence derived from verified execution`;
+  }
+
   if(proofIntent)proofIntent.textContent=`${intentType} ${intentAmount} ${intentAsset}`;
   if(proofPolicy)proofPolicy.textContent=`≤ ${payload?.policy?.maxTransactionAmount ?? data.policyMaximum ?? "—"} ${intentAsset}`;
   if(proofExecution)proofExecution.textContent=`${actualAmount} ${intentAsset}`;
@@ -3869,5 +4673,178 @@ document.addEventListener(
   }
 );
 </script>
+
+
+<style id="phorva-desktop-story-compact-v2">
+@media (min-width: 761px){
+
+  /* WHAT PHORVA IS — compact desktop investor layout */
+  #what-phorva.phorva-not{
+    padding: 18px 22px !important;
+  }
+
+  #what-phorva.phorva-not .story-kicker{
+    margin-bottom: 5px !important;
+  }
+
+  #what-phorva.phorva-not .story-hero-row{
+    gap: 12px !important;
+  }
+
+  #what-phorva.phorva-not h2{
+    font-size: 24px !important;
+    line-height: 1.05 !important;
+    margin: 0 !important;
+  }
+
+  #what-phorva.phorva-not .story-lead{
+    margin-top: 6px !important;
+    font-size: 10px !important;
+    line-height: 1.4 !important;
+  }
+
+  #what-phorva.phorva-not .identity-grid{
+    gap: 10px !important;
+    margin-top: 12px !important;
+  }
+
+  #what-phorva.phorva-not .identity-column{
+    padding: 11px 14px !important;
+    border-radius: 13px !important;
+  }
+
+  #what-phorva.phorva-not .identity-heading{
+    gap: 7px !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 0 !important;
+  }
+
+  #what-phorva.phorva-not .identity-heading span{
+    font-size: 7px !important;
+  }
+
+  #what-phorva.phorva-not .identity-heading strong{
+    font-size: 9px !important;
+  }
+
+  #what-phorva.phorva-not .identity-item{
+    padding: 7px 0 !important;
+  }
+
+  #what-phorva.phorva-not .identity-item strong{
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+  }
+
+  #what-phorva.phorva-not .identity-item span{
+    margin-top: 2px !important;
+    font-size: 8px !important;
+    line-height: 1.3 !important;
+  }
+
+  #what-phorva.phorva-not .identity-item:last-child{
+    padding-bottom: 1px !important;
+  }
+}
+</style>
+
+
+<style id="phorva-responsive-layout-fix">
+
+/* =========================================================
+   PHORVA — RESPONSIVE LAYOUT FIX
+   Restores the intended single-column mobile/tablet layout.
+   Does not change desktop presentation.
+   ========================================================= */
+
+@media (max-width: 950px){
+
+  .app{
+    width:100% !important;
+    max-width:100% !important;
+    overflow-x:hidden !important;
+  }
+
+  .grid{
+    width:100% !important;
+    grid-template-columns:1fr !important;
+  }
+
+  .panel.full{
+    grid-column:1 !important;
+  }
+
+  #what-phorva.phorva-not{
+    width:100% !important;
+    max-width:100% !important;
+    overflow:hidden !important;
+  }
+
+}
+
+@media (max-width: 760px){
+
+  .phorva-story-v2{
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+
+  #what-phorva.phorva-not .identity-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  #what-phorva.phorva-not .identity-column{
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+}
+
+</style>
+
+
+<style id="phorva-grid-breakpoint-fix">
+
+/* =========================================================
+   PHORVA — DASHBOARD RESPONSIVE BREAKPOINT
+   Keep the two-column investor layout on large desktop,
+   but give smaller screens the full content width.
+   ========================================================= */
+
+@media (max-width: 1200px){
+
+  .grid{
+    grid-template-columns:1fr !important;
+  }
+
+  .panel.full{
+    grid-column:1 !important;
+  }
+
+  .network{
+    width:100% !important;
+  }
+
+  #what-phorva.phorva-not,
+  #why-phorva.investor-story{
+    width:100% !important;
+    max-width:none !important;
+  }
+}
+
+@media (max-width: 760px){
+
+  .grid{
+    grid-template-columns:1fr !important;
+  }
+
+  #what-phorva.phorva-not .identity-grid{
+    grid-template-columns:1fr !important;
+  }
+
+}
+
+</style>
 
 </body></html>
