@@ -4819,11 +4819,17 @@ function createPhorvaProofReceipt({
       authorization: {
         decision:
           proverRequest.proofInput
+            ?.verifiedAuthorization
+            ?.decision ??
+          proverRequest.proofInput
             ?.authorization
             ?.decision ??
           null,
 
         allExecutionsAuthorized:
+          proverRequest.proofInput
+            ?.verifiedAuthorization
+            ?.allExecutionsAuthorized ??
           proverRequest.proofInput
             ?.authorization
             ?.allExecutionsAuthorized ??
@@ -4831,17 +4837,26 @@ function createPhorvaProofReceipt({
 
         sequenceValid:
           proverRequest.proofInput
+            ?.verifiedAuthorization
+            ?.sequenceValid ??
+          proverRequest.proofInput
             ?.authorization
             ?.sequenceValid ??
           null,
 
         graphInvariantsValid:
           proverRequest.proofInput
+            ?.verifiedAuthorization
+            ?.graphInvariantsValid ??
+          proverRequest.proofInput
             ?.authorization
             ?.graphInvariantsValid ??
           null,
 
         finalStateSatisfied:
+          proverRequest.proofInput
+            ?.verifiedAuthorization
+            ?.finalStateSatisfied ??
           proverRequest.proofInput
             ?.authorization
             ?.finalStateSatisfied ??
