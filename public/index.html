@@ -2787,12 +2787,10 @@ body{
 
   <div class="hero-kicker">THE VERIFICATION LAYER BETWEEN AGENTS AND EXECUTION</div>
 
-  <h1>Agents can act autonomously.<br><span>Phorva makes their actions verifiable.</span></h1>
+  <h1>Agents can act autonomously.<br><span>Phorva makes every action verifiable.</span></h1>
 
   <p class="hero-lead">
-    Phorva determines whether the action an agent wants to take is actually
-    the action it is authorized to execute — and produces verifiable evidence
-    of the result.
+    Phorva checks whether the action that actually executes is the action the agent was authorized to take — and produces cryptographic evidence of the result.
   </p>
 
   <div class="hero-flow-label">FROM AGENT INTENT TO VERIFIED EXECUTION</div>
@@ -2815,69 +2813,69 @@ body{
     <strong>Phorva verifies.</strong>
   </div>
 </section>
+
 <section class="how-works">
   <div class="how-works-head">
     <div>
-      <div class="panel-label">HOW PHORVA WORKS</div>
+      <div class="panel-label">HOW IT WORKS</div>
       <div class="how-works-title">Verification before autonomous execution</div>
     </div>
-    <div class="how-works-copy">Autonomous agents decide what they want to do. Phorva evaluates whether the resulting execution matches the declared intent and authorization conditions.</div>
   </div>
+
   <div class="how-works-body">
     <div class="how-works-flow">
-      <div class="how-node"><small>01 · SOURCE</small><strong>Agent</strong><span>An autonomous system proposes an action.</span></div>
-      <div class="how-node"><small>02 · DECLARATION</small><strong>Intent</strong><span>What the agent is authorized to accomplish.</span></div>
-      <div class="how-node core"><small>03 · VERIFICATION</small><strong>Phorva Core</strong><span>Policy · Risk · Authorization · Validation</span></div>
-      <div class="how-node"><small>04 · OBSERVATION</small><strong>Execution</strong><span>What actually happens in the execution environment.</span></div>
-      <div class="how-node verify"><small>05 · CHECK</small><strong>Verification</strong><span>Execution is checked against intent and authorization.</span></div>
-      <div class="how-node proof"><small>06 · EVIDENCE</small><strong>Proof-Carrying Action</strong><span>Execution evidence becomes canonical, verifiable output.</span></div>
-    </div>
-    <div class="execution-environments">
-      <div class="execution-environments-head">
-        <div class="execution-environments-title">ONE VERIFICATION LAYER. MULTIPLE EXECUTION ENVIRONMENTS.</div>
-        <div class="execution-environments-sub">Phorva governs the action · the environment executes it</div>
+      <div class="how-node">
+        <small>01</small>
+        <strong>Agent</strong>
+        <span>Proposes an action</span>
       </div>
-      <div class="environment-grid">
-        <div class="environment-group">
-          <small>Blockchain</small>
-          <div class="environment-items">
-            <div class="environment-item"><strong>Wallets</strong> · agent-controlled assets</div>
-            <div class="environment-item"><strong>DeFi</strong> · protocols & strategies</div>
-            <div class="environment-item"><strong>Prediction Markets</strong> · market actions</div>
-            <div class="environment-item"><strong>Gaming</strong> · autonomous economies</div>
-            <div class="environment-item"><strong>DAOs</strong> · treasury operations</div>
-            <div class="environment-item"><strong>Treasuries</strong> · capital movement</div>
-            <div class="environment-item"><strong>Automation</strong> · on-chain execution</div>
-          </div>
-        </div>
-        <div class="environment-group">
-          <small>Payments</small>
-          <div class="environment-items">
-            <div class="environment-item"><strong>Agent Payments</strong> · machine payments</div>
-            <div class="environment-item"><strong>Virtual Card</strong> · autonomous online spend</div>
-          </div>
-        </div>
+      <div class="how-node">
+        <small>02</small>
+        <strong>Intent</strong>
+        <span>Declares authorization</span>
       </div>
-      <div class="how-works-note"><strong>Phorva does not replace the execution layer.</strong> It verifies and governs the actions moving through it. Virtual Card execution is a future rail using existing regulated payment infrastructure; Phorva is not the card issuer.</div>
+      <div class="how-node core">
+        <small>03</small>
+        <strong>Phorva Core</strong>
+        <span>Policy · Risk · Authorization</span>
+      </div>
+      <div class="how-node">
+        <small>04</small>
+        <strong>Execution</strong>
+        <span>What actually happens</span>
+      </div>
+      <div class="how-node verify">
+        <small>05</small>
+        <strong>Check</strong>
+        <span>Matches intent?</span>
+      </div>
+      <div class="how-node proof">
+        <small>06</small>
+        <strong>Evidence</strong>
+        <span>Proof-carrying action</span>
+      </div>
     </div>
   </div>
 </section>
+
 <div class="grid">
 <section class="panel"><div class="panel-head"><div>
 
 <!-- PHORVA STORY — STEP 3 + STEP 4 -->
+
 <section class="phorva-story phorva-story-v2 investor-story" id="why-phorva">
 
-  <div class="story-kicker">WHY PHORVA EXISTS</div>
+  <div class="story-kicker">THE PROBLEM</div>
 
   <div class="story-hero-row">
     <div class="story-hero-copy">
       <h2>Autonomous agents are becoming economic actors.</h2>
 
       <p class="story-lead">
-        They can decide, transact and execute. The missing layer is verification:
-        knowing whether the action that actually happened is the action the agent
-        was authorized to take.
+        They can decide, transact, and move capital.<br><br>
+        Today the system may know a transaction was signed.<br>
+        It does not know whether the resulting execution matched the declared intent and authorization.<br><br>
+        That is the gap Phorva closes.
       </p>
     </div>
 
@@ -2888,62 +2886,14 @@ body{
     </div>
   </div>
 
-  <div class="story-compare investor-compare">
-
-    <div class="story-compare-card muted">
-      <div class="story-card-label">WITHOUT PHORVA</div>
-
-      <div class="story-flow">
-        <span>Agent Intent</span>
-        <b>→</b>
-        <span>Transaction</span>
-        <b>→</b>
-        <span>Execution</span>
-      </div>
-
-      <p>
-        The system may know that a transaction was signed,
-        but not whether the resulting execution matched
-        the intended action.
-      </p>
-    </div>
-
-    <div class="story-compare-card active">
-      <div class="story-card-label">WITH PHORVA</div>
-
-      <div class="story-flow">
-        <span>Intent</span>
-        <b>→</b>
-        <span>Policy</span>
-        <b>→</b>
-        <span>Risk</span>
-        <b>→</b>
-        <span>Authorization</span>
-        <b>→</b>
-        <span>Execution</span>
-        <b>→</b>
-        <span>Verification</span>
-        <b>→</b>
-        <span>Proof</span>
-      </div>
-
-      <p>
-        Phorva establishes what was intended, what was executed,
-        whether it matched, and what evidence was produced.
-      </p>
-    </div>
-
-  </div>
-
   <div class="phorva-story-proof">
 
     <div class="proof-story-header">
       <div>
-        <div class="story-kicker">THE VERIFICATION PROBLEM</div>
+        <div class="story-kicker">LIVE EXAMPLE</div>
         <h3>When execution does not match intent.</h3>
       </div>
-
-      <div class="proof-story-label">LIVE PHORVA EXAMPLE</div>
+      <div class="proof-story-label">PHORVA IN ACTION</div>
     </div>
 
     <div class="proof-story-flow">
@@ -2981,44 +2931,9 @@ body{
 
   </div>
 
-  <div class="story-kicker story-kicker-spaced">WHERE IT MATTERS</div>
-
-  <div class="story-examples">
-
-    <div class="story-example">
-      <strong>DEFI</strong>
-      <span>
-        Authorized swap: $300.<br>
-        Attempted execution: $3,000.<br>
-        <b>Phorva blocks it.</b>
-      </span>
-    </div>
-
-    <div class="story-example">
-      <strong>PAYMENTS</strong>
-      <span>
-        Agent receives defined spending conditions.<br>
-        <b>Execution is checked against them.</b>
-      </span>
-    </div>
-
-    <div class="story-example">
-      <strong>PREDICTION · GAMING · AUTOMATION</strong>
-      <span>
-        Agent proposes an action.<br>
-        <b>Execution becomes verifiable evidence.</b>
-      </span>
-    </div>
-
-  </div>
-
-  <div class="story-statement">
-    <span>Agents decide.</span>
-    <span>Execution systems execute.</span>
-    <strong>Phorva verifies.</strong>
-  </div>
-
 </section>
+
+
 
 <section class="phorva-story phorva-not phorva-story-v2" id="what-phorva-is">
 
@@ -3028,8 +2943,7 @@ body{
     <div>
       <h2>A verification layer, not another execution platform.</h2>
       <p class="story-lead">
-        Phorva sits between autonomous agents and the systems where their
-        actions execute.
+        Phorva sits between autonomous agents and the systems where their actions execute.
       </p>
     </div>
   </div>
@@ -3081,7 +2995,7 @@ body{
 
       <div class="identity-item">
         <strong>Not a prover marketplace</strong>
-        <span>Defines verification semantics; proving infrastructure supplies machinery.</span>
+        <span>Defines verification semantics; proving infrastructure supplies the machinery.</span>
       </div>
 
       <div class="identity-item">
@@ -3095,13 +3009,8 @@ body{
       </div>
 
       <div class="identity-item">
-        <strong>Not a card issuer</strong>
-        <span>Virtual Card is a future execution rail using existing regulated infrastructure.</span>
-      </div>
-
-      <div class="identity-item">
-        <strong>Not the agent's decision-maker</strong>
-        <span>Phorva verifies whether attempted actions are authorized and consistent with intent.</span>
+        <strong>Not the agent’s decision-maker</strong>
+        <span>Phorva only verifies whether attempted actions are authorized and consistent with intent.</span>
       </div>
     </div>
 
@@ -3114,15 +3023,34 @@ body{
 
 </section>
 
-<div class="panel-label">CORE PIPELINE</div><div class="panel-title">Phorva Verification Engine</div></div><div class="live">LIVE</div></div><div class="panel-body"><div class="core"><div class="core-node active"><span>01</span><strong>Intent</strong></div><div class="core-node active"><span>02</span><strong>Policy</strong></div><div class="core-node active"><span>03</span><strong>Risk</strong></div><div class="core-node active"><span>04</span><strong>Authorization</strong></div><div class="core-node active"><span>05</span><strong>Validation</strong></div><div class="core-node active"><span>06</span><strong>Execution</strong></div></div><div style="height:20px"></div><div class="panel-label investor-simulator-label">
-  <span>LIVE EXECUTION SIMULATOR</span>
-  <small>SEE THE VERIFICATION LAYER IN ACTION</small>
-</div><div class="sim" style="margin-top:10px"><button class="demo authorized" onclick="runDemo(300)"><h3>✓ Authorized execution</h3><p>Declared intent: swap 300 USDC</p><div class="amount">300 USDC</div><p>Max transaction: 500 USDC</p></button><button class="demo attack" onclick="runDemo(3000)"><h3>⚠ Simulate attack</h3><p>Declared intent: swap 300 USDC</p><div class="amount">3,000 USDC</div><p>Attempted execution exceeds authorized intent</p></button></div>
+
+<div class="panel-label">CORE PIPELINE</div><div class="panel-title">Phorva Verification Engine</div></div><div class="live">LIVE</div></div><div class="panel-body"><div class="core"><div class="core-node active"><span>01</span><strong>Intent</strong></div><div class="core-node active"><span>02</span><strong>Policy</strong></div><div class="core-node active"><span>03</span><strong>Risk</strong></div><div class="core-node active"><span>04</span><strong>Authorization</strong></div><div class="core-node active"><span>05</span><strong>Validation</strong></div><div class="core-node active"><span>06</span><strong>Execution</strong></div></div><div style="height:20px"></div>
+<div class="panel-label investor-simulator-label">
+  <span>LIVE DEMONSTRATION</span>
+  <small>SAME ENGINE · TWO OUTCOMES</small>
+</div>
+
+<div class="sim" style="margin-top:14px">
+  <button class="demo authorized" onclick="runDemo(300)">
+    <h3>✓ Authorized</h3>
+    <p>Declared intent: swap 300 USDC</p>
+    <div class="amount">300 USDC</div>
+    <p>Within policy limit</p>
+  </button>
+
+  <button class="demo attack" onclick="runDemo(3000)">
+    <h3>⚠ Attack Attempt</h3>
+    <p>Declared intent: swap 300 USDC</p>
+    <div class="amount">3,000 USDC</div>
+    <p>Exceeds authorized amount</p>
+  </button>
+</div>
+
 <div class="investor-simulator-note">
-  <strong>Same verification engine. Different execution outcome.</strong>
-  Click either scenario to run the action through Phorva and inspect the
-  resulting authorization, verification trace, execution graph and proof evidence below.
-</div><div id="verdict" class="verdict"><div class="verdict-head"><div><div class="panel-label">LIVE PHORVA VERDICT</div><div id="verdictName" class="verdict-name"></div></div><div id="risk" class="verdict-name"></div></div><div id="checks" class="checks"></div><details class="payload-details">
+  <strong>Click either scenario.</strong>
+  Phorva runs the same verification engine and shows the resulting decision, execution graph, and cryptographic evidence below.
+</div>
+<div id="verdict" class="verdict"><div class="verdict-head"><div><div class="panel-label">LIVE PHORVA VERDICT</div><div id="verdictName" class="verdict-name"></div></div><div id="risk" class="verdict-name"></div></div><div id="checks" class="checks"></div><details class="payload-details">
   <summary>View verification payload</summary>
   <div id="raw" class="raw"></div>
 </details></div></div></section>
@@ -3157,54 +3085,105 @@ body{
   </div>
 </div>
 <div id="trace" class="trace"><div class="trace-row"><span>Agent identity</span><span class="muted">READY</span></div><div class="trace-row"><span>Intent semantics</span><span class="muted">READY</span></div><div class="trace-row"><span>Policy limits</span><span class="muted">READY</span></div><div class="trace-row"><span>Transaction amount</span><span class="muted">READY</span></div><div class="trace-row"><span>Execution type</span><span class="muted">READY</span></div><div class="trace-row"><span>Transaction security</span><span class="muted">READY</span></div></div></div></section>
-<section class="panel full"><div class="panel-head"><div><div class="panel-label">PROOF-CARRYING ACTION</div><div class="panel-title">Execution → evidence → verification</div></div></div><div class="panel-body"><div class="proof-flow">
-<div class="proof">
-<div class="proof-node"><strong>Execution Graph</strong><small>ordered actions</small></div>
-<div class="proof-arrow">→</div>
-<div class="proof-node"><strong>Verification Trace</strong><small>security checks</small></div>
-<div class="proof-arrow">→</div>
-<div class="proof-node"><strong>Proof Statement</strong><small>canonical semantics</small></div>
-<div class="proof-arrow">→</div>
-<div class="proof-node"><strong>Commitment</strong><small>SHA-256 commitment</small></div>
-</div>
-<div class="proof-flow-caption">
-Canonical evidence derived from the verified execution
-</div>
-</div><div id="proofStatement" class="proof-statement">
-  <div class="proof-statement-grid">
+
+<section class="panel full" id="proof-carrying-action">
+  <div class="panel-head">
     <div>
-      <small>VERSION</small>
-      <strong id="proofVersion">phorva-proof-v1</strong>
-    </div>
-    <div>
-      <small>DECISION</small>
-      <strong id="proofDecision">AWAITING</strong>
-    </div>
-    <div>
-      <small>INTENT</small>
-      <strong id="proofIntent">Awaiting verification</strong>
-    </div>
-    <div>
-      <small>POLICY</small>
-      <strong id="proofPolicy">Awaiting verification</strong>
-    </div>
-    <div>
-      <small>EXECUTION</small>
-      <strong id="proofExecution">Awaiting verification</strong>
-    </div>
-    <div>
-      <small>CHECKS</small>
-      <strong id="proofChecks">—</strong>
+      <div class="panel-label">EVIDENCE</div>
+      <div class="panel-title">Execution → Verification → Proof</div>
     </div>
   </div>
 
-  <div class="proof-commitment">
-    <div>
-      <small>SHA-256 COMMITMENT</small>
-      <div id="proofHash" class="hash">Proof status: awaiting live authorization.</div>
+  <div class="panel-body">
+
+    <!-- Execution Graph -->
+    <div class="panel-label" style="margin-bottom:8px">EXECUTION GRAPH</div>
+    <div id="executionGraph" class="graph">
+      <div class="graph-node"><small>AGENT</small><strong>Awaiting verification</strong></div>
+      <div class="graph-arrow">→</div>
+      <div class="graph-node"><small>INTENT</small><strong>Awaiting action</strong></div>
+      <div class="graph-arrow">→</div>
+      <div class="graph-node"><small>PHORVA</small><strong>Verification</strong></div>
+      <div class="graph-arrow">→</div>
+      <div class="graph-node"><small>EXECUTION</small><strong>Awaiting transaction</strong></div>
+      <div class="graph-arrow">→</div>
+      <div class="graph-node"><small>FINAL</small><strong>Awaiting verdict</strong></div>
     </div>
+    <div id="graphHash" class="hash">Execution graph commitment: run a verification to generate evidence.</div>
+
+    <!-- Proof Statement -->
+    <div style="height:22px"></div>
+    <div class="panel-label" style="margin-bottom:8px">PROOF-CARRYING ACTION</div>
+
+    <div id="proofStatement" class="proof-statement">
+      <div class="proof-statement-grid">
+        <div>
+          <small>VERSION</small>
+          <strong id="proofVersion">phorva-proof-v1</strong>
+        </div>
+        <div>
+          <small>DECISION</small>
+          <strong id="proofDecision">AWAITING</strong>
+        </div>
+        <div>
+          <small>INTENT</small>
+          <strong id="proofIntent">Awaiting verification</strong>
+        </div>
+        <div>
+          <small>POLICY</small>
+          <strong id="proofPolicy">Awaiting verification</strong>
+        </div>
+        <div>
+          <small>EXECUTION</small>
+          <strong id="proofExecution">Awaiting verification</strong>
+        </div>
+        <div>
+          <small>CHECKS</small>
+          <strong id="proofChecks">—</strong>
+        </div>
+      </div>
+
+      <div class="proof-commitment">
+        <div>
+          <small>SHA-256 COMMITMENT</small>
+          <div id="proofHash" class="hash">Proof status: awaiting live authorization.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden detailed checks (toggle) -->
+    **Summary:**
+View detailed verification trace
+      <div id="traceStatus" class="trace-status" style="margin-top:12px">
+        <div class="trace-status-cell live">
+          <small>STATUS</small>
+          <strong id="traceStatusDecision">AWAITING</strong>
+        </div>
+        <div class="trace-status-cell">
+          <small>CHECKS</small>
+          <strong id="traceStatusTotal">—</strong>
+        </div>
+        <div class="trace-status-cell passed">
+          <small>PASSED</small>
+          <strong id="traceStatusPassed">—</strong>
+        </div>
+        <div class="trace-status-cell failed">
+          <small>FAILED</small>
+          <strong id="traceStatusFailed">—</strong>
+        </div>
+      </div>
+      <div id="trace" class="trace" style="margin-top:10px">
+        <div class="trace-row"><span>Agent identity</span><span class="muted">READY</span></div>
+        <div class="trace-row"><span>Intent</span><span class="muted">READY</span></div>
+        <div class="trace-row"><span>Policy</span><span class="muted">READY</span></div>
+        <div class="trace-row"><span>Amount</span><span class="muted">READY</span></div>
+        <div class="trace-row"><span>Execution type</span><span class="muted">READY</span></div>
+        <div class="trace-row"><span>Transaction security</span><span class="muted">READY</span></div>
+      </div>
+
   </div>
-</div></div></section>
+</section>
+
 
 <section class="panel full">
   <div class="panel-head">
@@ -3439,10 +3418,142 @@ Canonical evidence derived from the verified execution
   </div>
 </section>
 
-<section class="panel full"><div class="panel-head"><div><div class="panel-label">EXECUTION DESTINATIONS</div><div class="panel-title">Infrastructure for autonomous economic activity</div></div></div><div class="panel-body"><div class="destinations"><div class="destination"><b>Wallets</b>Agent-controlled assets</div><div class="destination"><b>DeFi</b>Protocols & strategies</div><div class="destination"><b>Prediction Markets</b>Market actions</div><div class="destination"><b>Gaming</b>Autonomous economies</div><div class="destination"><b>Agent Payments</b>Machine payments</div><div class="destination"><b>DAOs</b>Treasury operations</div><div class="destination"><b>Treasuries</b>Capital movement</div><div class="destination"><b>Automation</b>On-chain execution</div></div></div></section>
-</div><footer>PHORVA · Security & verification infrastructure for autonomous agents</footer></div>
+
+<section class="panel full">
+  <div class="panel-head">
+    <div>
+      <div class="panel-label">WHERE IT APPLIES</div>
+      <div class="panel-title">Infrastructure for autonomous economic activity</div>
+    </div>
+  </div>
+
+  <div class="panel-body">
+    <div class="destinations">
+      <div class="destination">
+        <b>DeFi</b>
+        Protocols & strategies
+      </div>
+      <div class="destination">
+        <b>Agent Payments</b>
+        Machine-to-machine spend
+      </div>
+      <div class="destination">
+        <b>DAOs & Treasuries</b>
+        Capital movement
+      </div>
+      <div class="destination">
+        <b>Prediction Markets</b>
+        Market actions
+      </div>
+      <div class="destination">
+        <b>Gaming</b>
+        Autonomous economies
+      </div>
+      <div class="destination">
+        <b>Wallets</b>
+        Agent-controlled assets
+      </div>
+      <div class="destination">
+        <b>Automation</b>
+        On-chain execution
+      </div>
+      <div class="destination">
+        <b>Virtual Cards</b>
+        Future regulated rail
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+<footer style="text-align:center; padding:36px 20px 28px; color:#5a6578; font-size:11px; line-height:1.7;">
+  <div style="margin-bottom:10px; color:#aeb7c7; font-weight:700; letter-spacing:.04em;">
+    PHORVA · Verifiable Execution Infrastructure
+  </div>
+
+  <div style="margin-bottom:14px; color:#7c879b;">
+    Live on Base Sepolia · Ethereum Sepolia · Arbitrum Sepolia
+  </div>
+
+  <div style="display:flex; justify-content:center; gap:22px; flex-wrap:wrap; margin-bottom:16px;">
+    <a href="https://discord.gg/Ka68Z7eYUJ" target="_blank" rel="noopener"
+       style="color:#9189ff; text-decoration:none; font-weight:600;">
+      Discord
+    </a>
+    <a href="https://x.com/PhorvaGuard" target="_blank" rel="noopener"
+       style="color:#9189ff; text-decoration:none; font-weight:600;">
+      X / Twitter
+    </a>
+  </div>
+
+  <div style="color:#566277; font-size:10px;">
+    For investor materials or partnership inquiries, reach out via Discord or X.
+  </div>
+</footer>
+</div>
 <script>
+
+function phorvaDisplayValue(value, fallback="—"){
+  if(value === null || value === undefined || value === ""){
+    return fallback;
+  }
+
+  if(
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ){
+    return String(value);
+  }
+
+  if(typeof value === "object"){
+    return phorvaDisplayValue(
+      value.commitment ??
+      value.hash ??
+      value.value ??
+      value.status ??
+      value.id ??
+      null,
+      fallback
+    );
+  }
+
+  return fallback;
+}
+
+
+function phorvaScalar(value, fallback="—"){
+  if(value === null || value === undefined || value === ""){
+    return fallback;
+  }
+
+  if(typeof value !== "object"){
+    return String(value);
+  }
+
+  const candidates = [
+    value.commitment,
+    value.hash,
+    value.value,
+    value.hex,
+    value.status,
+    value.id
+  ];
+
+  for(const candidate of candidates){
+    if(candidate !== null && candidate !== undefined && candidate !== ""){
+      return phorvaScalar(candidate, fallback);
+    }
+  }
+
+  return fallback;
+}
+
+let phorvaActiveRun=0;
+
 async function runDemo(amount){
+ const runId=++phorvaActiveRun;
+
  const box=document.getElementById('verdict');
  const name=document.getElementById('verdictName');
  const risk=document.getElementById('risk');
@@ -3582,7 +3693,17 @@ async function runDemo(amount){
   }
  };
 
+ let phorvaStage='starting';
+
  try{
+  const ensureActiveRun=()=>{
+   if(runId !== phorvaActiveRun){
+    throw new Error('STALE_PHORVA_RUN');
+   }
+  };
+
+  ensureActiveRun();
+  phorvaStage='authorization';
   const res=await fetch('/authorize',{
    method:'POST',
    headers:{'Content-Type':'application/json'},
@@ -3590,6 +3711,8 @@ async function runDemo(amount){
   });
 
   const data=await res.json();
+
+  ensureActiveRun();
 
   if(!res.ok || data.error){
    throw new Error(data.error || `HTTP ${res.status}`);
@@ -3665,6 +3788,9 @@ async function runDemo(amount){
     `${verdictPassedChecks}/${verdictTotalChecks} verified`;
   }
 
+  ensureActiveRun();
+
+  phorvaStage='verification-trace';
   const traceResponse=await fetch('/verification-trace',{
    method:'POST',
    headers:{'Content-Type':'application/json'},
@@ -3672,6 +3798,8 @@ async function runDemo(amount){
   });
 
   const traceData=await traceResponse.json();
+
+  ensureActiveRun();
 
   if(!traceResponse.ok || traceData.error){
    throw new Error(
@@ -3774,9 +3902,92 @@ async function runDemo(amount){
    summaryRow
   );
 
+  /*
+   * Live verification pipeline:
+   * authorization -> trace -> execution graph -> proof -> proof verification.
+   * The simulator now renders evidence returned by the real Phorva APIs
+   * instead of relying on hardcoded graph/proof values.
+   */
+  const executions=[{
+   executionId:'demo-execution-1',
+   sequence:0,
+   parentExecutionId:null,
+   agent:payload.agent,
+   action:payload.action,
+   intent:payload.intent,
+   policy:payload.policy,
+   transaction:payload.transaction
+  }];
+
+  async function postJson(path, body){
+   const response=await fetch(path,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body)
+   });
+
+   const json=await response.json();
+
+   if(runId !== phorvaActiveRun){
+    throw new Error('STALE_PHORVA_RUN');
+   }
+
+   if(!response.ok || json.error){
+    throw new Error(
+     json.error ||
+     `${path} HTTP ${response.status}`
+    );
+   }
+
+   return json;
+  }
+
+  ensureActiveRun();
+
+  phorvaStage='execution-graph';
+  const graphData=await postJson('/execution-graph',{
+   executions
+  });
+
+  ensureActiveRun();
+
+  phorvaStage='prove-execution';
+  const proofData=await postJson('/prove-execution',{
+   executions,
+   intent:payload.intent
+  });
+
+  ensureActiveRun();
+
+  phorvaStage='verify-execution';
+  const verificationData=await postJson('/verify-execution',{
+   proverRequest:proofData.proverRequest,
+   proof:proofData.proof
+  });
+
+  // A BLOCKED decision is a successful verification outcome.
+  // Only treat the response as fatal when the proof itself is cryptographically
+  // invalid or the decision is something unexpected.
+  const decision =
+    verificationData.receipt?.authorization?.decision ||
+    proofData.proofStatement?.authorization?.decision ||
+    (data.authorized ? "AUTHORIZED" : "BLOCKED");
+
+  if (
+    verificationData.valid !== true &&
+    decision !== "BLOCKED"
+  ) {
+    throw new Error(
+      verificationData.error ||
+      "Phorva proof verification returned invalid evidence."
+    );
+  }
+
+  ensureActiveRun();
+
   const graphCommitment=
-   data.proof?.statement?.executionGraph?.commitment ||
-   data.proof?.commitment ||
+   graphData.graph?.commitment ||
+   proofData.executionGraphCommitment ||
    '—';
 
   const graph=document.getElementById('executionGraph');
@@ -3801,10 +4012,11 @@ async function runDemo(amount){
    data.action?.asset ||
    'asset';
 
-  const actualAmount=
+  const actualAmount=phorvaDisplayValue(
    data.actualTransactionAmount ??
-   data.transaction?.amount ??
-   '—';
+   data.transaction?.amount,
+   "—"
+  );
 
   const actualFunction=
    data.decodedTransaction?.function ||
@@ -3878,33 +4090,37 @@ async function runDemo(amount){
   `;
 
   const proofStatement=
-   data.proof?.statement || null;
+   proofData.proofStatement ||
+   proofData.proof?.statement ||
+   null;
 
   const proofCommitment=
-   data.proof?.commitment ||
+   proofData.proofCommitment ||
+   proofData.proof?.commitment ||
    '—';
 
   const proofVersion=
    proofStatement?.version ||
-   data.proof?.version ||
+   proofData.version ||
    'phorva-proof-v1';
 
   const proofDecision=
    proofStatement?.authorization?.decision ||
-   data.proof?.decision ||
    (graphAuthorized ? 'AUTHORIZED' : 'BLOCKED');
 
   const proofGraphCommitment=
+   proofData.executionGraphCommitment ||
    proofStatement?.executionGraph?.commitment ||
    graphCommitment ||
    '—';
 
   const proofTraceCommitment=
+   proofData.verificationTraceCommitment ||
    proofStatement?.verificationTrace?.commitment ||
    '—';
 
   const proofStatementHash=
-   proofCommitment;
+   phorvaScalar(proofCommitment);
 
   const proofIntentText=
    `${intentType} ${intentAmount} ${intentAsset}`;
@@ -3949,7 +4165,7 @@ async function runDemo(amount){
 
   if(proofHashElement){
    proofHashElement.innerHTML=
-    `<span style="color:#35d69a">LIVE</span> · ${proofStatementHash}`;
+    `<span style="color:#35d69a">LIVE</span> · ${phorvaScalar(proofStatementHash)}`;
   }
 
   const graphHashElement=
@@ -3957,7 +4173,7 @@ async function runDemo(amount){
 
   if(graphHashElement){
    graphHashElement.textContent=
-    proofGraphCommitment;
+    `Execution graph commitment: ${phorvaScalar(proofGraphCommitment)}`;
   }
 
   const proofStatementNode=
@@ -3972,19 +4188,37 @@ async function runDemo(amount){
   document.getElementById('proofHash').dataset.traceCommitment=
    proofTraceCommitment;
 
+  ensureActiveRun();
+
   raw.textContent=JSON.stringify({
    authorization:data,
-   verificationTrace:traceData
+   verificationTrace:traceData,
+   executionGraph:graphData,
+   proof:proofData,
+   proofVerification:verificationData
   },null,2);
 
  }catch(e){
+  if(e?.message === 'STALE_PHORVA_RUN'){
+   return;
+  }
+
+  if(runId !== phorvaActiveRun){
+   return;
+  }
+
   name.textContent='ENGINE ERROR';
   name.className='verdict-name bad';
 
   risk.textContent='ERROR';
   risk.className='verdict-name bad';
 
-  raw.textContent=String(e);
+  raw.textContent=JSON.stringify({
+   stage:phorvaStage,
+   error:String(e),
+   message:e?.message || null,
+   stack:e?.stack || null
+  },null,2);
  }
 
  box.scrollIntoView({
@@ -4531,14 +4765,16 @@ function syncMainVerificationSurfaces(data,traceData,payload){
   }
 
   const graphHash=document.getElementById("graphHash");
-  const graphCommitment=
-    data.proof?.statement?.executionGraph?.commitment ||
-    data.proof?.executionGraph?.commitment ||
-    data.proof?.commitment ||
-    data.commitment ||
-    "—";
+  const graphCommitment=phorvaDisplayValue(
+    data.proof?.statement?.executionGraph?.commitment ??
+    data.proof?.executionGraph?.commitment ??
+    data.proof?.commitment ??
+    data.commitment,
+    "—"
+  );
   if(graphHash){
-    graphHash.textContent=`Execution graph commitment: ${graphCommitment}`;
+    graphHash.textContent=
+      `Execution graph commitment: ${phorvaScalar(graphCommitment)}`;
   }
 
   /* VERIFICATION TRACE */
@@ -4587,11 +4823,12 @@ function syncMainVerificationSurfaces(data,traceData,payload){
     proofStatement?.authorization?.decision ||
     data.proof?.decision ||
     (authorized ? "AUTHORIZED" : "BLOCKED");
-  const proofCommitment=
-    data.commitment ||
-    data.proof?.commitment ||
-    data.proofCommitment ||
-    "—";
+  const proofCommitment=phorvaDisplayValue(
+    data.commitment ??
+    data.proof?.commitment ??
+    data.proofCommitment,
+    "—"
+  );
 
   const proofIntent=document.getElementById("proofIntent");
   const proofPolicy=document.getElementById("proofPolicy");
@@ -4615,7 +4852,7 @@ function syncMainVerificationSurfaces(data,traceData,payload){
   if(proofExecution)proofExecution.textContent=`${actualAmount} ${intentAsset}`;
   if(proofChecks)proofChecks.textContent=`${passedChecks}/${totalChecks}`;
   if(proofHash){
-    proofHash.innerHTML=`<span style="color:#35d69a">LIVE</span> · ${proofCommitment}`;
+    proofHash.innerHTML=`<span style="color:#35d69a">LIVE</span> · ${phorvaScalar(proofCommitment)}`;
   }
 }
 

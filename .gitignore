@@ -1,11 +1,9 @@
-.env
 node_modules/
+.env
+.env.local
+.env.*.local
 *.log
-server.js.backup-*
-universal-router-test.txt
-
-# Local test backups
-test-agentguard.js.backup-*
-
-# Local test backups
-test-agentguard.js.backup-*
+.DS_Store
+.vercel
+server.js.backup*
+*.backup*

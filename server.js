@@ -4733,6 +4733,23 @@ function createPhorvaProofReceipt({
     );
   }
 
+  console.log("[PHORVA RECEIPT DIAGNOSTIC]", JSON.stringify({
+    requestId: proverRequest.requestId ?? null,
+    provider: proverRequest.provider ?? null,
+    verifiedDecision:
+      proverRequest.proofInput?.verifiedAuthorization?.decision ?? null,
+    authorizationDecision:
+      proverRequest.proofInput?.authorization?.decision ?? null,
+    allExecutionsAuthorized:
+      proverRequest.proofInput?.verifiedAuthorization?.allExecutionsAuthorized ?? null,
+    sequenceValid:
+      proverRequest.proofInput?.verifiedAuthorization?.sequenceValid ?? null,
+    graphInvariantsValid:
+      proverRequest.proofInput?.verifiedAuthorization?.graphInvariantsValid ?? null,
+    finalStateSatisfied:
+      proverRequest.proofInput?.verifiedAuthorization?.finalStateSatisfied ?? null
+  }, null, 2));
+
   const receipt =
     canonicalizeProofValue({
       version:
@@ -5064,9 +5081,12 @@ function verifyPhorvaProofReceipt({
   const authorization =
     receipt.authorization ?? {};
 
+  // Accept both terminal decisions as valid verification outcomes.
+  // AUTHORIZED  → action was permitted
+  // BLOCKED     → action was correctly rejected
   if (
-    authorization.decision !==
-    "AUTHORIZED"
+    authorization.decision !== "AUTHORIZED" &&
+    authorization.decision !== "BLOCKED"
   ) {
     return {
       valid: false,
@@ -5075,48 +5095,52 @@ function verifyPhorvaProofReceipt({
     };
   }
 
-  if (
-    authorization.allExecutionsAuthorized !==
-    true
-  ) {
-    return {
-      valid: false,
-      error:
-        "Proof receipt authorization binding failed"
-    };
-  }
+  // When the decision is BLOCKED, the boolean flags are expected to be false.
+  // Only enforce the strict "all true" invariants for AUTHORIZED receipts.
+  if (authorization.decision === "AUTHORIZED") {
+    if (
+      authorization.allExecutionsAuthorized !==
+      true
+    ) {
+      return {
+        valid: false,
+        error:
+          "Proof receipt authorization binding failed"
+      };
+    }
 
-  if (
-    authorization.sequenceValid !==
-    true
-  ) {
-    return {
-      valid: false,
-      error:
-        "Proof receipt sequence authorization binding failed"
-    };
-  }
+    if (
+      authorization.sequenceValid !==
+      true
+    ) {
+      return {
+        valid: false,
+        error:
+          "Proof receipt sequence authorization binding failed"
+      };
+    }
 
-  if (
-    authorization.graphInvariantsValid !==
-    true
-  ) {
-    return {
-      valid: false,
-      error:
-        "Proof receipt graph authorization binding failed"
-    };
-  }
+    if (
+      authorization.graphInvariantsValid !==
+      true
+    ) {
+      return {
+        valid: false,
+        error:
+          "Proof receipt graph authorization binding failed"
+      };
+    }
 
-  if (
-    authorization.finalStateSatisfied !==
-    true
-  ) {
-    return {
-      valid: false,
-      error:
-        "Proof receipt final-state authorization binding failed"
-    };
+    if (
+      authorization.finalStateSatisfied !==
+      true
+    ) {
+      return {
+        valid: false,
+        error:
+          "Proof receipt final-state authorization binding failed"
+      };
+    }
   }
 
   if (
