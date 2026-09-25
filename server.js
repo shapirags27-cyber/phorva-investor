@@ -4,6 +4,12 @@ const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
 
+const { createProductionApi } = require("./api/production-api");
+const db = require("./api/database");
+const { createApiKeyStore } = require("./api/api-keys");
+
+const apiKeyStore = createApiKeyStore(db);
+
 const chains = {
   baseSepolia: {
     name: "Base Sepolia",
@@ -6689,6 +6695,278 @@ app.get("/health", (req, res) => {
     analyzer: "EVM parameter verification",
     mode: "local simulation"
   });
+});
+
+
+
+/*
+ * Phorva Project / API Key Management
+ *
+ * Temporary bootstrap management endpoints.
+ * These will later be protected by dashboard/admin
+ * authentication.
+ */
+
+app.post("/v1/projects", (req, res) => {
+  try {
+    const name =
+      typeof req.body?.name === "string"
+        ? req.body.name.trim()
+        : "";
+
+    if (!name) {
+      return res.status(400).json({
+        error: {
+          code: "INVALID_REQUEST",
+          message: "Project name is required"
+        }
+      });
+    }
+
+    if (name.length > 100) {
+      return res.status(400).json({
+        error: {
+          code: "INVALID_REQUEST",
+          message: "Project name must be 100 characters or less"
+        }
+      });
+    }
+
+    const project =
+      apiKeyStore.createProject(name);
+
+    return res.status(201).json({
+      project
+    });
+  } catch (error) {
+    console.error("Project creation error:", error);
+
+    return res.status(500).json({
+      error: {
+        code: "PROJECT_CREATION_FAILED",
+        message: "Could not create project"
+      }
+    });
+  }
+});
+
+app.post("/v1/api-keys", (req, res) => {
+  try {
+    const projectId =
+      typeof req.body?.projectId === "string"
+        ? req.body.projectId.trim()
+        : "";
+
+    const name =
+      typeof req.body?.name === "string"
+        ? req.body.name.trim()
+        : "Default";
+
+    const environment =
+      req.body?.environment === "test"
+        ? "test"
+        : "live";
+
+    if (!projectId) {
+      return res.status(400).json({
+        error: {
+          code: "INVALID_REQUEST",
+          message: "projectId is required"
+        }
+      });
+    }
+
+    const result =
+      apiKeyStore.createKey({
+        projectId,
+        name,
+        environment
+      });
+
+    return res.status(201).json(result);
+  } catch (error) {
+    console.error("API key creation error:", error);
+
+    return res.status(500).json({
+      error: {
+        code: "API_KEY_CREATION_FAILED",
+        message: "Could not create API key"
+      }
+    });
+  }
+});
+
+app.get("/v1/api-keys", (req, res) => {
+  const projectId =
+    typeof req.query.projectId === "string"
+      ? req.query.projectId
+      : "";
+
+  if (!projectId) {
+    return res.status(400).json({
+      error: {
+        code: "INVALID_REQUEST",
+        message: "projectId is required"
+      }
+    });
+  }
+
+  return res.json({
+    keys: apiKeyStore.list(projectId)
+  });
+});
+
+app.post("/v1/api-keys/:id/revoke", (req, res) => {
+  const revoked =
+    apiKeyStore.revoke(req.params.id);
+
+  if (!revoked) {
+    return res.status(404).json({
+      error: {
+        code: "API_KEY_NOT_FOUND",
+        message: "API key not found or already revoked"
+      }
+    });
+  }
+
+  return res.json({
+    revoked: true,
+    id: req.params.id
+  });
+});
+
+
+/*
+ * Phorva Production API v1
+ *
+ * Generic verification boundary for autonomous
+ * agent execution. The API delegates authorization
+ * to the existing Phorva verification engine.
+ */
+
+const productionApi = createProductionApi({
+  express,
+
+  verify: async ({
+    agent,
+    action,
+    intent,
+    policy,
+    transaction
+  }) => {
+    return verifyExecutionAuthorization({
+      agent,
+      action,
+      intent,
+      policy,
+      transaction
+    });
+  },
+
+  getHealth: async () => ({
+    service: "phorva-api",
+    status: "ok",
+    engine: "phorva-verification-engine",
+    verificationMode: "PURE_EXECUTION_VERIFICATION",
+    analyzer: "EVM parameter verification"
+  }),
+
+  authenticate: async (req) => {
+    const authorization =
+      req.headers.authorization || "";
+
+    if (!authorization.startsWith("Bearer ")) {
+      return false;
+    }
+
+    const suppliedKey =
+      authorization.slice("Bearer ".length).trim();
+
+    if (!suppliedKey) {
+      return false;
+    }
+
+    const identity =
+      apiKeyStore.authenticate(suppliedKey);
+
+    if (!identity) {
+      return false;
+    }
+
+    req.phorvaIdentity = identity;
+
+    return true;
+  }
+});
+
+app.use("/v1", productionApi);
+
+
+// PHORVA_DOCS_ROUTES
+const phorvaDocsRoutes = [
+  "/docs",
+  "/docs/",
+  "/docs/actions/approvals",
+  "/docs/actions/bridges",
+  "/docs/actions/custom-calls",
+  "/docs/actions/defi",
+  "/docs/actions/multi-step",
+  "/docs/actions/swaps",
+  "/docs/actions/transfers",
+  "/docs/actions/withdrawals",
+  "/docs/api",
+  "/docs/architecture",
+  "/docs/authentication",
+  "/docs/connect",
+  "/docs/core-concepts",
+  "/docs/developer/api",
+  "/docs/developer/api-keys",
+  "/docs/developer/errors",
+  "/docs/developer/integration",
+  "/docs/developer/sdk",
+  "/docs/infrastructure/chains",
+  "/docs/infrastructure/protocols",
+  "/docs/infrastructure/providers",
+  "/docs/infrastructure/security",
+  "/docs/introduction",
+  "/docs/phorva-vs-infrastructure",
+  "/docs/quickstart",
+  "/docs/roadmap",
+  "/docs/sdk",
+  "/docs/security/architecture",
+  "/docs/security/auditability",
+  "/docs/security/threat-model",
+  "/docs/security/verification-integrity",
+  "/docs/use-cases",
+  "/docs/use-cases/agent-payments",
+  "/docs/use-cases/agent-wallets",
+  "/docs/use-cases/autonomous-trading",
+  "/docs/use-cases/daos-treasuries",
+  "/docs/use-cases/defi",
+  "/docs/use-cases/gaming",
+  "/docs/use-cases/onchain-automation",
+  "/docs/use-cases/prediction-markets",
+  "/docs/use-cases/virtual-cards",
+  "/docs/verification/authorization",
+  "/docs/verification/commitment",
+  "/docs/verification/execution-graph",
+  "/docs/verification/failure-states",
+  "/docs/verification/final-state",
+  "/docs/verification/intent",
+  "/docs/verification/policy",
+  "/docs/verification/proof",
+  "/docs/verification/receipts",
+  "/docs/verification/risk",
+  "/docs/verification/security-model",
+  "/docs/verification/semantics",
+  "/docs/verification/trace",
+  "/docs/verification/transaction",
+  "/docs/verification/transaction-analysis",
+  "/docs/what-is"
+];
+
+app.get(phorvaDocsRoutes, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "docs", "index.html"));
 });
 
 app.listen(PORT, () => {

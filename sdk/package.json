@@ -1,0 +1,12 @@
+{
+  "name": "@phorva/sdk",
+  "version": "0.1.0",
+  "description": "Official SDK for Phorva / AgentGuard verification layer",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": ["phorva", "agentguard", "verification", "sdk"],
+  "license": "MIT"
+}

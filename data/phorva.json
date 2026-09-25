@@ -1,0 +1,22 @@
+{
+  "projects": [
+    {
+      "id": "proj_7403aefa-b32b-4fd6-91b2-afe2b23b75a5",
+      "name": "Phorva Development",
+      "created_at": "2026-09-25T08:20:13.766Z"
+    }
+  ],
+  "apiKeys": [
+    {
+      "id": "key_da5ffef9-9672-476d-8263-4e9c16097d6d",
+      "project_id": "proj_7403aefa-b32b-4fd6-91b2-afe2b23b75a5",
+      "name": "Development Key",
+      "key_prefix": "pk_test_ea668f51",
+      "key_hash": "cae0cb41a9fc41e730a461d20bd5e9069e28d5b12ca6811260516e6b3ef1ed1b",
+      "environment": "test",
+      "created_at": "2026-09-25T08:21:15.139Z",
+      "last_used_at": "2026-09-25T08:24:35.064Z",
+      "revoked_at": null
+    }
+  ]
+}

@@ -2779,9 +2779,260 @@ body{
 }
 </style>
 
+
+<style id="phorva-site-nav-style">
+#phorva-site-nav {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-left:auto;
+  margin-right:16px;
+}
+
+#phorva-site-nav a,
+#phorva-site-nav button {
+  appearance:none;
+  border:1px solid rgba(130,150,190,.16);
+  background:rgba(255,255,255,.025);
+  color:#9aa5ba;
+  text-decoration:none;
+  padding:9px 12px;
+  border-radius:9px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.03em;
+  transition:.16s ease;
+}
+
+#phorva-site-nav a:hover,
+#phorva-site-nav button:hover {
+  color:#fff;
+  border-color:rgba(124,108,255,.42);
+  background:rgba(124,108,255,.07);
+  transform:translateY(-1px);
+}
+
+#phorva-navigator-panel {
+  position:fixed;
+  top:76px;
+  right:22px;
+  width:min(390px,calc(100vw - 28px));
+  max-height:calc(100vh - 100px);
+  overflow:auto;
+  z-index:1000;
+  display:none;
+  padding:16px;
+  border:1px solid rgba(130,150,190,.18);
+  border-radius:17px;
+  background:
+    linear-gradient(145deg,rgba(12,18,31,.98),rgba(5,8,15,.99));
+  box-shadow:0 25px 80px rgba(0,0,0,.55);
+  backdrop-filter:blur(18px);
+}
+
+#phorva-navigator-panel.open {
+  display:block;
+}
+
+.phorva-nav-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-bottom:13px;
+  margin-bottom:13px;
+  border-bottom:1px solid rgba(130,150,190,.12);
+}
+
+.phorva-nav-head strong {
+  font-size:12px;
+  letter-spacing:.08em;
+}
+
+.phorva-nav-head span {
+  color:#68758b;
+  font-size:9px;
+}
+
+.phorva-nav-group {
+  margin-bottom:16px;
+}
+
+.phorva-nav-group-title {
+  color:#68758b;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.15em;
+  margin-bottom:6px;
+}
+
+.phorva-nav-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5px;
+}
+
+.phorva-nav-grid a {
+  color:#aeb8ca;
+  text-decoration:none;
+  padding:8px 9px;
+  border:1px solid transparent;
+  border-radius:7px;
+  font-size:9px;
+}
+
+.phorva-nav-grid a:hover {
+  color:#fff;
+  background:rgba(124,108,255,.07);
+  border-color:rgba(124,108,255,.18);
+}
+
+@media(max-width:700px) {
+  #phorva-site-nav {
+    margin-right:8px;
+  }
+
+  #phorva-site-nav a {
+    display:none;
+  }
+
+  #phorva-site-nav button {
+    padding:8px 10px;
+  }
+
+  #phorva-navigator-panel {
+    right:12px;
+    top:68px;
+  }
+}
+</style>
+
 </head>
 <body><div class="app">
 <header class="topbar"><div class="brand"><div class="logo"><img src="/phorva-logo.png" alt="Phorva logo"></div><div><div class="brand-name">PHORVA</div><div class="brand-sub">VERIFIABLE EXECUTION INFRASTRUCTURE</div></div></div><div class="status"><span class="dot"></span> Verification engine online</div></header>
+<nav id="phorva-site-nav" aria-label="Phorva navigation">
+  <a href="/docs">Docs</a>
+  <a href="/docs/quickstart">Get Started</a>
+  <button type="button" id="phorva-navigator-toggle">Navigator</button>
+</nav>
+
+<div id="phorva-navigator-panel">
+  <div class="phorva-nav-head">
+    <div>
+      <strong>PHORVA NAVIGATOR</strong>
+      <div style="margin-top:4px;color:#68758b;font-size:8px">
+        Product architecture & developer documentation
+      </div>
+    </div>
+    <button type="button" id="phorva-navigator-close"
+      style="border:0;background:transparent;color:#68758b;cursor:pointer;font-size:16px">×</button>
+  </div>
+
+  <div class="phorva-nav-group">
+    <div class="phorva-nav-group-title">OVERVIEW</div>
+    <div class="phorva-nav-grid">
+      <a href="/docs">Introduction</a>
+      <a href="/docs/architecture">Architecture</a>
+      <a href="/docs/core-concepts">Core Concepts</a>
+      <a href="/docs/what-is">What Phorva Is / Isn't</a>
+      <a href="/docs/phorva-vs-infrastructure">Infrastructure Boundaries</a>
+    </div>
+  </div>
+
+  <div class="phorva-nav-group">
+    <div class="phorva-nav-group-title">GET STARTED</div>
+    <div class="phorva-nav-grid">
+      <a href="/docs/quickstart">Quickstart</a>
+      <a href="/docs/sdk">SDK</a>
+      <a href="/docs/api">API</a>
+      <a href="/docs/authentication">Authentication</a>
+      <a href="/docs/connect">How to Connect</a>
+    </div>
+  </div>
+
+  <div class="phorva-nav-group">
+    <div class="phorva-nav-group-title">VERIFICATION</div>
+    <div class="phorva-nav-grid">
+      <a href="/docs/verification/intent">Intent</a>
+      <a href="/docs/verification/policy">Policy</a>
+      <a href="/docs/verification/risk">Risk</a>
+      <a href="/docs/verification/authorization">Authorization</a>
+      <a href="/docs/verification/transaction">Transaction</a>
+      <a href="/docs/verification/execution-graph">Execution Graph</a>
+      <a href="/docs/verification/final-state">Final-State</a>
+      <a href="/docs/verification/trace">Trace</a>
+      <a href="/docs/verification/proof">Proof / Evidence</a>
+      <a href="/docs/verification/receipts">Receipts</a>
+    </div>
+  </div>
+
+  <div class="phorva-nav-group">
+    <div class="phorva-nav-group-title">ACTIONS</div>
+    <div class="phorva-nav-grid">
+      <a href="/docs/actions/transfers">Transfers</a>
+      <a href="/docs/actions/approvals">Approvals</a>
+      <a href="/docs/actions/swaps">Swaps</a>
+      <a href="/docs/actions/withdrawals">Withdrawals</a>
+      <a href="/docs/actions/defi">DeFi</a>
+      <a href="/docs/actions/bridges">Bridges</a>
+      <a href="/docs/actions/custom-calls">Custom Calls</a>
+      <a href="/docs/actions/multi-step">Multi-Step</a>
+    </div>
+  </div>
+
+  <div class="phorva-nav-group">
+    <div class="phorva-nav-group-title">USE CASES</div>
+    <div class="phorva-nav-grid">
+      <a href="/docs/use-cases">Overview</a>
+      <a href="/docs/use-cases/defi">DeFi</a>
+      <a href="/docs/use-cases/prediction-markets">Prediction Markets</a>
+      <a href="/docs/use-cases/autonomous-trading">Autonomous Trading</a>
+      <a href="/docs/use-cases/agent-payments">Agent Payments</a>
+      <a href="/docs/use-cases/virtual-cards">Virtual Cards</a>
+      <a href="/docs/use-cases/gaming">Gaming</a>
+      <a href="/docs/use-cases/agent-wallets">Agent Wallets</a>
+      <a href="/docs/use-cases/daos-treasuries">DAOs & Treasuries</a>
+      <a href="/docs/use-cases/onchain-automation">On-chain Automation</a>
+    </div>
+  </div>
+  <div class="phorva-nav-group">
+    <div class="phorva-nav-group-title">INFRASTRUCTURE</div>
+    <div class="phorva-nav-grid">
+      <a href="/docs/infrastructure/chains">Chains</a>
+      <a href="/docs/infrastructure/protocols">Protocol Integrations</a>
+      <a href="/docs/infrastructure/providers">Providers</a>
+      <a href="/docs/infrastructure/security">Security Model</a>
+    </div>
+  </div>
+
+  <div class="phorva-nav-group">
+    <div class="phorva-nav-group-title">DEVELOPER</div>
+    <div class="phorva-nav-grid">
+      <a href="/docs/developer/sdk">SDK</a>
+      <a href="/docs/developer/api">API Reference</a>
+      <a href="/docs/developer/api-keys">API Keys</a>
+      <a href="/docs/developer/integration">Integration</a>
+      <a href="/docs/developer/errors">Errors</a>
+    </div>
+  </div>
+
+  <div class="phorva-nav-group">
+    <div class="phorva-nav-group-title">SECURITY</div>
+    <div class="phorva-nav-grid">
+      <a href="/docs/security/threat-model">Threat Model</a>
+      <a href="/docs/security/architecture">Security Architecture</a>
+      <a href="/docs/security/verification-integrity">Verification Integrity</a>
+      <a href="/docs/security/auditability">Auditability</a>
+    </div>
+  </div>
+
+  <div class="phorva-nav-group">
+    <div class="phorva-nav-group-title">ROADMAP</div>
+    <div class="phorva-nav-grid">
+      <a href="/docs/roadmap">Current → Production → Ecosystem</a>
+    </div>
+  </div>
+</div>
+
 <section class="hero investor-hero">
   <div class="eyebrow">SECURITY + VERIFICATION FOR AUTONOMOUS AGENTS</div>
 
@@ -5083,5 +5334,34 @@ document.addEventListener(
 }
 
 </style>
+
+
+<script id="phorva-site-nav-script">
+(function () {
+  const toggle = document.getElementById("phorva-navigator-toggle");
+  const panel = document.getElementById("phorva-navigator-panel");
+  const close = document.getElementById("phorva-navigator-close");
+
+  if (!toggle || !panel) return;
+
+  toggle.addEventListener("click", function () {
+    panel.classList.toggle("open");
+  });
+
+  close?.addEventListener("click", function () {
+    panel.classList.remove("open");
+  });
+
+  document.addEventListener("click", function (event) {
+    if (
+      panel.classList.contains("open") &&
+      !panel.contains(event.target) &&
+      !toggle.contains(event.target)
+    ) {
+      panel.classList.remove("open");
+    }
+  });
+})();
+</script>
 
 </body></html>

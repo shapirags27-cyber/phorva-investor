@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phorva Docs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/docs/styles.css">
+</head>
+<body>
+<div class="docs-shell">
+
+  <aside class="docs-sidebar" id="docs-sidebar">
+    <div class="docs-brand">
+      <img src="/phorva-logo.png" alt="Phorva">
+      <div>
+        <div class="docs-brand-name">PHORVA</div>
+        <div class="docs-brand-sub">VERIFIABLE EXECUTION</div>
+      </div>
+    </div>
+
+    <div class="nav-wrap" id="docs-nav"></div>
+  </aside>
+
+  <main class="docs-main">
+
+    <header class="docs-topbar">
+      <button class="icon-button menu-button" id="docs-menu">☰</button>
+
+      <div class="search">
+        <input
+          id="docs-search"
+          type="search"
+          placeholder="Search documentation  ·  Ctrl K"
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="top-actions">
+        <a class="docs-link" href="/">Phorva</a>
+        <a class="docs-link" href="/docs">Docs</a>
+        <a class="docs-link" href="/docs/quickstart">Get Started</a>
+        <button class="icon-button" id="docs-theme">Theme</button>
+        <button class="icon-button" id="docs-close">Close</button>
+      </div>
+    </header>
+
+    <article class="docs-content" id="docs-content"></article>
+
+  </main>
+</div>
+
+<script src="/docs/app.js"></script>
+</body>
+</html>
