@@ -1,6 +1,384 @@
 
 const PHORVA_PAGES = {'introduction': '\n<section class="doc-hero">\n  <div class="eyebrow">PHORVA / OVERVIEW</div>\n  <h1>Verifiable execution for autonomous agents.</h1>\n  <p>\n    Phorva is a verification and control layer between autonomous systems\n    and blockchain execution. It evaluates declared intent, policy and risk,\n    verifies the execution that actually occurs, and produces a structured\n    verifiable result.\n  </p>\n</section>\n\n<div class="notice">\n  <strong>Core principle</strong>\n  <p>\n    Any autonomous system can declare an intent. Phorva evaluates policy and\n    risk, verifies the actual execution against the authorized intent, and\n    produces a verifiable result.\n  </p>\n</div>\n\n<div class="cards">\n  <div class="card"><h3>Agent</h3><p>Decides what it wants to do.</p></div>\n  <div class="card"><h3>Phorva</h3><p>Verifies whether the intended execution is authorized.</p></div>\n  <div class="card"><h3>Protocol</h3><p>Executes the requested operation.</p></div>\n  <div class="card"><h3>Blockchain</h3><p>Records the resulting execution.</p></div>\n</div>\n', 'architecture': '\n<div class="eyebrow">OVERVIEW / ARCHITECTURE</div>\n<h1>Phorva architecture</h1>\n<p>\n  Phorva is designed as a provider-agnostic and protocol-agnostic\n  verification control plane.\n</p>\n\n<div class="architecture">\n  <div>AGENT</div><span>→</span>\n  <div class="accent">PHORVA CORE</div><span>→</span>\n  <div>INTENT</div><span>→</span>\n  <div>POLICY</div><span>→</span>\n  <div>RISK</div><span>→</span>\n  <div>AUTHORIZATION</div><span>→</span>\n  <div>EXECUTION</div>\n</div>\n\n<h2>Verification flow</h2>\n<ol class="steps">\n  <li><strong>Intent</strong> — establish what the autonomous system says it intends to do.</li>\n  <li><strong>Policy</strong> — apply limits, allowlists, restrictions and authorization rules.</li>\n  <li><strong>Risk</strong> — evaluate transaction and execution conditions.</li>\n  <li><strong>Authorization</strong> — determine whether the execution is permitted.</li>\n  <li><strong>Execution verification</strong> — compare actual execution with the authorized conditions.</li>\n  <li><strong>Evidence</strong> — produce the verification result, trace, commitment and receipt where applicable.</li>\n</ol>\n\n<h2>Infrastructure boundary</h2>\n<p>\n  Phorva defines the verification semantics. Providers supply proving or\n  verification machinery where required. Protocol adapters connect Phorva\n  verification to underlying execution systems.\n</p>\n', 'core-concepts': '\n<div class="eyebrow">OVERVIEW / CORE CONCEPTS</div>\n<h1>Core concepts</h1>\n\n<div class="cards">\n  <div class="card"><h3>Intent</h3><p>The declared action and constraints an autonomous system intends to execute.</p></div>\n  <div class="card"><h3>Policy</h3><p>Rules defining what an agent is permitted to execute.</p></div>\n  <div class="card"><h3>Risk</h3><p>Evaluation of execution conditions and potentially unsafe behavior.</p></div>\n  <div class="card"><h3>Authorization</h3><p>The canonical determination of whether an execution is permitted.</p></div>\n  <div class="card"><h3>Execution Graph</h3><p>A representation of the operations and relationships involved in execution.</p></div>\n  <div class="card"><h3>Evidence</h3><p>Structured information supporting the verification result.</p></div>\n</div>\n\n<h2>Agent identity</h2>\n<p>\n  Agent identity connects an execution request to the autonomous system,\n  wallet or integration context that requested verification.\n</p>\n\n<h2>Trust boundaries</h2>\n<p>\n  Inputs supplied by an agent or caller are treated as claims to be validated,\n  not automatically trusted authorization facts.\n</p>\n', 'what-is': '\n<div class="eyebrow">OVERVIEW / BOUNDARIES</div>\n<h1>What Phorva is — and is not</h1>\n\n<h2>Phorva is</h2>\n<ul>\n  <li>A verification and control layer for autonomous execution.</li>\n  <li>A policy and authorization verification system.</li>\n  <li>A transaction and execution analysis layer.</li>\n  <li>A provider-agnostic verification architecture.</li>\n  <li>A protocol-agnostic control plane.</li>\n</ul>\n\n<h2>Phorva is not</h2>\n<ul>\n  <li>An agent wallet.</li>\n  <li>A blockchain.</li>\n  <li>A prover network.</li>\n  <li>A zk-proof marketplace.</li>\n  <li>An execution venue.</li>\n  <li>A place where agents live.</li>\n</ul>\n\n<div class="notice">\n  <strong>Boundary</strong>\n  <p>\n    Agent wallets hold or control assets. Phorva verifies whether an agent\'s\n    intended execution is authorized.\n  </p>\n</div>\n', 'quickstart': '\n<div class="eyebrow">GET STARTED / QUICKSTART</div>\n<h1>Quickstart</h1>\n<p>Install the Phorva SDK and connect an application to the verification layer.</p>\n\n<h2>Install</h2>\n<pre><code>npm install @phorva/sdk</code></pre>\n\n<h2>Initialize</h2>\n<pre><code>import { Phorva } from \'@phorva/sdk\';\n\nconst phorva = new Phorva({\n  apiKey: process.env.PHORVA_API_KEY,\n  network: \'baseSepolia\'\n});</code></pre>\n\n<h2>Verification request</h2>\n<pre><code>const result = await phorva.authorize({\n  intent: {\n    type: \'swap\',\n    amount: \'300\',\n    token: \'USDC\'\n  },\n  policy: {\n    maxTransactionAmount: 500\n  }\n});\n\nconsole.log(result);</code></pre>\n\n<div class="notice">\n  <strong>Production note</strong>\n  <p>\n    Network availability, API capabilities and protocol adapters are\n    documented according to their implementation status. Testnet support\n    must not be interpreted as mainnet availability.\n  </p>\n</div>\n', 'sdk': '\n<div class="eyebrow">GET STARTED / SDK</div>\n<h1>Phorva SDK</h1>\n<p>\n  The SDK provides an application-facing interface for submitting execution\n  verification requests.\n</p>\n\n<h2>JavaScript / TypeScript</h2>\n<pre><code>import { Phorva } from \'@phorva/sdk\';\n\nconst phorva = new Phorva({\n  apiKey: process.env.PHORVA_API_KEY\n});</code></pre>\n\n<h2>Integration model</h2>\n<p>\n  An agent or application submits an intent and execution context. Phorva\n  evaluates the request and returns a structured verification result.\n</p>\n', 'api': '\n<div class="eyebrow">GET STARTED / API</div>\n<h1>Phorva API</h1>\n<p>\n  The API is the programmatic interface between applications and the Phorva\n  verification engine.\n</p>\n\n<h2>Verification</h2>\n<pre><code>POST /v1/verify</code></pre>\n\n<h2>Health</h2>\n<pre><code>GET /v1/health</code></pre>\n\n<h2>Authentication</h2>\n<p>\n  API requests use a Phorva API key supplied as a Bearer credential.\n</p>\n\n<pre><code>Authorization: Bearer YOUR_PHORVA_API_KEY</code></pre>\n', 'authentication': '\n<div class="eyebrow">GET STARTED / AUTHENTICATION</div>\n<h1>Authentication</h1>\n<p>\n  Phorva API access is authenticated using project-scoped API keys.\n</p>\n\n<h2>Environment separation</h2>\n<div class="cards">\n  <div class="card"><h3>Test</h3><p>For development and test environments.</p></div>\n  <div class="card"><h3>Production</h3><p>For production integrations when production access is available.</p></div>\n</div>\n\n<h2>Secret handling</h2>\n<ul>\n  <li>Keep API keys in environment variables or a secret manager.</li>\n  <li>Never commit secrets to source control.</li>\n  <li>Rotate compromised credentials.</li>\n  <li>The full secret should only be displayed at creation time by the Developer Console.</li>\n</ul>\n', 'connect': '\n<div class="eyebrow">GET STARTED / CONNECTION</div>\n<h1>How to connect</h1>\n<p>\n  Applications can integrate Phorva through the SDK or directly through the\n  verification API.\n</p>\n\n<div class="architecture">\n  <div>AGENT</div><span>→</span>\n  <div>SDK / API</div><span>→</span>\n  <div class="accent">PHORVA</div><span>→</span>\n  <div>VERIFICATION</div><span>→</span>\n  <div>RESULT</div>\n</div>\n', 'intent': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Intent</h1>\n<p>Intent matching compares the declared action and constraints with the execution that is actually evaluated.</p>\n\n<h2>Verification conditions</h2>\n<div class="cards">\n  <div class="card"><h3>Identity</h3><p>Who or what requested the execution.</p></div>\n  <div class="card"><h3>Intent</h3><p>What the system declared it intended to do.</p></div>\n  <div class="card"><h3>Policy</h3><p>What the system is permitted to do.</p></div>\n  <div class="card"><h3>Execution</h3><p>What the transaction or execution actually contains.</p></div>\n</div>\n\n<h2>Security properties</h2>\n<ul>\n  <li>Caller-provided authorization claims are not treated as authoritative without validation.</li>\n  <li>Transaction parameters can be compared with declared intent.</li>\n  <li>Contract, protocol and chain conditions can be evaluated.</li>\n  <li>Verification results can carry structured evidence.</li>\n</ul>\n', 'policy': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Policy</h1>\n<p>Policies define transaction limits, protocol and contract allowlists, chain restrictions, asset restrictions and other authorization conditions.</p>\n\n<h2>Verification conditions</h2>\n<div class="cards">\n  <div class="card"><h3>Identity</h3><p>Who or what requested the execution.</p></div>\n  <div class="card"><h3>Intent</h3><p>What the system declared it intended to do.</p></div>\n  <div class="card"><h3>Policy</h3><p>What the system is permitted to do.</p></div>\n  <div class="card"><h3>Execution</h3><p>What the transaction or execution actually contains.</p></div>\n</div>\n\n<h2>Security properties</h2>\n<ul>\n  <li>Caller-provided authorization claims are not treated as authoritative without validation.</li>\n  <li>Transaction parameters can be compared with declared intent.</li>\n  <li>Contract, protocol and chain conditions can be evaluated.</li>\n  <li>Verification results can carry structured evidence.</li>\n</ul>\n', 'risk': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Risk</h1>\n<p>Risk evaluation considers the conditions surrounding an execution and can contribute to an allow or block decision.</p>\n\n<h2>Verification conditions</h2>\n<div class="cards">\n  <div class="card"><h3>Identity</h3><p>Who or what requested the execution.</p></div>\n  <div class="card"><h3>Intent</h3><p>What the system declared it intended to do.</p></div>\n  <div class="card"><h3>Policy</h3><p>What the system is permitted to do.</p></div>\n  <div class="card"><h3>Execution</h3><p>What the transaction or execution actually contains.</p></div>\n</div>\n\n<h2>Security properties</h2>\n<ul>\n  <li>Caller-provided authorization claims are not treated as authoritative without validation.</li>\n  <li>Transaction parameters can be compared with declared intent.</li>\n  <li>Contract, protocol and chain conditions can be evaluated.</li>\n  <li>Verification results can carry structured evidence.</li>\n</ul>\n', 'authorization': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Authorization</h1>\n<p>Authorization is the canonical determination of whether a requested execution satisfies the applicable authorization conditions.</p>\n\n<h2>Verification conditions</h2>\n<div class="cards">\n  <div class="card"><h3>Identity</h3><p>Who or what requested the execution.</p></div>\n  <div class="card"><h3>Intent</h3><p>What the system declared it intended to do.</p></div>\n  <div class="card"><h3>Policy</h3><p>What the system is permitted to do.</p></div>\n  <div class="card"><h3>Execution</h3><p>What the transaction or execution actually contains.</p></div>\n</div>\n\n<h2>Security properties</h2>\n<ul>\n  <li>Caller-provided authorization claims are not treated as authoritative without validation.</li>\n  <li>Transaction parameters can be compared with declared intent.</li>\n  <li>Contract, protocol and chain conditions can be evaluated.</li>\n  <li>Verification results can carry structured evidence.</li>\n</ul>\n', 'transaction': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Transaction Verification</h1>\n<p>Transaction verification analyzes transaction fields, calldata and execution conditions rather than relying solely on caller-supplied claims.</p>\n\n<h2>Verification conditions</h2>\n<div class="cards">\n  <div class="card"><h3>Identity</h3><p>Who or what requested the execution.</p></div>\n  <div class="card"><h3>Intent</h3><p>What the system declared it intended to do.</p></div>\n  <div class="card"><h3>Policy</h3><p>What the system is permitted to do.</p></div>\n  <div class="card"><h3>Execution</h3><p>What the transaction or execution actually contains.</p></div>\n</div>\n\n<h2>Security properties</h2>\n<ul>\n  <li>Caller-provided authorization claims are not treated as authoritative without validation.</li>\n  <li>Transaction parameters can be compared with declared intent.</li>\n  <li>Contract, protocol and chain conditions can be evaluated.</li>\n  <li>Verification results can carry structured evidence.</li>\n</ul>\n', 'execution-graph': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Execution Graph</h1>\n<p>The execution graph represents the operations involved in an execution, including multi-step relationships where supported.</p>\n\n<h2>Verification conditions</h2>\n<div class="cards">\n  <div class="card"><h3>Identity</h3><p>Who or what requested the execution.</p></div>\n  <div class="card"><h3>Intent</h3><p>What the system declared it intended to do.</p></div>\n  <div class="card"><h3>Policy</h3><p>What the system is permitted to do.</p></div>\n  <div class="card"><h3>Execution</h3><p>What the transaction or execution actually contains.</p></div>\n</div>\n\n<h2>Security properties</h2>\n<ul>\n  <li>Caller-provided authorization claims are not treated as authoritative without validation.</li>\n  <li>Transaction parameters can be compared with declared intent.</li>\n  <li>Contract, protocol and chain conditions can be evaluated.</li>\n  <li>Verification results can carry structured evidence.</li>\n</ul>\n', 'final-state': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Final-State Verification</h1>\n<p>Final-state verification checks resulting state against the conditions that were expected from the authorized execution.</p>\n\n<h2>Verification conditions</h2>\n<div class="cards">\n  <div class="card"><h3>Identity</h3><p>Who or what requested the execution.</p></div>\n  <div class="card"><h3>Intent</h3><p>What the system declared it intended to do.</p></div>\n  <div class="card"><h3>Policy</h3><p>What the system is permitted to do.</p></div>\n  <div class="card"><h3>Execution</h3><p>What the transaction or execution actually contains.</p></div>\n</div>\n\n<h2>Security properties</h2>\n<ul>\n  <li>Caller-provided authorization claims are not treated as authoritative without validation.</li>\n  <li>Transaction parameters can be compared with declared intent.</li>\n  <li>Contract, protocol and chain conditions can be evaluated.</li>\n  <li>Verification results can carry structured evidence.</li>\n</ul>\n', 'trace': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Verification Trace</h1>\n<p>A verification trace records how verification conditions were evaluated and which checks contributed to the result.</p>\n\n<h2>Verification conditions</h2>\n<div class="cards">\n  <div class="card"><h3>Identity</h3><p>Who or what requested the execution.</p></div>\n  <div class="card"><h3>Intent</h3><p>What the system declared it intended to do.</p></div>\n  <div class="card"><h3>Policy</h3><p>What the system is permitted to do.</p></div>\n  <div class="card"><h3>Execution</h3><p>What the transaction or execution actually contains.</p></div>\n</div>\n\n<h2>Security properties</h2>\n<ul>\n  <li>Caller-provided authorization claims are not treated as authoritative without validation.</li>\n  <li>Transaction parameters can be compared with declared intent.</li>\n  <li>Contract, protocol and chain conditions can be evaluated.</li>\n  <li>Verification results can carry structured evidence.</li>\n</ul>\n', 'proof': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Proof / Evidence</h1>\n<p>Verified actions can produce structured evidence describing the intent, authorization, execution and verification result.</p>\n\n<h2>Verification conditions</h2>\n<div class="cards">\n  <div class="card"><h3>Identity</h3><p>Who or what requested the execution.</p></div>\n  <div class="card"><h3>Intent</h3><p>What the system declared it intended to do.</p></div>\n  <div class="card"><h3>Policy</h3><p>What the system is permitted to do.</p></div>\n  <div class="card"><h3>Execution</h3><p>What the transaction or execution actually contains.</p></div>\n</div>\n\n<h2>Security properties</h2>\n<ul>\n  <li>Caller-provided authorization claims are not treated as authoritative without validation.</li>\n  <li>Transaction parameters can be compared with declared intent.</li>\n  <li>Contract, protocol and chain conditions can be evaluated.</li>\n  <li>Verification results can carry structured evidence.</li>\n</ul>\n', 'commitment': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Commitment</h1>\n<p>A deterministic commitment can bind relevant execution and verification data to a verification result.</p>\n\n<h2>Verification conditions</h2>\n<div class="cards">\n  <div class="card"><h3>Identity</h3><p>Who or what requested the execution.</p></div>\n  <div class="card"><h3>Intent</h3><p>What the system declared it intended to do.</p></div>\n  <div class="card"><h3>Policy</h3><p>What the system is permitted to do.</p></div>\n  <div class="card"><h3>Execution</h3><p>What the transaction or execution actually contains.</p></div>\n</div>\n\n<h2>Security properties</h2>\n<ul>\n  <li>Caller-provided authorization claims are not treated as authoritative without validation.</li>\n  <li>Transaction parameters can be compared with declared intent.</li>\n  <li>Contract, protocol and chain conditions can be evaluated.</li>\n  <li>Verification results can carry structured evidence.</li>\n</ul>\n', 'receipts': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Verification Receipts</h1>\n<p>A verification receipt provides a structured record of the verification outcome and supporting evidence.</p>\n\n<h2>Verification conditions</h2>\n<div class="cards">\n  <div class="card"><h3>Identity</h3><p>Who or what requested the execution.</p></div>\n  <div class="card"><h3>Intent</h3><p>What the system declared it intended to do.</p></div>\n  <div class="card"><h3>Policy</h3><p>What the system is permitted to do.</p></div>\n  <div class="card"><h3>Execution</h3><p>What the transaction or execution actually contains.</p></div>\n</div>\n\n<h2>Security properties</h2>\n<ul>\n  <li>Caller-provided authorization claims are not treated as authoritative without validation.</li>\n  <li>Transaction parameters can be compared with declared intent.</li>\n  <li>Contract, protocol and chain conditions can be evaluated.</li>\n  <li>Verification results can carry structured evidence.</li>\n</ul>\n', 'verification-semantics': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Verification semantics</h1>\n<p>\n  Phorva\'s core abstraction is the definition of what must be true for an\n  autonomous execution to be considered authorized and verified.\n</p>\n\n<h2>Semantic layers</h2>\n<div class="cards">\n  <div class="card"><h3>Identity</h3><p>Who is requesting or controlling execution.</p></div>\n  <div class="card"><h3>Intent</h3><p>What was intended.</p></div>\n  <div class="card"><h3>Policy</h3><p>What is permitted.</p></div>\n  <div class="card"><h3>Execution</h3><p>What actually happened or is being proposed.</p></div>\n  <div class="card"><h3>Result</h3><p>Whether the relevant conditions were satisfied.</p></div>\n</div>\n', 'transaction-analysis': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Transaction analysis</h1>\n<p>\n  Transaction analysis examines execution data such as chain identity,\n  destination, function selector, calldata parameters, native value and\n  relevant token information.\n</p>\n\n<h2>Checks</h2>\n<ul>\n  <li>Chain verification</li>\n  <li>Contract verification</li>\n  <li>Protocol verification</li>\n  <li>Function-selector verification</li>\n  <li>Parameter verification</li>\n  <li>Native-value verification</li>\n  <li>Token verification</li>\n  <li>Amount verification</li>\n</ul>\n', 'security-model': '\n<div class="eyebrow">VERIFICATION / SECURITY</div>\n<h1>Verification security model</h1>\n<p>\n  Phorva treats security-critical execution claims as data that must be\n  validated. A caller cannot make an execution authorized simply by placing\n  an authorization claim in the request.\n</p>\n\n<h2>Trust boundaries</h2>\n<ul>\n  <li>Agent and application inputs</li>\n  <li>Wallet and signing systems</li>\n  <li>Phorva verification engine</li>\n  <li>Protocol adapters</li>\n  <li>External proving or verification providers</li>\n  <li>Blockchain execution environment</li>\n</ul>\n', 'failure-states': '\n<div class="eyebrow">VERIFICATION</div>\n<h1>Failure and rejection states</h1>\n<p>\n  Verification can reject an execution when required authorization or\n  execution conditions are not satisfied.\n</p>\n\n<div class="cards">\n  <div class="card"><h3>Intent mismatch</h3><p>Actual execution differs from the declared intent.</p></div>\n  <div class="card"><h3>Policy violation</h3><p>The execution exceeds a configured policy condition.</p></div>\n  <div class="card"><h3>Unexpected contract</h3><p>The destination does not satisfy the allowed contract condition.</p></div>\n  <div class="card"><h3>Wrong chain</h3><p>The execution occurs on an unauthorized chain.</p></div>\n  <div class="card"><h3>Parameter mismatch</h3><p>Relevant calldata or execution parameters differ from expectations.</p></div>\n  <div class="card"><h3>Risk rejection</h3><p>Risk conditions do not satisfy the applicable authorization requirements.</p></div>\n</div>\n', 'transfers': '\n<div class="eyebrow">ACTIONS</div>\n<h1>Transfers</h1>\n<p>\n  Phorva\'s execution model is intentionally broader than a single transaction\n  type. The same verification semantics can be applied to different\n  autonomous execution actions.\n</p>\n<div class="cards">\n<div class="card"><h3>Native transfers</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>ERC-20 transfers</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Token spending</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div>\n</div>\n', 'approvals': '\n<div class="eyebrow">ACTIONS</div>\n<h1>Approvals</h1>\n<p>\n  Phorva\'s execution model is intentionally broader than a single transaction\n  type. The same verification semantics can be applied to different\n  autonomous execution actions.\n</p>\n<div class="cards">\n<div class="card"><h3>ERC-20 approvals</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Permit / signature-based approvals</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Allowance changes</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Approval risk</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div>\n</div>\n', 'swaps': '\n<div class="eyebrow">ACTIONS</div>\n<h1>Swaps</h1>\n<p>\n  Phorva\'s execution model is intentionally broader than a single transaction\n  type. The same verification semantics can be applied to different\n  autonomous execution actions.\n</p>\n<div class="cards">\n<div class="card"><h3>Token swaps</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Amount verification</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Slippage conditions</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Protocol verification</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Route validation</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div>\n</div>\n', 'withdrawals': '\n<div class="eyebrow">ACTIONS</div>\n<h1>Withdrawals</h1>\n<p>\n  Phorva\'s execution model is intentionally broader than a single transaction\n  type. The same verification semantics can be applied to different\n  autonomous execution actions.\n</p>\n<div class="cards">\n<div class="card"><h3>Vault withdrawals</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Protocol withdrawals</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Asset and amount verification</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Final-state verification</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div>\n</div>\n', 'defi': '\n<div class="eyebrow">USE CASES</div>\n<h1>DeFi</h1>\n<p>Verify autonomous interactions with decentralized finance protocols.</p>\n\n<h2>Common controls</h2>\n<div class="cards">\n  <div class="card"><h3>Intent</h3><p>Define the expected action.</p></div>\n  <div class="card"><h3>Policy</h3><p>Set limits and restrictions.</p></div>\n  <div class="card"><h3>Risk</h3><p>Evaluate execution conditions.</p></div>\n  <div class="card"><h3>Verification</h3><p>Compare actual execution with authorization.</p></div>\n  <div class="card"><h3>Evidence</h3><p>Record the resulting verification information.</p></div>\n</div>\n\n<h2>Implementation status</h2>\n<div class="notice">\n  <strong>Documentation boundary</strong>\n  <p>\n    Individual protocols and rails are documented as implemented, testnet,\n    planned or ecosystem targets according to their actual integration status.\n  </p>\n</div>\n', 'bridges': '\n<div class="eyebrow">ACTIONS</div>\n<h1>Bridges</h1>\n<p>\n  Phorva\'s execution model is intentionally broader than a single transaction\n  type. The same verification semantics can be applied to different\n  autonomous execution actions.\n</p>\n<div class="cards">\n<div class="card"><h3>Cross-chain transfers</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Cross-chain swaps</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Source validation</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Destination validation</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Destination-state verification</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div>\n</div>\n', 'custom-calls': '\n<div class="eyebrow">ACTIONS</div>\n<h1>Custom Contract Calls</h1>\n<p>\n  Phorva\'s execution model is intentionally broader than a single transaction\n  type. The same verification semantics can be applied to different\n  autonomous execution actions.\n</p>\n<div class="cards">\n<div class="card"><h3>Arbitrary calldata</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Function selectors</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Contract interactions</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Batch transactions</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Multicall</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Multi-contract execution</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div>\n</div>\n', 'multi-step': '\n<div class="eyebrow">ACTIONS</div>\n<h1>Multi-Step Execution</h1>\n<p>\n  Phorva\'s execution model is intentionally broader than a single transaction\n  type. The same verification semantics can be applied to different\n  autonomous execution actions.\n</p>\n<div class="cards">\n<div class="card"><h3>Execution graphs</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Step ordering</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Intermediate conditions</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Cross-contract execution</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div><div class="card"><h3>Final-state verification</h3><p>Verification conditions can be applied according to the integration and implementation status.</p></div>\n</div>\n', 'prediction-markets': '\n<div class="eyebrow">USE CASES</div>\n<h1>Prediction Markets</h1>\n<p>Verify market participation, orders, positions, collateral and settlement-related execution.</p>\n\n<h2>Common controls</h2>\n<div class="cards">\n  <div class="card"><h3>Intent</h3><p>Define the expected action.</p></div>\n  <div class="card"><h3>Policy</h3><p>Set limits and restrictions.</p></div>\n  <div class="card"><h3>Risk</h3><p>Evaluate execution conditions.</p></div>\n  <div class="card"><h3>Verification</h3><p>Compare actual execution with authorization.</p></div>\n  <div class="card"><h3>Evidence</h3><p>Record the resulting verification information.</p></div>\n</div>\n\n<h2>Implementation status</h2>\n<div class="notice">\n  <strong>Documentation boundary</strong>\n  <p>\n    Individual protocols and rails are documented as implemented, testnet,\n    planned or ecosystem targets according to their actual integration status.\n  </p>\n</div>\n\n<h2>Potential action model</h2>\n<ul>\n  <li>Market creation</li>\n  <li>Market participation</li>\n  <li>Buy or sell outcome</li>\n  <li>Position management</li>\n  <li>Order placement and cancellation</li>\n  <li>Settlement</li>\n  <li>Claim winnings</li>\n  <li>Redeem positions</li>\n  <li>Collateral movement</li>\n  <li>Maximum position and exposure limits</li>\n</ul>\n<p>Potential integrations include prediction-market infrastructure such as Polymarket and Kalshi, subject to actual integration and availability.</p>\n', 'autonomous-trading': '\n<div class="eyebrow">USE CASES</div>\n<h1>Autonomous Trading</h1>\n<p>Apply authorization and verification controls to trading agents and automated strategies.</p>\n\n<h2>Common controls</h2>\n<div class="cards">\n  <div class="card"><h3>Intent</h3><p>Define the expected action.</p></div>\n  <div class="card"><h3>Policy</h3><p>Set limits and restrictions.</p></div>\n  <div class="card"><h3>Risk</h3><p>Evaluate execution conditions.</p></div>\n  <div class="card"><h3>Verification</h3><p>Compare actual execution with authorization.</p></div>\n  <div class="card"><h3>Evidence</h3><p>Record the resulting verification information.</p></div>\n</div>\n\n<h2>Implementation status</h2>\n<div class="notice">\n  <strong>Documentation boundary</strong>\n  <p>\n    Individual protocols and rails are documented as implemented, testnet,\n    planned or ecosystem targets according to their actual integration status.\n  </p>\n</div>\n\n<h2>Trading controls</h2>\n<ul>\n  <li>Strategy authorization</li>\n  <li>Maximum trade size</li>\n  <li>Daily exposure</li>\n  <li>Token restrictions</li>\n  <li>Protocol restrictions</li>\n  <li>Slippage limits</li>\n  <li>Position limits</li>\n  <li>Multi-step strategy verification</li>\n  <li>Unexpected transaction detection</li>\n  <li>Final-state verification</li>\n</ul>\n', 'agent-payments': '\n<div class="eyebrow">USE CASES</div>\n<h1>Agent Payments</h1>\n<p>Verify agent-to-agent, agent-to-user, merchant and stablecoin payment execution.</p>\n\n<h2>Common controls</h2>\n<div class="cards">\n  <div class="card"><h3>Intent</h3><p>Define the expected action.</p></div>\n  <div class="card"><h3>Policy</h3><p>Set limits and restrictions.</p></div>\n  <div class="card"><h3>Risk</h3><p>Evaluate execution conditions.</p></div>\n  <div class="card"><h3>Verification</h3><p>Compare actual execution with authorization.</p></div>\n  <div class="card"><h3>Evidence</h3><p>Record the resulting verification information.</p></div>\n</div>\n\n<h2>Implementation status</h2>\n<div class="notice">\n  <strong>Documentation boundary</strong>\n  <p>\n    Individual protocols and rails are documented as implemented, testnet,\n    planned or ecosystem targets according to their actual integration status.\n  </p>\n</div>\n\n<h2>Payment controls</h2>\n<ul>\n  <li>Payment limits</li>\n  <li>Spending limits</li>\n  <li>Payment authorization</li>\n  <li>Stablecoin payments</li>\n  <li>Cross-chain payments</li>\n  <li>Payment verification</li>\n  <li>Payment receipts</li>\n  <li>Payment policy</li>\n</ul>\n', 'virtual-cards': '\n<div class="eyebrow">USE CASES</div>\n<h1>Virtual Cards</h1>\n<p>Provide the verification and control layer around virtual-card transaction authorization.</p>\n\n<h2>Common controls</h2>\n<div class="cards">\n  <div class="card"><h3>Intent</h3><p>Define the expected action.</p></div>\n  <div class="card"><h3>Policy</h3><p>Set limits and restrictions.</p></div>\n  <div class="card"><h3>Risk</h3><p>Evaluate execution conditions.</p></div>\n  <div class="card"><h3>Verification</h3><p>Compare actual execution with authorization.</p></div>\n  <div class="card"><h3>Evidence</h3><p>Record the resulting verification information.</p></div>\n</div>\n\n<h2>Implementation status</h2>\n<div class="notice">\n  <strong>Documentation boundary</strong>\n  <p>\n    Individual protocols and rails are documented as implemented, testnet,\n    planned or ecosystem targets according to their actual integration status.\n  </p>\n</div>\n\n<h2>Virtual-card verification</h2>\n<ul>\n  <li>Payment intent</li>\n  <li>Merchant and category policy</li>\n  <li>Transaction amount limits</li>\n  <li>Daily and monthly limits</li>\n  <li>Merchant restrictions</li>\n  <li>Authorization</li>\n  <li>Risk evaluation</li>\n  <li>Approved / blocked decisions</li>\n  <li>Evidence and receipts</li>\n</ul>\n<p>\n  Phorva provides the verification and control layer. It does not need to be\n  the card issuer or card network.\n</p>\n', 'gaming': '\n<div class="eyebrow">USE CASES</div>\n<h1>Gaming</h1>\n<p>Verify agent-controlled game actions, purchases, assets and marketplace execution.</p>\n\n<h2>Common controls</h2>\n<div class="cards">\n  <div class="card"><h3>Intent</h3><p>Define the expected action.</p></div>\n  <div class="card"><h3>Policy</h3><p>Set limits and restrictions.</p></div>\n  <div class="card"><h3>Risk</h3><p>Evaluate execution conditions.</p></div>\n  <div class="card"><h3>Verification</h3><p>Compare actual execution with authorization.</p></div>\n  <div class="card"><h3>Evidence</h3><p>Record the resulting verification information.</p></div>\n</div>\n\n<h2>Implementation status</h2>\n<div class="notice">\n  <strong>Documentation boundary</strong>\n  <p>\n    Individual protocols and rails are documented as implemented, testnet,\n    planned or ecosystem targets according to their actual integration status.\n  </p>\n</div>\n\n<h2>Potential gaming actions</h2>\n<ul>\n  <li>In-game purchases</li>\n  <li>Asset purchases and transfers</li>\n  <li>NFT purchases and transfers</li>\n  <li>Marketplace transactions</li>\n  <li>Game rewards</li>\n  <li>Agent-controlled game actions</li>\n  <li>Asset approvals</li>\n  <li>Trading of game assets</li>\n  <li>Spending limits and game/contract allowlists</li>\n</ul>\n', 'agent-wallets': '\n<div class="eyebrow">USE CASES</div>\n<h1>Agent Wallets</h1>\n<p>Integrate with wallets that hold or control assets while Phorva verifies whether intended execution is authorized.</p>\n\n<h2>Common controls</h2>\n<div class="cards">\n  <div class="card"><h3>Intent</h3><p>Define the expected action.</p></div>\n  <div class="card"><h3>Policy</h3><p>Set limits and restrictions.</p></div>\n  <div class="card"><h3>Risk</h3><p>Evaluate execution conditions.</p></div>\n  <div class="card"><h3>Verification</h3><p>Compare actual execution with authorization.</p></div>\n  <div class="card"><h3>Evidence</h3><p>Record the resulting verification information.</p></div>\n</div>\n\n<h2>Implementation status</h2>\n<div class="notice">\n  <strong>Documentation boundary</strong>\n  <p>\n    Individual protocols and rails are documented as implemented, testnet,\n    planned or ecosystem targets according to their actual integration status.\n  </p>\n</div>\n\n<h2>Integration boundary</h2>\n<div class="architecture">\n  <div>AGENT</div><span>→</span>\n  <div>WALLET</div><span>→</span>\n  <div class="accent">PHORVA</div><span>→</span>\n  <div>PROTOCOL</div><span>→</span>\n  <div>CHAIN</div>\n</div>\n<p>\n  Agent wallets hold or control assets. Phorva verifies whether an agent\'s\n  intended execution is authorized.\n</p>\n', 'daos-treasuries': '\n<div class="eyebrow">USE CASES</div>\n<h1>DAOs & Treasuries</h1>\n<p>Apply execution verification and spending policies to treasury operations.</p>\n\n<h2>Common controls</h2>\n<div class="cards">\n  <div class="card"><h3>Intent</h3><p>Define the expected action.</p></div>\n  <div class="card"><h3>Policy</h3><p>Set limits and restrictions.</p></div>\n  <div class="card"><h3>Risk</h3><p>Evaluate execution conditions.</p></div>\n  <div class="card"><h3>Verification</h3><p>Compare actual execution with authorization.</p></div>\n  <div class="card"><h3>Evidence</h3><p>Record the resulting verification information.</p></div>\n</div>\n\n<h2>Implementation status</h2>\n<div class="notice">\n  <strong>Documentation boundary</strong>\n  <p>\n    Individual protocols and rails are documented as implemented, testnet,\n    planned or ecosystem targets according to their actual integration status.\n  </p>\n</div>\n\n<h2>Treasury controls</h2>\n<ul>\n  <li>Treasury transactions</li>\n  <li>Spending policies</li>\n  <li>Multisignature workflows</li>\n  <li>Protocol and contract allowlists</li>\n  <li>Spending limits</li>\n  <li>Asset restrictions</li>\n  <li>Proposal execution</li>\n  <li>Automated treasury operations</li>\n  <li>Execution verification</li>\n  <li>Audit trail and evidence</li>\n</ul>\n', 'onchain-automation': '\n<div class="eyebrow">USE CASES</div>\n<h1>On-chain Automation</h1>\n<p>Verify automated on-chain operations against declared intent and policy.</p>\n\n<h2>Common controls</h2>\n<div class="cards">\n  <div class="card"><h3>Intent</h3><p>Define the expected action.</p></div>\n  <div class="card"><h3>Policy</h3><p>Set limits and restrictions.</p></div>\n  <div class="card"><h3>Risk</h3><p>Evaluate execution conditions.</p></div>\n  <div class="card"><h3>Verification</h3><p>Compare actual execution with authorization.</p></div>\n  <div class="card"><h3>Evidence</h3><p>Record the resulting verification information.</p></div>\n</div>\n\n<h2>Implementation status</h2>\n<div class="notice">\n  <strong>Documentation boundary</strong>\n  <p>\n    Individual protocols and rails are documented as implemented, testnet,\n    planned or ecosystem targets according to their actual integration status.\n  </p>\n</div>\n', 'chains': '\n<div class="eyebrow">INFRASTRUCTURE / CHAINS</div>\n<h1>Chains</h1>\n<p>\n  Phorva is designed for multi-chain execution verification rather than a\n  single-chain product.\n</p>\n\n<h2>Current development environments</h2>\n<div class="cards">\n  <div class="card"><h3>Base Sepolia</h3><p>Chain ID 84532.</p></div>\n  <div class="card"><h3>Ethereum Sepolia</h3><p>Chain ID 11155111.</p></div>\n  <div class="card"><h3>Arbitrum Sepolia</h3><p>Chain ID 421614.</p></div>\n</div>\n\n<h2>Chain verification</h2>\n<ul>\n  <li>Chain identity</li>\n  <li>Chain matching</li>\n  <li>RPC providers</li>\n  <li>Block verification</li>\n  <li>Transaction lookup</li>\n  <li>Multi-chain execution</li>\n</ul>\n\n<p>\n  Ethereum, Base, Arbitrum and additional EVM environments can be supported\n  through the architecture. Future non-EVM support is possible where the\n  verification model can be implemented appropriately.\n</p>\n', 'protocols': '\n<div class="eyebrow">INFRASTRUCTURE / PROTOCOLS</div>\n<h1>Protocol integrations</h1>\n<p>\n  Phorva uses protocol and execution adapters so its verification semantics\n  are not hardcoded around one application.\n</p>\n\n<div class="architecture">\n  <div>PHORVA CORE</div><span>→</span>\n  <div class="accent">PROTOCOL / EXECUTION ADAPTER</div><span>→</span>\n  <div>UNDERLYING PROTOCOL</div>\n</div>\n\n<div class="cards">\n  <div class="card"><h3>Uniswap</h3><p>Protocol integration target.</p></div>\n  <div class="card"><h3>Aave</h3><p>Protocol integration target.</p></div>\n  <div class="card"><h3>Morpho</h3><p>Protocol integration target.</p></div>\n  <div class="card"><h3>Curve</h3><p>Protocol integration target.</p></div>\n  <div class="card"><h3>Aerodrome</h3><p>Protocol integration target.</p></div>\n  <div class="card"><h3>Sky</h3><p>Protocol integration target.</p></div>\n</div>\n\n<p>\n  Prediction-market, bridge, gaming and payment infrastructure can follow the\n  same adapter architecture. Individual integrations should not be presented\n  as live until implemented.\n</p>\n', 'providers': '\n<div class="eyebrow">INFRASTRUCTURE / PROVIDERS</div>\n<h1>Provider and prover infrastructure</h1>\n\n<p>\n  Phorva defines the verification semantics; providers supply the\n  proving/verification machinery.\n</p>\n\n<div class="cards">\n  <div class="card"><h3>Provider abstraction</h3><p>Keep Phorva semantics independent from a particular infrastructure provider.</p></div>\n  <div class="card"><h3>Provider adapters</h3><p>Connect external proving or verification systems.</p></div>\n  <div class="card"><h3>Provider selection</h3><p>Select infrastructure appropriate to a verification workload.</p></div>\n  <div class="card"><h3>Failure handling</h3><p>Account for provider failures and availability conditions.</p></div>\n  <div class="card"><h3>Fallback</h3><p>Support alternative infrastructure where the deployment architecture requires it.</p></div>\n  <div class="card"><h3>Proof lifecycle</h3><p>Manage proof generation and verification as infrastructure concerns.</p></div>\n</div>\n\n<div class="notice">\n  <strong>Positioning</strong>\n  <p>\n    Phorva is not building its own prover network. External providers can\n    supply proving and verification infrastructure while Phorva owns the\n    verification semantics and control-plane experience.\n  </p>\n</div>\n', 'infrastructure-security': '\n<div class="eyebrow">VERIFICATION / SECURITY</div>\n<h1>Verification security model</h1>\n<p>\n  Phorva treats security-critical execution claims as data that must be\n  validated. A caller cannot make an execution authorized simply by placing\n  an authorization claim in the request.\n</p>\n\n<h2>Trust boundaries</h2>\n<ul>\n  <li>Agent and application inputs</li>\n  <li>Wallet and signing systems</li>\n  <li>Phorva verification engine</li>\n  <li>Protocol adapters</li>\n  <li>External proving or verification providers</li>\n  <li>Blockchain execution environment</li>\n</ul>\n', 'api-reference': '\n<div class="eyebrow">GET STARTED / API</div>\n<h1>Phorva API</h1>\n<p>\n  The API is the programmatic interface between applications and the Phorva\n  verification engine.\n</p>\n\n<h2>Verification</h2>\n<pre><code>POST /v1/verify</code></pre>\n\n<h2>Health</h2>\n<pre><code>GET /v1/health</code></pre>\n\n<h2>Authentication</h2>\n<p>\n  API requests use a Phorva API key supplied as a Bearer credential.\n</p>\n\n<pre><code>Authorization: Bearer YOUR_PHORVA_API_KEY</code></pre>\n', 'api-keys': '\n<div class="eyebrow">DEVELOPER / API KEYS</div>\n<h1>API keys</h1>\n<p>\n  API keys provide authenticated access to Phorva projects.\n</p>\n\n<h2>Developer Console flow</h2>\n<div class="steps">\n  <div class="step"><strong>1. Account</strong><span>Create an account and organization.</span></div>\n  <div class="step"><strong>2. Project</strong><span>Create a project for an agent or application.</span></div>\n  <div class="step"><strong>3. Key</strong><span>Create a test or production API key.</span></div>\n  <div class="step"><strong>4. Integrate</strong><span>Store the key securely and connect the SDK or API.</span></div>\n</div>\n\n<h2>Lifecycle</h2>\n<pre><code>Account\n  → Organization\n  → Project\n  → API Key\n  → Agent\n  → Verification Requests\n  → Logs\n  → Usage\n  → Billing (later)</code></pre>\n\n<div class="notice">\n  <strong>Secret handling</strong>\n  <p>\n    A newly created secret should be displayed once. The server should retain\n    only the representation required to authenticate and manage the key.\n  </p>\n</div>\n', 'integration': '\n<div class="eyebrow">DEVELOPER / INTEGRATION</div>\n<h1>Integration guide</h1>\n\n<h2>Recommended architecture</h2>\n<div class="architecture">\n  <div>AGENT</div><span>→</span>\n  <div>YOUR APPLICATION</div><span>→</span>\n  <div class="accent">PHORVA API</div><span>→</span>\n  <div>VERIFICATION</div><span>→</span>\n  <div>EXECUTION</div>\n</div>\n\n<h2>Integration patterns</h2>\n<ul>\n  <li>Pre-execution verification</li>\n  <li>Wallet-provider integration</li>\n  <li>Automated trading verification</li>\n  <li>Agent payment verification</li>\n  <li>Protocol execution verification</li>\n  <li>Post-execution verification where final-state validation is required</li>\n</ul>\n', 'errors': '\n<div class="eyebrow">DEVELOPER / ERRORS</div>\n<h1>Error handling</h1>\n<p>\n  Integrations should distinguish infrastructure errors from verification\n  rejections.\n</p>\n\n<div class="cards">\n  <div class="card"><h3>Authentication error</h3><p>The API credential cannot be authenticated.</p></div>\n  <div class="card"><h3>Validation error</h3><p>The request does not satisfy the API input contract.</p></div>\n  <div class="card"><h3>Verification rejection</h3><p>The execution does not satisfy authorization conditions.</p></div>\n  <div class="card"><h3>Provider error</h3><p>External verification infrastructure failed or was unavailable.</p></div>\n  <div class="card"><h3>Execution error</h3><p>The underlying execution system reported an execution failure.</p></div>\n</div>\n', 'threat-model': '\n<div class="eyebrow">SECURITY</div>\n<h1>Threat model</h1>\n<p>\n  Phorva is designed around the assumption that autonomous execution can be\n  manipulated, misrepresented or unexpectedly changed between intent and\n  execution.\n</p>\n\n<div class="cards">\n  <div class="card"><h3>Caller manipulation</h3><p>Untrusted caller fields must not establish authorization.</p></div>\n  <div class="card"><h3>Calldata manipulation</h3><p>Encoded execution parameters can differ from declared intent.</p></div>\n  <div class="card"><h3>Approval risk</h3><p>Unexpected or excessive token approvals can create downstream risk.</p></div>\n  <div class="card"><h3>Wrong chain</h3><p>An execution may occur on an unauthorized network.</p></div>\n  <div class="card"><h3>Wrong token</h3><p>The actual asset may differ from the intended asset.</p></div>\n  <div class="card"><h3>Amount manipulation</h3><p>Actual transaction amounts can differ from intended amounts.</p></div>\n  <div class="card"><h3>Intent manipulation</h3><p>Declared intent itself must be handled within an authorization model.</p></div>\n  <div class="card"><h3>Execution graph integrity</h3><p>Multi-step execution must preserve the relationship between verified steps.</p></div>\n</div>\n', 'security-architecture': '\n<div class="eyebrow">SECURITY</div>\n<h1>Security architecture</h1>\n\n<h2>Trust boundaries</h2>\n<ul>\n  <li>Autonomous agent</li>\n  <li>Application</li>\n  <li>Wallet or signer</li>\n  <li>Phorva verification layer</li>\n  <li>Protocol adapter</li>\n  <li>External provider</li>\n  <li>Blockchain</li>\n</ul>\n\n<h2>Security properties</h2>\n<ul>\n  <li>Canonical authorization verification</li>\n  <li>Transaction parameter verification</li>\n  <li>Execution graph integrity</li>\n  <li>Final-state verification</li>\n  <li>Verification traceability</li>\n  <li>Evidence and auditability</li>\n</ul>\n', 'verification-integrity': '\n<div class="eyebrow">SECURITY</div>\n<h1>Verification integrity</h1>\n<p>\n  Authorization decisions should be derived from verifiable execution\n  conditions rather than accepted from untrusted request claims.\n</p>\n\n<h2>Integrity concerns</h2>\n<ul>\n  <li>Caller-input security</li>\n  <li>Authorization integrity</li>\n  <li>Calldata manipulation</li>\n  <li>Parameter manipulation</li>\n  <li>Unexpected contracts</li>\n  <li>Wrong-chain execution</li>\n  <li>Wrong-token execution</li>\n  <li>Amount manipulation</li>\n  <li>Replay considerations</li>\n  <li>Execution-graph integrity</li>\n  <li>Final-state verification</li>\n</ul>\n', 'auditability': '\n<div class="eyebrow">SECURITY / AUDITABILITY</div>\n<h1>Auditability</h1>\n<p>\n  Verification should produce enough structured information for developers,\n  operators and authorized reviewers to understand why an execution was\n  allowed or rejected.\n</p>\n\n<ul>\n  <li>Verification logs</li>\n  <li>Execution traces</li>\n  <li>Verification history</li>\n  <li>Audit trail</li>\n  <li>Evidence</li>\n  <li>Receipts</li>\n  <li>Commitments</li>\n  <li>Transaction status</li>\n  <li>Rejected transactions</li>\n  <li>Risk events</li>\n  <li>Developer debugging</li>\n</ul>\n\n<h2>Audit roadmap</h2>\n<p>\n  Independent security review and formal audit are production roadmap items\n  and should not be represented as completed until actually performed.\n</p>\n', 'roadmap': '\n<div class="eyebrow">ROADMAP</div>\n<h1>Phorva roadmap</h1>\n\n<h2>Current / MVP</h2>\n<div class="cards">\n  <div class="card"><h3>Verification engine</h3><p>Core verification and authorization infrastructure.</p></div>\n  <div class="card"><h3>Multi-chain testnet</h3><p>Development environments across supported testnets.</p></div>\n  <div class="card"><h3>API surface</h3><p>Developer-facing verification API foundation.</p></div>\n  <div class="card"><h3>SDK</h3><p>Application integration layer.</p></div>\n  <div class="card"><h3>Execution graph</h3><p>Execution structure and verification representation.</p></div>\n  <div class="card"><h3>Verification trace</h3><p>Traceable verification conditions.</p></div>\n  <div class="card"><h3>Provider abstraction</h3><p>Provider-independent architecture.</p></div>\n  <div class="card"><h3>Proof / evidence model</h3><p>Structured verification evidence and commitments.</p></div>\n</div>\n\n<h2>Production</h2>\n<ul>\n  <li>Mainnet deployment</li>\n  <li>External provider integrations</li>\n  <li>Wallet integrations</li>\n  <li>Persistent verification records</li>\n  <li>Production SDK</li>\n  <li>Expanded protocol adapters</li>\n  <li>Monitoring</li>\n  <li>Security audit</li>\n</ul>\n\n<h2>Ecosystem</h2>\n<ul>\n  <li>DeFi integrations</li>\n  <li>Prediction-market integrations</li>\n  <li>Agent-payment integrations</li>\n  <li>DAO and treasury integrations</li>\n  <li>Virtual-card execution rails</li>\n  <li>Additional gaming and automation integrations</li>\n</ul>\n', 'use-cases': '\n<div class="eyebrow">USE CASES</div>\n<h1>One verification model. Many autonomous systems.</h1>\n<p>\n  Phorva is designed to remain horizontal. The action changes, but the core\n  verification model remains: intent → policy → risk → authorization →\n  execution verification → result.\n</p>\n\n<div class="cards">\n  <div class="card"><h3>DeFi</h3><p>Protocol and asset execution verification.</p></div>\n  <div class="card"><h3>Prediction Markets</h3><p>Orders, positions, collateral and settlement actions.</p></div>\n  <div class="card"><h3>Autonomous Trading</h3><p>Strategy and transaction authorization.</p></div>\n  <div class="card"><h3>Agent Payments</h3><p>Programmatic payment verification.</p></div>\n  <div class="card"><h3>Virtual Cards</h3><p>Transaction policy and authorization.</p></div>\n  <div class="card"><h3>Gaming</h3><p>Agent-controlled game and asset actions.</p></div>\n  <div class="card"><h3>Agent Wallets</h3><p>Pre-execution verification for wallet infrastructure.</p></div>\n  <div class="card"><h3>DAOs & Treasuries</h3><p>Institutional execution controls.</p></div>\n  <div class="card"><h3>On-chain Automation</h3><p>Verification for automated blockchain operations.</p></div>\n</div>\n', 'phorva-vs-infrastructure': '\n<div class="eyebrow">OVERVIEW / INFRASTRUCTURE BOUNDARIES</div>\n<h1>Phorva vs. infrastructure</h1>\n\n<div class="architecture vertical">\n  <div>AGENT<br><small>decides what it wants to do</small></div>\n  <span>↓</span>\n  <div>WALLET<br><small>controls / signs execution</small></div>\n  <span>↓</span>\n  <div class="accent">PHORVA<br><small>verifies whether execution is authorized</small></div>\n  <span>↓</span>\n  <div>PROTOCOL<br><small>executes the operation</small></div>\n  <span>↓</span>\n  <div>BLOCKCHAIN<br><small>records execution</small></div>\n</div>\n\n<h2>Provider boundary</h2>\n<p>\n  Providers can supply proving or verification machinery. Phorva defines the\n  verification semantics and integrates that infrastructure into its control\n  plane.\n</p>\n'};
-const PHORVA_ROUTES = {'/docs': 'introduction', '/docs/': 'introduction', '/docs/introduction': 'introduction', '/docs/architecture': 'architecture', '/docs/core-concepts': 'core-concepts', '/docs/what-is': 'what-is', '/docs/phorva-vs-infrastructure': 'phorva-vs-infrastructure', '/docs/quickstart': 'quickstart', '/docs/sdk': 'sdk', '/docs/api': 'api', '/docs/authentication': 'authentication', '/docs/connect': 'connect', '/docs/verification/intent': 'intent', '/docs/verification/policy': 'policy', '/docs/verification/risk': 'risk', '/docs/verification/authorization': 'authorization', '/docs/verification/transaction': 'transaction', '/docs/verification/transaction-analysis': 'transaction-analysis', '/docs/verification/execution-graph': 'execution-graph', '/docs/verification/final-state': 'final-state', '/docs/verification/trace': 'trace', '/docs/verification/proof': 'proof', '/docs/verification/commitment': 'commitment', '/docs/verification/receipts': 'receipts', '/docs/verification/semantics': 'verification-semantics', '/docs/verification/security-model': 'security-model', '/docs/verification/failure-states': 'failure-states', '/docs/actions/transfers': 'transfers', '/docs/actions/approvals': 'approvals', '/docs/actions/swaps': 'swaps', '/docs/actions/withdrawals': 'withdrawals', '/docs/actions/defi': 'defi', '/docs/actions/bridges': 'bridges', '/docs/actions/custom-calls': 'custom-calls', '/docs/actions/multi-step': 'multi-step', '/docs/use-cases': 'use-cases', '/docs/use-cases/defi': 'defi', '/docs/use-cases/prediction-markets': 'prediction-markets', '/docs/use-cases/autonomous-trading': 'autonomous-trading', '/docs/use-cases/agent-payments': 'agent-payments', '/docs/use-cases/virtual-cards': 'virtual-cards', '/docs/use-cases/gaming': 'gaming', '/docs/use-cases/agent-wallets': 'agent-wallets', '/docs/use-cases/daos-treasuries': 'daos-treasuries', '/docs/use-cases/onchain-automation': 'onchain-automation', '/docs/infrastructure/chains': 'chains', '/docs/infrastructure/protocols': 'protocols', '/docs/infrastructure/providers': 'providers', '/docs/infrastructure/security': 'infrastructure-security', '/docs/developer/sdk': 'sdk', '/docs/developer/api': 'api-reference', '/docs/developer/api-keys': 'api-keys', '/docs/developer/integration': 'integration', '/docs/developer/errors': 'errors', '/docs/security/threat-model': 'threat-model', '/docs/security/architecture': 'security-architecture', '/docs/security/verification-integrity': 'verification-integrity', '/docs/security/auditability': 'auditability', '/docs/roadmap': 'roadmap'};
+
+/* PHORVA DOCS — navigator completion pages */
+
+PHORVA_PAGES["what-is-phorva"] = `
+<div class="eyebrow">OVERVIEW / WHAT IS PHORVA</div>
+<h1>What is Phorva?</h1>
+<p>
+  Phorva is a verification and control layer between autonomous agents
+  and blockchain execution.
+</p>
+
+<div class="notice">
+  <strong>Core principle</strong>
+  <p>
+    Phorva verifies whether the execution that is about to occur matches
+    the intent, policy and authorization conditions established for the agent.
+  </p>
+</div>
+
+<h2>What Phorva verifies</h2>
+<ul>
+  <li>Agent and project context</li>
+  <li>Declared intent</li>
+  <li>Policy constraints</li>
+  <li>Transaction and calldata parameters</li>
+  <li>Protocol and contract conditions</li>
+  <li>Chain and asset conditions</li>
+  <li>Execution graph integrity</li>
+  <li>Final execution state where supported</li>
+</ul>
+
+<h2>What Phorva produces</h2>
+<p>
+  A structured verification result containing the authorization decision
+  and supporting verification information such as traces, commitments,
+  evidence and receipts where applicable.
+</p>
+`;
+
+PHORVA_PAGES["trust-boundaries"] = `
+<div class="eyebrow">OVERVIEW / TRUST BOUNDARIES</div>
+<h1>Trust boundaries</h1>
+<p>
+  Phorva treats information supplied by an agent or caller as input that
+  must be evaluated, not as an authoritative authorization fact.
+</p>
+
+<div class="architecture">
+  <div>AGENT</div><span>→</span>
+  <div>CLAIMS</div><span>→</span>
+  <div class="accent">PHORVA VERIFICATION</div><span>→</span>
+  <div>VERDICT</div><span>→</span>
+  <div>EXECUTION</div>
+</div>
+
+<h2>Boundary principles</h2>
+<ul>
+  <li>Caller-provided authorization claims are validated.</li>
+  <li>Transaction parameters are independently evaluated.</li>
+  <li>Policy decisions are derived from configured controls.</li>
+  <li>Execution evidence is evaluated against the authorized conditions.</li>
+</ul>
+`;
+
+PHORVA_PAGES["evidence"] = `
+<div class="eyebrow">VERIFICATION / EVIDENCE</div>
+<h1>Evidence</h1>
+<p>
+  Evidence is the structured information produced to explain and support
+  a Phorva verification result.
+</p>
+
+<h2>Evidence can include</h2>
+<div class="cards">
+  <div class="card"><h3>Intent</h3><p>The declared action and constraints.</p></div>
+  <div class="card"><h3>Policy</h3><p>The authorization conditions evaluated.</p></div>
+  <div class="card"><h3>Execution</h3><p>The transaction and execution data analyzed.</p></div>
+  <div class="card"><h3>Trace</h3><p>The verification checks performed.</p></div>
+  <div class="card"><h3>Commitment</h3><p>A commitment to the verified statement or result.</p></div>
+  <div class="card"><h3>Receipt</h3><p>A structured record of the verification outcome.</p></div>
+</div>
+`;
+
+PHORVA_PAGES["proof-statements"] = `
+<div class="eyebrow">VERIFICATION / PROOF STATEMENTS</div>
+<h1>Proof statements</h1>
+<p>
+  A proof statement describes the conditions Phorva has verified about
+  an execution.
+</p>
+
+<h2>Statement model</h2>
+<pre><code>{
+  "version": "phorva-proof-v1",
+  "decision": "AUTHORIZED",
+  "intent": "...",
+  "policy": "...",
+  "execution": "...",
+  "commitment": "..."
+}</code></pre>
+
+<div class="notice">
+  <strong>Important</strong>
+  <p>
+    A proof statement represents a verification claim. The proving machinery
+    used to establish or verify that claim can be supplied by external
+    infrastructure providers.
+  </p>
+</div>
+`;
+
+PHORVA_PAGES["commitments"] = `
+<div class="eyebrow">VERIFICATION / COMMITMENTS</div>
+<h1>Commitments</h1>
+<p>
+  Commitments provide a deterministic cryptographic reference to the
+  verified execution statement and associated verification material.
+</p>
+
+<h2>Purpose</h2>
+<ul>
+  <li>Bind evidence to a specific verification result.</li>
+  <li>Support auditability.</li>
+  <li>Detect changes to committed verification data.</li>
+  <li>Provide a stable reference for downstream systems.</li>
+</ul>
+`;
+
+PHORVA_PAGES["trading"] = `
+<div class="eyebrow">USE CASES / TRADING</div>
+<h1>Autonomous trading</h1>
+<p>
+  Phorva can act as the verification layer for trading agents that
+  execute strategies against blockchain protocols.
+</p>
+
+<h2>Controls</h2>
+<ul>
+  <li>Maximum trade size</li>
+  <li>Daily or rolling exposure limits</li>
+  <li>Token restrictions</li>
+  <li>Protocol and contract allowlists</li>
+  <li>Slippage constraints</li>
+  <li>Position limits</li>
+  <li>Multi-step execution verification</li>
+</ul>
+
+<p>
+  The trading system remains responsible for strategy decisions.
+  Phorva verifies whether the resulting execution satisfies the configured
+  authorization conditions.
+</p>
+`;
+
+PHORVA_PAGES["projects"] = `
+<div class="eyebrow">DEVELOPER / PROJECTS</div>
+<h1>Projects</h1>
+<p>
+  A project represents an application or integration using Phorva.
+  Projects provide the organizational boundary for agents, policies,
+  API credentials and verification activity.
+</p>
+
+<div class="architecture">
+  <div>ORGANIZATION</div><span>→</span>
+  <div class="accent">PROJECT</div><span>→</span>
+  <div>API KEY</div><span>→</span>
+  <div>AGENT</div><span>→</span>
+  <div>VERIFICATION</div>
+</div>
+`;
+
+PHORVA_PAGES["agents"] = `
+<div class="eyebrow">DEVELOPER / AGENTS</div>
+<h1>Agents</h1>
+<p>
+  Agent identity connects verification requests to the autonomous system
+  responsible for initiating an execution.
+</p>
+
+<h2>Agent context</h2>
+<ul>
+  <li>Project identity</li>
+  <li>Agent identity</li>
+  <li>Requested action</li>
+  <li>Policy context</li>
+  <li>Execution context</li>
+</ul>
+`;
+
+PHORVA_PAGES["examples"] = `
+<div class="eyebrow">DEVELOPER / EXAMPLES</div>
+<h1>Examples</h1>
+<p>
+  Examples demonstrate common ways to integrate verification into an
+  autonomous execution flow.
+</p>
+
+<h2>Basic verification</h2>
+<pre><code>const result = await phorva.verify({
+  agent: "TradingAgent-01",
+  intent: {
+    action: "swap",
+    amount: "300",
+    token: "USDC"
+  },
+  execution: {
+    chain: "baseSepolia",
+    protocol: "Uniswap"
+  }
+});</code></pre>
+`;
+
+PHORVA_PAGES["provider-architecture"] = `
+<div class="eyebrow">INFRASTRUCTURE / PROVIDER ARCHITECTURE</div>
+<h1>Provider architecture</h1>
+<p>
+  Phorva separates verification semantics from the infrastructure used
+  to perform proving or verification operations.
+</p>
+
+<div class="architecture">
+  <div>PHORVA SEMANTICS</div><span>→</span>
+  <div class="accent">PROVIDER ADAPTER</div><span>→</span>
+  <div>PROVING / VERIFICATION INFRASTRUCTURE</div>
+</div>
+
+<div class="notice">
+  <strong>Boundary</strong>
+  <p>
+    Phorva defines the verification semantics; providers supply the
+    proving or verification machinery where required.
+  </p>
+</div>
+`;
+
+PHORVA_PAGES["provers"] = `
+<div class="eyebrow">INFRASTRUCTURE / PROVER INFRASTRUCTURE</div>
+<h1>Prover infrastructure</h1>
+<p>
+  Phorva is designed to work with external proving and verification
+  infrastructure through provider adapters.
+</p>
+
+<h2>Provider responsibilities</h2>
+<ul>
+  <li>Proof generation where required</li>
+  <li>Proof verification where required</li>
+  <li>Provider-specific execution</li>
+  <li>Provider availability and lifecycle handling</li>
+</ul>
+
+<p>
+  Phorva does not position itself as a prover network.
+</p>
+`;
+
+PHORVA_PAGES["adapters"] = `
+<div class="eyebrow">INFRASTRUCTURE / EXECUTION ADAPTERS</div>
+<h1>Execution adapters</h1>
+<p>
+  Execution adapters connect Phorva's verification model to specific
+  chains, protocols and execution environments.
+</p>
+
+<h2>Adapter responsibilities</h2>
+<ul>
+  <li>Decode protocol-specific execution data.</li>
+  <li>Normalize execution into Phorva verification semantics.</li>
+  <li>Connect chain and protocol context to verification.</li>
+  <li>Preserve provider and protocol independence at the core layer.</li>
+</ul>
+`;
+
+PHORVA_PAGES["security-trust-boundaries"] = `
+<div class="eyebrow">SECURITY / TRUST BOUNDARIES</div>
+<h1>Security trust boundaries</h1>
+<p>
+  Phorva's security model separates untrusted execution claims from
+  independently evaluated authorization and verification state.
+</p>
+
+<h2>Security boundary</h2>
+<div class="cards">
+  <div class="card"><h3>Caller</h3><p>Supplies execution claims and context.</p></div>
+  <div class="card"><h3>Phorva</h3><p>Validates policy, intent and execution conditions.</p></div>
+  <div class="card"><h3>Provider</h3><p>Supplies proving or verification machinery where required.</p></div>
+  <div class="card"><h3>Protocol</h3><p>Performs the underlying blockchain operation.</p></div>
+</div>
+`;
+
+PHORVA_PAGES["security-testing"] = `
+<div class="eyebrow">SECURITY / SECURITY TESTING</div>
+<h1>Security testing</h1>
+<p>
+  Phorva's verification engine is developed with adversarial execution
+  cases covering authorization, transaction integrity and execution
+  verification.
+</p>
+
+<h2>Test categories</h2>
+<ul>
+  <li>Intent mismatch</li>
+  <li>Policy limit violations</li>
+  <li>Wrong protocol or contract</li>
+  <li>Wrong chain</li>
+  <li>Unexpected native value</li>
+  <li>Token and amount manipulation</li>
+  <li>Unlimited approval detection</li>
+  <li>Execution graph integrity</li>
+  <li>Final-state verification</li>
+  <li>Proof and verification integrity</li>
+</ul>
+
+<div class="notice">
+  <strong>Current engineering checkpoint</strong>
+  <p>
+    The current development security suite contains 87 passing security
+    tests. Production readiness remains dependent on additional
+    infrastructure, security review and deployment controls.
+  </p>
+</div>
+`;
+
+PHORVA_PAGES["changelog"] = `
+<div class="eyebrow">RESOURCES / CHANGELOG</div>
+<h1>Changelog</h1>
+<p>
+  Phorva's changelog records changes to the verification engine,
+  developer platform, documentation and infrastructure.
+</p>
+
+<h2>Current development direction</h2>
+<ul>
+  <li>Verification control plane</li>
+  <li>Multi-chain EVM architecture</li>
+  <li>Provider abstraction</li>
+  <li>Execution graph verification</li>
+  <li>Proof statements and receipts</li>
+  <li>Developer API and SDK</li>
+</ul>
+`;
+
+PHORVA_PAGES["status"] = `
+<div class="eyebrow">RESOURCES / STATUS</div>
+<h1>Phorva status</h1>
+<p>
+  This page describes the current implementation state of the Phorva
+  development platform.
+</p>
+
+<div class="cards">
+  <div class="card"><h3>Verification Engine</h3><p>Enabled in the current development environment.</p></div>
+  <div class="card"><h3>Security Tests</h3><p>87 / 87 passing at the current engineering checkpoint.</p></div>
+  <div class="card"><h3>Chains</h3><p>Base Sepolia, Ethereum Sepolia and Arbitrum Sepolia are used in the current test environment.</p></div>
+  <div class="card"><h3>Production</h3><p>Production capabilities are being developed and should not be inferred from testnet functionality.</p></div>
+</div>
+`;
+
+
+const PHORVA_ROUTES = {
+
+  '/docs/what-is-phorva': 'what-is-phorva',
+  '/docs/trust-boundaries': 'trust-boundaries',
+  '/docs/verification/evidence': 'evidence',
+  '/docs/verification/proof-statements': 'proof-statements',
+  '/docs/verification/commitments': 'commitments',
+  '/docs/use-cases/trading': 'trading',
+  '/docs/developer/projects': 'projects',
+  '/docs/developer/agents': 'agents',
+  '/docs/developer/examples': 'examples',
+  '/docs/infrastructure/provider-architecture': 'provider-architecture',
+  '/docs/infrastructure/provers': 'provers',
+  '/docs/infrastructure/adapters': 'adapters',
+  '/docs/security/trust-boundaries': 'security-trust-boundaries',
+  '/docs/security/testing': 'security-testing',
+  '/docs/changelog': 'changelog',
+  '/docs/status': 'status',
+'/docs': 'introduction', '/docs/': 'introduction', '/docs/introduction': 'introduction', '/docs/architecture': 'architecture', '/docs/core-concepts': 'core-concepts', '/docs/what-is': 'what-is', '/docs/phorva-vs-infrastructure': 'phorva-vs-infrastructure', '/docs/quickstart': 'quickstart', '/docs/sdk': 'sdk', '/docs/api': 'api', '/docs/authentication': 'authentication', '/docs/connect': 'connect', '/docs/verification/intent': 'intent', '/docs/verification/policy': 'policy', '/docs/verification/risk': 'risk', '/docs/verification/authorization': 'authorization', '/docs/verification/transaction': 'transaction', '/docs/verification/transaction-analysis': 'transaction-analysis', '/docs/verification/execution-graph': 'execution-graph', '/docs/verification/final-state': 'final-state', '/docs/verification/trace': 'trace', '/docs/verification/proof': 'proof', '/docs/verification/commitment': 'commitment', '/docs/verification/receipts': 'receipts', '/docs/verification/semantics': 'verification-semantics', '/docs/verification/security-model': 'security-model', '/docs/verification/failure-states': 'failure-states', '/docs/actions/transfers': 'transfers', '/docs/actions/approvals': 'approvals', '/docs/actions/swaps': 'swaps', '/docs/actions/withdrawals': 'withdrawals', '/docs/actions/defi': 'defi', '/docs/actions/bridges': 'bridges', '/docs/actions/custom-calls': 'custom-calls', '/docs/actions/multi-step': 'multi-step', '/docs/use-cases': 'use-cases', '/docs/use-cases/defi': 'defi', '/docs/use-cases/prediction-markets': 'prediction-markets', '/docs/use-cases/autonomous-trading': 'autonomous-trading', '/docs/use-cases/agent-payments': 'agent-payments', '/docs/use-cases/virtual-cards': 'virtual-cards', '/docs/use-cases/gaming': 'gaming', '/docs/use-cases/agent-wallets': 'agent-wallets', '/docs/use-cases/daos-treasuries': 'daos-treasuries', '/docs/use-cases/onchain-automation': 'onchain-automation', '/docs/infrastructure/chains': 'chains', '/docs/infrastructure/protocols': 'protocols', '/docs/infrastructure/providers': 'providers', '/docs/infrastructure/security': 'infrastructure-security', '/docs/developer/sdk': 'sdk', '/docs/developer/api': 'api-reference', '/docs/developer/api-keys': 'api-keys', '/docs/developer/integration': 'integration', '/docs/developer/errors': 'errors', '/docs/security/threat-model': 'threat-model', '/docs/security/architecture': 'security-architecture', '/docs/security/verification-integrity': 'verification-integrity', '/docs/security/auditability': 'auditability', '/docs/roadmap': 'roadmap'};
 const PHORVA_NAV = [
   ['OVERVIEW', [
     ['Introduction', '/docs'],
