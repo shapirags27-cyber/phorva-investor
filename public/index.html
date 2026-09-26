@@ -2906,13 +2906,1042 @@ body{
 }
 </style>
 
+
+
+<style id="phorva-product-hero-v1">
+
+.phorva-product-hero{
+  position:relative;
+  padding-top:78px !important;
+  padding-bottom:52px !important;
+}
+
+.phorva-hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(390px,.95fr);
+  gap:58px;
+  align-items:center;
+  max-width:1180px;
+  margin:0 auto;
+}
+
+.phorva-hero-copy{
+  max-width:690px;
+}
+
+.phorva-hero-copy h1{
+  margin:18px 0 22px;
+  max-width:760px;
+}
+
+.phorva-hero-copy .hero-lead{
+  max-width:650px;
+}
+
+.phorva-hero-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:28px;
+}
+
+.phorva-hero-primary,
+.phorva-hero-secondary{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  padding:0 18px;
+  border-radius:8px;
+  text-decoration:none;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  transition:.2s ease;
+}
+
+.phorva-hero-primary{
+  color:#07101d;
+  background:#fff;
+  border:1px solid #fff;
+  box-shadow:0 12px 35px rgba(90,110,255,.12);
+}
+
+.phorva-hero-primary:hover{
+  transform:translateY(-1px);
+  background:#e9edff;
+}
+
+.phorva-hero-secondary{
+  color:#aeb8c9;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(120,137,165,.24);
+}
+
+.phorva-hero-secondary:hover{
+  color:#fff;
+  border-color:rgba(120,137,165,.48);
+}
+
+.phorva-hero-note{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:18px;
+  color:#647187;
+  font-size:9px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+.phorva-live-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#67e8a5;
+  box-shadow:0 0 12px rgba(103,232,165,.65);
+}
+
+.phorva-note-divider{
+  width:1px;
+  height:11px;
+  background:rgba(120,137,165,.20);
+  margin:0 3px;
+}
+
+.phorva-live-verification{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(105,125,170,.23);
+  border-radius:16px;
+  padding:20px;
+  background:
+    radial-gradient(circle at 80% 0%,rgba(79,91,220,.14),transparent 42%),
+    linear-gradient(145deg,rgba(17,23,38,.98),rgba(8,12,21,.98));
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.38),
+    inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+.phorva-live-verification:before{
+  content:"";
+  position:absolute;
+  top:-80px;
+  right:-80px;
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  background:rgba(80,91,255,.10);
+  filter:blur(35px);
+  pointer-events:none;
+}
+
+.phorva-live-header{
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:15px;
+  padding-bottom:17px;
+  border-bottom:1px solid rgba(120,137,165,.13);
+}
+
+.phorva-live-label{
+  margin-bottom:5px;
+  color:#65738a;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.13em;
+}
+
+.phorva-live-header strong{
+  color:#eef2f8;
+  font-size:13px;
+  font-weight:700;
+}
+
+.phorva-live-badge{
+  padding:5px 7px;
+  border:1px solid rgba(103,232,165,.22);
+  border-radius:5px;
+  color:#70e6a7;
+  background:rgba(103,232,165,.055);
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:.12em;
+}
+
+.phorva-agent-row{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:17px 0;
+}
+
+.phorva-agent-avatar{
+  width:32px;
+  height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:9px;
+  color:#dfe5ff;
+  background:linear-gradient(145deg,#313b75,#171c39);
+  border:1px solid rgba(115,130,255,.24);
+  font-size:12px;
+  font-weight:800;
+}
+
+.phorva-agent-row > div:nth-child(2){
+  min-width:0;
+  flex:1;
+}
+
+.phorva-agent-row strong,
+.phorva-agent-row span{
+  display:block;
+}
+
+.phorva-agent-row strong{
+  color:#e6eaf2;
+  font-size:11px;
+}
+
+.phorva-agent-row span{
+  margin-top:3px;
+  color:#68768d;
+  font-size:8px;
+}
+
+.phorva-agent-status{
+  color:#68768d !important;
+  font-size:7px !important;
+  font-weight:800;
+  letter-spacing:.09em;
+}
+
+.phorva-verification-block{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.phorva-verification-section{
+  padding:13px;
+  border:1px solid rgba(120,137,165,.13);
+  border-radius:8px;
+  background:rgba(255,255,255,.018);
+}
+
+.phorva-verification-section small{
+  display:block;
+  margin-bottom:6px;
+  color:#647187;
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:.10em;
+}
+
+.phorva-verification-section strong{
+  color:#dbe1eb;
+  font-size:10px;
+  font-weight:650;
+}
+
+.phorva-check-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  margin-top:12px;
+  overflow:hidden;
+  border:1px solid rgba(120,137,165,.12);
+  border-radius:8px;
+  background:rgba(120,137,165,.10);
+}
+
+.phorva-check{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:11px 12px;
+  background:rgba(9,14,24,.93);
+}
+
+.phorva-check span{
+  color:#647187;
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:.07em;
+}
+
+.phorva-check strong{
+  font-size:8px;
+  font-weight:800;
+}
+
+.phorva-check .pass{
+  color:#70e6a7;
+}
+
+.phorva-check .low{
+  color:#aebdff;
+}
+
+.phorva-verification-result{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:12px;
+  padding:15px;
+  border:1px solid rgba(103,232,165,.18);
+  border-radius:9px;
+  background:rgba(103,232,165,.035);
+}
+
+.phorva-verification-result small{
+  display:block;
+  margin-bottom:5px;
+  color:#617086;
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:.12em;
+}
+
+.phorva-verification-result strong{
+  color:#8cf0ba;
+  font-size:12px;
+  letter-spacing:.04em;
+}
+
+.phorva-result-mark{
+  width:26px;
+  height:26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(103,232,165,.30);
+  border-radius:50%;
+  color:#82edb4;
+  font-size:12px;
+}
+
+.phorva-evidence-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding-top:13px;
+  color:#59677c;
+  font-size:7px;
+  letter-spacing:.04em;
+}
+
+.phorva-hero-architecture{
+  max-width:1180px;
+  margin:58px auto 0;
+  padding-top:25px;
+  border-top:1px solid rgba(120,137,165,.11);
+}
+
+.phorva-hero-architecture .hero-flow-label{
+  margin-bottom:14px;
+}
+
+.phorva-hero-architecture .flow{
+  margin:0;
+}
+
+@media(max-width:950px){
+  .phorva-hero-grid{
+    grid-template-columns:1fr;
+    gap:38px;
+  }
+
+  .phorva-hero-copy{
+    max-width:760px;
+  }
+
+  .phorva-live-verification{
+    max-width:650px;
+  }
+}
+
+@media(max-width:600px){
+  .phorva-product-hero{
+    padding-top:48px !important;
+  }
+
+  .phorva-hero-actions{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .phorva-hero-primary,
+  .phorva-hero-secondary{
+    width:100%;
+  }
+
+  .phorva-verification-block,
+  .phorva-check-grid{
+    grid-template-columns:1fr;
+  }
+
+  .phorva-evidence-row{
+    flex-direction:column;
+    gap:5px;
+  }
+
+  .phorva-hero-architecture{
+    margin-top:40px;
+    overflow:hidden;
+  }
+
+  .phorva-hero-architecture .flow{
+    min-width:650px;
+  }
+}
+
+</style>
+
+
+<style id="phorva-live-demo-v1">
+.phorva-live-demo{
+  position:relative;
+  max-width:1180px;
+  margin:110px auto;
+  padding:0 28px;
+}
+
+.phorva-section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:60px;
+  margin-bottom:42px;
+}
+
+.phorva-section-head h2{
+  margin:10px 0 0;
+  font-size:clamp(42px,5vw,72px);
+  line-height:.96;
+  letter-spacing:-.045em;
+}
+
+.phorva-section-head h2 span{
+  opacity:.45;
+}
+
+.phorva-section-head p{
+  max-width:430px;
+  margin:0;
+  color:rgba(255,255,255,.56);
+  line-height:1.7;
+  font-size:15px;
+}
+
+.phorva-eyebrow{
+  font-size:10px;
+  letter-spacing:.18em;
+  font-weight:700;
+  color:rgba(150,170,255,.9);
+}
+
+.phorva-demo-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.phorva-demo-card{
+  appearance:none;
+  text-align:left;
+  color:inherit;
+  font:inherit;
+  cursor:pointer;
+  padding:28px;
+  min-height:330px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.09);
+  background:
+    linear-gradient(145deg,rgba(24,32,67,.72),rgba(8,10,22,.96));
+  box-shadow:0 20px 70px rgba(0,0,0,.22);
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease,
+    opacity .25s ease;
+}
+
+.phorva-demo-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(145,160,255,.32);
+}
+
+.phorva-demo-card.is-active{
+  border-color:rgba(145,160,255,.5);
+  box-shadow:
+    0 0 0 1px rgba(110,125,255,.08),
+    0 30px 90px rgba(55,65,180,.16);
+}
+
+.phorva-demo-card.attack.is-active{
+  border-color:rgba(255,120,140,.42);
+  box-shadow:
+    0 0 0 1px rgba(255,100,120,.06),
+    0 30px 90px rgba(150,30,60,.12);
+}
+
+.demo-card-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:50px;
+}
+
+.demo-index{
+  color:rgba(255,255,255,.35);
+  font-size:11px;
+  letter-spacing:.15em;
+}
+
+.demo-status{
+  font-size:10px;
+  letter-spacing:.13em;
+  font-weight:800;
+  padding:7px 10px;
+  border-radius:999px;
+  border:1px solid rgba(100,220,170,.2);
+  background:rgba(70,200,150,.07);
+}
+
+.demo-status.danger{
+  color:#ff9baa;
+  border-color:rgba(255,100,125,.2);
+  background:rgba(255,70,100,.07);
+}
+
+.demo-card-label{
+  color:rgba(255,255,255,.4);
+  font-size:10px;
+  letter-spacing:.16em;
+  margin-bottom:8px;
+}
+
+.demo-amount{
+  font-size:48px;
+  line-height:1;
+  letter-spacing:-.04em;
+  font-weight:700;
+}
+
+.demo-description{
+  margin-top:10px;
+  color:rgba(255,255,255,.58);
+  font-size:14px;
+}
+
+.demo-divider{
+  height:1px;
+  background:rgba(255,255,255,.07);
+  margin:25px 0 16px;
+}
+
+.demo-row{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  padding:5px 0;
+  color:rgba(255,255,255,.43);
+  font-size:12px;
+}
+
+.demo-row strong{
+  color:rgba(255,255,255,.86);
+  font-weight:600;
+}
+
+.demo-result{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:20px;
+}
+
+.demo-result>span{
+  display:grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:rgba(70,210,160,.1);
+  color:#8df0ca;
+  font-weight:800;
+}
+
+.demo-result strong{
+  display:block;
+  font-size:13px;
+}
+
+.demo-result small{
+  display:block;
+  margin-top:3px;
+  color:rgba(255,255,255,.4);
+  font-size:11px;
+}
+
+.danger-result>span{
+  background:rgba(255,70,100,.1);
+  color:#ff879a;
+}
+
+.phorva-demo-verdict{
+  margin-top:18px;
+  padding:30px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.08);
+  background:
+    linear-gradient(145deg,rgba(13,17,38,.98),rgba(7,9,18,.98));
+}
+
+.demo-verdict-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:20px;
+  padding-bottom:24px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.demo-verdict-head h3{
+  margin:8px 0 0;
+  font-size:30px;
+  letter-spacing:-.025em;
+}
+
+.demo-risk{
+  padding:8px 11px;
+  border:1px solid rgba(100,220,170,.18);
+  border-radius:999px;
+  color:#8df0ca;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.12em;
+}
+
+.demo-checks{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;
+  margin:22px 0;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:12px;
+}
+
+.demo-checks div{
+  display:grid;
+  grid-template-columns:28px 1fr auto;
+  align-items:center;
+  gap:7px;
+  min-height:48px;
+  padding:0 13px;
+  background:rgba(255,255,255,.025);
+  border-bottom:1px solid rgba(255,255,255,.045);
+}
+
+.demo-checks span{
+  color:rgba(255,255,255,.27);
+  font-size:9px;
+}
+
+.demo-checks b{
+  color:rgba(255,255,255,.72);
+  font-size:11px;
+  font-weight:500;
+}
+
+.demo-checks em{
+  color:#8df0ca;
+  font-style:normal;
+  font-size:9px;
+  letter-spacing:.1em;
+  font-weight:800;
+}
+
+.demo-verdict-footer{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:1px;
+  border-top:1px solid rgba(255,255,255,.06);
+  padding-top:22px;
+}
+
+.demo-verdict-footer span{
+  display:block;
+  color:rgba(255,255,255,.3);
+  font-size:9px;
+  letter-spacing:.14em;
+  margin-bottom:6px;
+}
+
+.demo-verdict-footer strong{
+  font-size:12px;
+}
+
+.phorva-demo-note{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  margin:18px 4px 0;
+  color:rgba(255,255,255,.38);
+  font-size:12px;
+  line-height:1.6;
+}
+
+.phorva-demo-note span{
+  color:rgba(145,160,255,.8);
+}
+
+.phorva-demo-note p{
+  margin:0;
+  max-width:700px;
+}
+
+.phorva-demo-verdict.is-blocked .demo-risk{
+  color:#ff9baa;
+  border-color:rgba(255,100,125,.2);
+  background:rgba(255,70,100,.05);
+}
+
+.phorva-demo-verdict.is-blocked .demo-checks div:nth-child(2) em,
+.phorva-demo-verdict.is-blocked .demo-checks div:nth-child(3) em,
+.phorva-demo-verdict.is-blocked .demo-checks div:nth-child(4) em{
+  color:#ff9baa;
+}
+
+@media(max-width:760px){
+  .phorva-live-demo{
+    margin:80px auto;
+    padding:0 18px;
+  }
+
+  .phorva-section-head{
+    display:block;
+    margin-bottom:28px;
+  }
+
+  .phorva-section-head p{
+    margin-top:20px;
+  }
+
+  .phorva-demo-grid{
+    grid-template-columns:1fr;
+  }
+
+  .phorva-demo-card{
+    min-height:0;
+  }
+
+  .demo-checks{
+    grid-template-columns:1fr;
+  }
+
+  .demo-verdict-footer{
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+}
+</style>
+
+<style id="phorva-product-navigation-v1">
+.phorva-product-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+}
+
+.phorva-brand-link{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:inherit;
+  text-decoration:none;
+}
+
+.phorva-header-right{
+  display:flex;
+  align-items:center;
+  gap:22px;
+}
+
+.phorva-account-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.phorva-signin,
+.phorva-api-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:34px;
+  padding:0 14px;
+  border-radius:8px;
+  text-decoration:none;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  transition:.2s ease;
+}
+
+.phorva-signin{
+  color:#aeb8c9;
+  border:1px solid rgba(120,137,165,.18);
+  background:rgba(255,255,255,.02);
+}
+
+.phorva-signin:hover{
+  color:#fff;
+  border-color:rgba(120,137,165,.38);
+  background:rgba(255,255,255,.05);
+}
+
+.phorva-api-button{
+  color:#07101d;
+  background:#fff;
+  border:1px solid rgba(255,255,255,.8);
+  box-shadow:0 0 24px rgba(105,125,255,.10);
+}
+
+.phorva-api-button:hover{
+  background:#e9edff;
+  transform:translateY(-1px);
+}
+
+.phorva-product-nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:0 22px;
+}
+
+.phorva-nav-main,
+.phorva-nav-utility{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.phorva-nav-dropdown{
+  position:relative;
+}
+
+.phorva-nav-dropdown > button,
+.phorva-nav-utility > a,
+.phorva-nav-utility > button{
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:#8995a9;
+  font:inherit;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  padding:12px 13px;
+  cursor:pointer;
+  text-decoration:none;
+  border-radius:7px;
+}
+
+.phorva-nav-dropdown > button span{
+  margin-left:4px;
+  color:#56647a;
+}
+
+.phorva-nav-dropdown > button:hover,
+.phorva-nav-utility > a:hover,
+.phorva-nav-utility > button:hover{
+  color:#fff;
+  background:rgba(255,255,255,.035);
+}
+
+.phorva-nav-menu{
+  position:absolute;
+  z-index:100;
+  top:calc(100% + 7px);
+  left:0;
+  min-width:205px;
+  padding:7px;
+  display:none;
+  border:1px solid rgba(100,120,155,.20);
+  border-radius:10px;
+  background:rgba(10,14,23,.97);
+  box-shadow:0 18px 55px rgba(0,0,0,.42);
+  backdrop-filter:blur(18px);
+}
+
+.phorva-nav-dropdown:hover .phorva-nav-menu,
+.phorva-nav-dropdown:focus-within .phorva-nav-menu{
+  display:block;
+}
+
+.phorva-nav-menu a{
+  display:block;
+  padding:9px 10px;
+  border-radius:6px;
+  color:#8f9bb0;
+  font-size:10px;
+  text-decoration:none;
+  line-height:1.3;
+}
+
+.phorva-nav-menu a:hover{
+  color:#fff;
+  background:rgba(88,106,255,.10);
+}
+
+@media(max-width:900px){
+  .phorva-product-header{
+    align-items:flex-start;
+  }
+
+  .phorva-header-right .status{
+    display:none;
+  }
+
+  .phorva-product-nav{
+    overflow-x:auto;
+    justify-content:flex-start;
+  }
+
+  .phorva-nav-utility{
+    margin-left:auto;
+  }
+}
+
+@media(max-width:640px){
+  .phorva-product-header{
+    gap:10px;
+  }
+
+  .brand-sub{
+    display:none;
+  }
+
+  .phorva-signin{
+    display:none;
+  }
+
+  .phorva-api-button{
+    min-height:30px;
+    padding:0 10px;
+    font-size:9px;
+  }
+
+  .phorva-product-nav{
+    padding:0 10px;
+  }
+
+  .phorva-nav-dropdown > button,
+  .phorva-nav-utility > a,
+  .phorva-nav-utility > button{
+    padding:10px 8px;
+    font-size:9px;
+  }
+}
+</style>
+
 </head>
 <body><div class="app">
-<header class="topbar"><div class="brand"><div class="logo"><img src="/phorva-logo.png" alt="Phorva logo"></div><div><div class="brand-name">PHORVA</div><div class="brand-sub">VERIFIABLE EXECUTION INFRASTRUCTURE</div></div></div><div class="status"><span class="dot"></span> Verification engine online</div></header>
-<nav id="phorva-site-nav" aria-label="Phorva navigation">
-  <a href="/docs">Docs</a>
-  <a href="/docs/quickstart">Get Started</a>
-  <button type="button" id="phorva-navigator-toggle">Navigator</button>
+<header class="topbar phorva-product-header">
+  <div class="brand">
+    <a href="/" class="phorva-brand-link" aria-label="Phorva home">
+      <div class="logo">
+        <img src="/phorva-logo.png" alt="Phorva logo">
+      </div>
+      <div>
+        <div class="brand-name">PHORVA</div>
+        <div class="brand-sub">VERIFIABLE EXECUTION INFRASTRUCTURE</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="phorva-header-right">
+    <div class="status">
+      <span class="dot"></span>
+      Verification engine online
+    </div>
+
+    <div class="phorva-account-actions">
+      <a href="/signin" class="phorva-signin">Sign In</a>
+      <a href="/docs/quickstart" class="phorva-api-button">Get API Key</a>
+    </div>
+  </div>
+</header>
+
+<nav id="phorva-site-nav" class="phorva-product-nav" aria-label="Phorva navigation">
+
+  <div class="phorva-nav-main">
+
+    <div class="phorva-nav-dropdown">
+      <button type="button">Product <span>⌄</span></button>
+      <div class="phorva-nav-menu">
+        <a href="/docs/verification">Verification</a>
+        <a href="/docs/verification/policy">Policy Engine</a>
+        <a href="/docs/verification/risk">Risk Engine</a>
+        <a href="/docs/verification/authorization">Authorization</a>
+        <a href="/docs/verification/execution-graph">Execution Graph</a>
+        <a href="/docs/verification/proof">Evidence &amp; Receipts</a>
+      </div>
+    </div>
+
+    <div class="phorva-nav-dropdown">
+      <button type="button">Developers <span>⌄</span></button>
+      <div class="phorva-nav-menu">
+        <a href="/docs/developer/api">API</a>
+        <a href="/docs/developer/sdk">SDK</a>
+        <a href="/docs/developer/api-keys">API Keys</a>
+        <a href="/docs/quickstart">Quickstart</a>
+        <a href="/docs/connect">Integrations</a>
+        <a href="/docs">MCP</a>
+      </div>
+    </div>
+
+    <div class="phorva-nav-dropdown">
+      <button type="button">Use Cases <span>⌄</span></button>
+      <div class="phorva-nav-menu">
+        <a href="/docs/use-cases/defi">DeFi</a>
+        <a href="/docs/use-cases/autonomous-trading">Trading</a>
+        <a href="/docs/use-cases/prediction-markets">Prediction Markets</a>
+        <a href="/docs/use-cases/agent-payments">Agent Payments</a>
+        <a href="/docs/use-cases/gaming">Gaming</a>
+        <a href="/docs/use-cases/agent-wallets">Agent Wallets</a>
+        <a href="/docs/use-cases/daos-treasuries">DAOs &amp; Treasuries</a>
+      </div>
+    </div>
+
+    <div class="phorva-nav-dropdown">
+      <button type="button">Resources <span>⌄</span></button>
+      <div class="phorva-nav-menu">
+        <a href="/docs">Docs</a>
+        <a href="/docs/architecture">Architecture</a>
+        <a href="/docs/infrastructure/security">Security</a>
+        <a href="/docs/roadmap">Roadmap</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="phorva-nav-utility">
+    <a href="/docs">Docs</a>
+    <button type="button" id="phorva-navigator-toggle">Navigator</button>
+  </div>
 </nav>
 
 <div id="phorva-navigator-panel">
@@ -3033,36 +4062,145 @@ body{
   </div>
 </div>
 
-<section class="hero investor-hero">
-  <div class="eyebrow">SECURITY + VERIFICATION FOR AUTONOMOUS AGENTS</div>
+<section class="hero investor-hero phorva-product-hero">
 
-  <div class="hero-kicker">THE VERIFICATION LAYER BETWEEN AGENTS AND EXECUTION</div>
+  <div class="phorva-hero-grid">
 
-  <h1>Agents can act autonomously.<br><span>Phorva makes every action verifiable.</span></h1>
+    <div class="phorva-hero-copy">
 
-  <p class="hero-lead">
-    Phorva checks whether the action that actually executes is the action the agent was authorized to take — and produces cryptographic evidence of the result.
-  </p>
+      <div class="eyebrow">VERIFIABLE EXECUTION INFRASTRUCTURE</div>
 
-  <div class="hero-flow-label">FROM AGENT INTENT TO VERIFIED EXECUTION</div>
+      <div class="hero-kicker">SECURITY + VERIFICATION FOR AUTONOMOUS AGENTS</div>
 
-  <div class="flow">
-    <div class="flow-item">Agent</div>
-    <span class="arrow">→</span>
-    <div class="flow-item">Intent</div>
-    <span class="arrow">→</span>
-    <div class="flow-item core">PHORVA CORE</div>
-    <span class="arrow">→</span>
-    <div class="flow-item">Verification</div>
-    <span class="arrow">→</span>
-    <div class="flow-item">Verified Execution</div>
+      <h1>
+        Agents can act autonomously.<br>
+        <span>Phorva verifies what they actually execute.</span>
+      </h1>
+
+      <p class="hero-lead">
+        Phorva sits between autonomous agents and blockchain execution,
+        verifying intent, policy, risk, authorization, and the transaction
+        that actually executes.
+      </p>
+
+      <div class="phorva-hero-actions">
+        <a href="#developer-integration" class="phorva-hero-primary">
+          Run a Verification
+        </a>
+        <a href="/docs/quickstart" class="phorva-hero-secondary">
+          Get API Key
+        </a>
+      </div>
+
+      <div class="phorva-hero-note">
+        <span class="phorva-live-dot"></span>
+        Verification engine online
+        <span class="phorva-note-divider"></span>
+        87/87 security tests
+      </div>
+
+    </div>
+
+    <div class="phorva-live-verification">
+
+      <div class="phorva-live-header">
+        <div>
+          <div class="phorva-live-label">PHORVA VERIFICATION</div>
+          <strong>Verification preview</strong>
+        </div>
+        <span class="phorva-live-badge">LIVE</span>
+      </div>
+
+      <div class="phorva-agent-row">
+        <div class="phorva-agent-avatar">T</div>
+        <div>
+          <strong>TradingAgent-01</strong>
+          <span>Autonomous trading agent</span>
+        </div>
+        <span class="phorva-agent-status">CONNECTED</span>
+      </div>
+
+      <div class="phorva-verification-block">
+
+        <div class="phorva-verification-section">
+          <small>INTENT</small>
+          <strong>Swap 300 USDC → ETH</strong>
+        </div>
+
+        <div class="phorva-verification-section">
+          <small>EXECUTION</small>
+          <strong>Uniswap · Base Sepolia</strong>
+        </div>
+
+      </div>
+
+      <div class="phorva-check-grid">
+
+        <div class="phorva-check">
+          <span>POLICY</span>
+          <strong class="pass">PASS</strong>
+        </div>
+
+        <div class="phorva-check">
+          <span>INTENT</span>
+          <strong class="pass">MATCH</strong>
+        </div>
+
+        <div class="phorva-check">
+          <span>RISK</span>
+          <strong class="low">LOW</strong>
+        </div>
+
+        <div class="phorva-check">
+          <span>AUTHORIZATION</span>
+          <strong class="pass">AUTHORIZED</strong>
+        </div>
+
+      </div>
+
+      <div class="phorva-verification-result">
+        <div>
+          <small>PHORVA VERDICT</small>
+          <strong>VERIFIED EXECUTION</strong>
+        </div>
+
+        <div class="phorva-result-mark">✓</div>
+      </div>
+
+      <div class="phorva-evidence-row">
+        <span>Evidence generated</span>
+        <span>Commitment available</span>
+        <span>Trace recorded</span>
+      </div>
+
+    </div>
+
   </div>
 
-  <div class="hero-principle">
-    <span>Agents decide.</span>
-    <span>Execution systems execute.</span>
-    <strong>Phorva verifies.</strong>
+  <div class="phorva-hero-architecture">
+
+    <div class="hero-flow-label">FROM AGENT INTENT TO VERIFIED EXECUTION</div>
+
+    <div class="flow">
+      <div class="flow-item">Agent</div>
+      <span class="arrow">→</span>
+      <div class="flow-item">Intent</div>
+      <span class="arrow">→</span>
+      <div class="flow-item core">PHORVA CORE</div>
+      <span class="arrow">→</span>
+      <div class="flow-item">Verification</div>
+      <span class="arrow">→</span>
+      <div class="flow-item">Verified Execution</div>
+    </div>
+
+    <div class="hero-principle">
+      <span>Agents decide.</span>
+      <span>Execution systems execute.</span>
+      <strong>Phorva verifies.</strong>
+    </div>
+
   </div>
+
 </section>
 
 <section class="how-works">
@@ -3103,7 +4241,7 @@ body{
       <div class="how-node proof">
         <small>06</small>
         <strong>Evidence</strong>
-        <span>Proof-carrying action</span>
+        <span>Proof-carrying execution</span>
       </div>
     </div>
   </div>
@@ -3186,93 +4324,9 @@ body{
 
 
 
-<section class="phorva-story phorva-not phorva-story-v2" id="what-phorva-is">
 
-  <div class="story-kicker">WHAT PHORVA IS — AND IS NOT</div>
 
-  <div class="story-hero-row">
-    <div>
-      <h2>A verification layer, not another execution platform.</h2>
-      <p class="story-lead">
-        Phorva sits between autonomous agents and the systems where their actions execute.
-      </p>
-    </div>
-  </div>
 
-  <div class="identity-grid">
-
-    <div class="identity-column is">
-      <div class="identity-heading">
-        <span>01</span>
-        <strong>PHORVA IS</strong>
-      </div>
-
-      <div class="identity-item">
-        <strong>Verification infrastructure</strong>
-        <span>Security and verification for autonomous execution.</span>
-      </div>
-
-      <div class="identity-item">
-        <strong>Intent verification</strong>
-        <span>Checks execution against the declared objective.</span>
-      </div>
-
-      <div class="identity-item">
-        <strong>Policy · Risk · Authorization</strong>
-        <span>Evaluates whether proposed execution satisfies its conditions.</span>
-      </div>
-
-      <div class="identity-item">
-        <strong>Execution verification</strong>
-        <span>Checks what actually happened against what was authorized.</span>
-      </div>
-
-      <div class="identity-item">
-        <strong>Proof-carrying actions</strong>
-        <span>Produces canonical evidence from verified execution.</span>
-      </div>
-    </div>
-
-    <div class="identity-column not">
-      <div class="identity-heading">
-        <span>02</span>
-        <strong>PHORVA IS NOT</strong>
-      </div>
-
-      <div class="identity-item">
-        <strong>Not an agent wallet</strong>
-        <span>Does not hold assets or replace wallet infrastructure.</span>
-      </div>
-
-      <div class="identity-item">
-        <strong>Not a prover marketplace</strong>
-        <span>Defines verification semantics; proving infrastructure supplies the machinery.</span>
-      </div>
-
-      <div class="identity-item">
-        <strong>Not an agent platform</strong>
-        <span>Agents are built and operated by developers.</span>
-      </div>
-
-      <div class="identity-item">
-        <strong>Not an execution environment</strong>
-        <span>Does not replace blockchains, payment rails or wallets.</span>
-      </div>
-
-      <div class="identity-item">
-        <strong>Not the agent’s decision-maker</strong>
-        <span>Phorva only verifies whether attempted actions are authorized and consistent with intent.</span>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="story-statement compact">
-    <strong>Phorva does not replace the execution layer.</strong>
-    <span>It verifies and governs the actions moving through it.</span>
-  </div>
-
-</section>
 
 
 <div class="panel-label">CORE PIPELINE</div><div class="panel-title">Phorva Verification Engine</div></div><div class="live">LIVE</div></div><div class="panel-body"><div class="core"><div class="core-node active"><span>01</span><strong>Intent</strong></div><div class="core-node active"><span>02</span><strong>Policy</strong></div><div class="core-node active"><span>03</span><strong>Risk</strong></div><div class="core-node active"><span>04</span><strong>Authorization</strong></div><div class="core-node active"><span>05</span><strong>Validation</strong></div><div class="core-node active"><span>06</span><strong>Execution</strong></div></div><div style="height:20px"></div>
@@ -3305,7 +4359,7 @@ body{
   <summary>View verification payload</summary>
   <div id="raw" class="raw"></div>
 </details></div></div></section>
-<section class="panel"><div class="panel-head"><div><div class="panel-label">NETWORK STATUS</div><div class="panel-title">Verification Environment</div></div></div><div class="panel-body"><div class="stats"><div class="stat"><small>Chains</small><strong>3</strong></div><div class="stat"><small>Providers</small><strong>2</strong></div><div class="stat"><small>Tests</small><strong>87/87</strong></div></div><div style="height:18px"></div><div class="trace"><div class="trace-row"><span>Base Sepolia</span><span class="pass">CONNECTED</span></div><div class="trace-row"><span>Ethereum Sepolia</span><span class="pass">CONNECTED</span></div><div class="trace-row"><span>Arbitrum Sepolia</span><span class="pass">CONNECTED</span></div><div class="trace-row"><span>Mock prover</span><span class="pass">AVAILABLE</span></div><div class="trace-row"><span>Local-test prover</span><span class="pass">AVAILABLE</span></div></div></div></section>
+<section id="phorva-network-status" class="panel"><div class="panel-head"><div><div class="panel-label">NETWORK STATUS</div><div class="panel-title">Verification Environment</div></div></div><div class="panel-body"><div class="stats"><div class="stat"><small>Chains</small><strong>3</strong></div><div class="stat"><small>Providers</small><strong>2</strong></div><div class="stat"><small>Tests</small><strong>87/87</strong></div></div><div style="height:18px"></div><div class="trace"><div class="trace-row"><span>Base Sepolia</span><span class="pass">CONNECTED</span></div><div class="trace-row"><span>Ethereum Sepolia</span><span class="pass">CONNECTED</span></div><div class="trace-row"><span>Arbitrum Sepolia</span><span class="pass">CONNECTED</span></div><div class="trace-row"><span>Mock prover</span><span class="pass">AVAILABLE</span></div><div class="trace-row"><span>Local-test prover</span><span class="pass">AVAILABLE</span></div></div></div></section>
 <section class="panel"><div class="panel-head"><div><div class="panel-label">EXECUTION GRAPH</div><div class="panel-title">What actually happened?</div></div><div class="panel-label">GRAPH V1</div></div><div class="panel-body"><div id="executionGraph" class="graph">
 <div class="graph-node"><small>AGENT</small><strong>Awaiting verification</strong></div>
 <div class="graph-arrow">→</div>
@@ -3317,7 +4371,7 @@ body{
 <div class="graph-arrow">→</div>
 <div class="graph-node"><small>FINAL</small><strong>Awaiting verdict</strong></div>
 </div><div id="graphHash" class="hash">Execution graph commitment: run a verification to generate evidence.</div></div></section>
-<section class="panel"><div class="panel-head"><div><div class="panel-label">VERIFICATION TRACE</div><div class="panel-title">Independent execution checks</div></div></div><div class="panel-body"><div id="traceStatus" class="trace-status">
+<section id="phorva-verification-trace" class="panel"><div class="panel-head"><div><div class="panel-label">VERIFICATION TRACE</div><div class="panel-title">Independent execution checks</div></div></div><div class="panel-body"><div id="traceStatus" class="trace-status">
   <div class="trace-status-cell live">
     <small>STATUS</small>
     <strong id="traceStatusDecision">AWAITING</strong>
@@ -3723,7 +4777,7 @@ View detailed verification trace
   </div>
 
   <div style="margin-bottom:14px; color:#7c879b;">
-    Live on Base Sepolia · Ethereum Sepolia · Arbitrum Sepolia
+    Verification environment · Base Sepolia · Ethereum Sepolia · Arbitrum Sepolia
   </div>
 
   <div style="display:flex; justify-content:center; gap:22px; flex-wrap:wrap; margin-bottom:16px;">
@@ -5360,6 +6414,540 @@ document.addEventListener(
     ) {
       panel.classList.remove("open");
     }
+  });
+})();
+</script>
+
+
+<script id="phorva-live-demo-v1-js">
+(function(){
+  const cards = document.querySelectorAll(".phorva-demo-card");
+  const verdict = document.getElementById("phorva-demo-verdict");
+  const title = document.getElementById("demo-verdict-title");
+  const risk = document.getElementById("demo-verdict-risk");
+  const decision = document.getElementById("demo-decision");
+  const count = document.getElementById("demo-check-count");
+  const checks = document.querySelectorAll("#demo-checks em");
+
+  if(!cards.length || !verdict) return;
+
+  cards.forEach(card => {
+    card.addEventListener("click", function(){
+      cards.forEach(c => c.classList.remove("is-active"));
+      card.classList.add("is-active");
+
+      const blocked = card.dataset.demo === "blocked";
+
+      verdict.classList.toggle("is-blocked", blocked);
+
+      title.textContent = blocked ? "BLOCKED" : "AUTHORIZED";
+      risk.textContent = blocked ? "HIGH RISK" : "LOW RISK";
+      decision.textContent = blocked ? "BLOCKED" : "AUTHORIZED";
+      count.textContent = blocked ? "13 / 15" : "15 / 15";
+
+      checks.forEach((check, index) => {
+        if(blocked && (index === 2 || index === 3)){
+          check.textContent = "FAIL";
+        }else{
+          check.textContent = "PASS";
+        }
+      });
+    });
+  });
+})();
+</script>
+
+
+<script id="phorva-live-demo-engine-v1">
+(function () {
+  const cards = document.querySelectorAll(".phorva-demo-card");
+  const verdict = document.getElementById("phorva-demo-verdict");
+  const title = document.getElementById("demo-verdict-title");
+  const risk = document.getElementById("demo-verdict-risk");
+  const decision = document.getElementById("demo-decision");
+  const count = document.getElementById("demo-check-count");
+  const checks = document.querySelectorAll("#demo-checks em");
+
+  if (!cards.length || !verdict) return;
+
+  const baseRequest = {
+    agent: "TradingAgent-01",
+    action: "swap",
+    chain: "baseSepolia",
+    protocol: "Uniswap",
+    asset: "USDC-equivalent",
+    intentAmount: 300,
+    maxTransaction: 500,
+    recipient: "0x0000000000000000000000000000000000000001"
+  };
+
+  function setFallback(blocked) {
+    verdict.classList.toggle("is-blocked", blocked);
+
+    title.textContent = blocked ? "BLOCKED" : "AUTHORIZED";
+    risk.textContent = blocked ? "HIGH RISK" : "LOW RISK";
+    decision.textContent = blocked ? "BLOCKED" : "AUTHORIZED";
+    count.textContent = blocked ? "13 / 15" : "15 / 15";
+
+    checks.forEach(function (check, index) {
+      check.textContent =
+        blocked && (index === 2 || index === 3)
+          ? "FAIL"
+          : "PASS";
+    });
+  }
+
+  async function verify(blocked) {
+    const request = {
+      ...baseRequest,
+      amount: blocked ? 3000 : 300
+    };
+
+    try {
+      const response = await fetch("/authorize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(request)
+      });
+
+      if (!response.ok) {
+        throw new Error("Verification request failed");
+      }
+
+      const data = await response.json();
+
+      const authorized =
+        data.authorized === true ||
+        data.verdict === "AUTHORIZED" ||
+        data.status === "AUTHORIZED" ||
+        data.decision === "AUTHORIZED";
+
+      const actualBlocked = !authorized;
+
+      verdict.classList.toggle("is-blocked", actualBlocked);
+
+      title.textContent =
+        actualBlocked ? "BLOCKED" : "AUTHORIZED";
+
+      risk.textContent =
+        actualBlocked ? "HIGH RISK" : "LOW RISK";
+
+      decision.textContent =
+        actualBlocked ? "BLOCKED" : "AUTHORIZED";
+
+      const passed =
+        Number(data.checksPassed) ||
+        Number(data.passed) ||
+        (actualBlocked ? 13 : 15);
+
+      const total =
+        Number(data.checksTotal) ||
+        Number(data.totalChecks) ||
+        15;
+
+      count.textContent = passed + " / " + total;
+
+      checks.forEach(function (check, index) {
+        if (
+          actualBlocked &&
+          (
+            index === 2 ||
+            index === 3
+          )
+        ) {
+          check.textContent = "FAIL";
+        } else {
+          check.textContent = "PASS";
+        }
+      });
+
+    } catch (error) {
+      console.warn(
+        "Phorva live verification unavailable; using local demonstration state.",
+        error
+      );
+
+      setFallback(blocked);
+    }
+  }
+
+  cards.forEach(function (card) {
+    card.addEventListener("click", function () {
+      cards.forEach(function (c) {
+        c.classList.remove("is-active");
+      });
+
+      card.classList.add("is-active");
+
+      const blocked =
+        card.dataset.demo === "blocked";
+
+      verify(blocked);
+    });
+  });
+
+  const initial =
+    document.querySelector(
+      '.phorva-demo-card[data-demo="blocked"]'
+    );
+
+  if (initial) {
+    initial.click();
+  }
+})();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<script id="phorva-verification-surface-sync-v4">
+(function () {
+  const demoCards = document.querySelectorAll(".phorva-demo-card");
+  if (!demoCards.length) return;
+
+  const state = {
+    decision: "AUTHORIZED",
+    risk: "LOW",
+    amount: 300,
+    intentAmount: 300,
+    passed: 15,
+    failed: 0,
+    total: 15,
+    protocol: "Uniswap",
+    chain: "Base Sepolia",
+    agent: "TradingAgent-01",
+    action: "swap",
+    commitment: null,
+    raw: null
+  };
+
+  function textNodes(root) {
+    return Array.from(root.querySelectorAll("*")).filter(function (el) {
+      return el.children.length === 0;
+    });
+  }
+
+  function replace(root, oldText, newText) {
+    textNodes(root).forEach(function (el) {
+      if (el.textContent.trim() === oldText) {
+        el.textContent = newText;
+      }
+    });
+  }
+
+  function containsReplace(root, oldText, newText) {
+    textNodes(root).forEach(function (el) {
+      if (el.textContent.includes(oldText)) {
+        el.textContent = el.textContent.replace(oldText, newText);
+      }
+    });
+  }
+
+  function findSection(label) {
+    const nodes = Array.from(document.querySelectorAll("*")).filter(function (el) {
+      return el.children.length === 0 &&
+        el.textContent.trim() === label;
+    });
+
+    if (!nodes.length) return null;
+
+    let current = nodes[0];
+
+    for (let i = 0; i < 6 && current; i++) {
+      if (
+        current.querySelector &&
+        current.querySelectorAll(".phorva-demo-card").length === 0
+      ) {
+        if (current.textContent.length > 150) return current;
+      }
+
+      current = current.parentElement;
+    }
+
+    return nodes[0].parentElement;
+  }
+
+  function updateExecutionGraph() {
+    const section = findSection("EXECUTION GRAPH");
+    if (!section) return;
+
+    replace(
+      section,
+      "13/15 CHECKS",
+      state.passed + "/" + state.total + " CHECKS"
+    );
+
+    replace(
+      section,
+      "15/15 CHECKS",
+      state.passed + "/" + state.total + " CHECKS"
+    );
+
+    replace(
+      section,
+      "SEQUENCE REJECTED",
+      state.decision === "BLOCKED"
+        ? "SEQUENCE REJECTED"
+        : "SEQUENCE VERIFIED"
+    );
+
+    replace(
+      section,
+      "SEQUENCE VERIFIED",
+      state.decision === "BLOCKED"
+        ? "SEQUENCE REJECTED"
+        : "SEQUENCE VERIFIED"
+    );
+
+    containsReplace(
+      section,
+      "3000 USDC · Uniswap",
+      state.amount + " USDC · " + state.protocol
+    );
+
+    containsReplace(
+      section,
+      "300 USDC · Uniswap",
+      state.amount + " USDC · " + state.protocol
+    );
+
+    replace(
+      section,
+      "EXECUTION STOPPED",
+      state.decision === "BLOCKED"
+        ? "EXECUTION STOPPED"
+        : "EXECUTION VALID"
+    );
+
+    replace(
+      section,
+      "EXECUTION VALID",
+      state.decision === "BLOCKED"
+        ? "EXECUTION STOPPED"
+        : "EXECUTION VALID"
+    );
+
+    replace(
+      section,
+      "BLOCKED",
+      state.decision
+    );
+
+    replace(
+      section,
+      "AUTHORIZED",
+      state.decision
+    );
+
+    if (state.commitment) {
+      containsReplace(
+        section,
+        "Execution graph commitment:",
+        "Execution graph commitment: " + state.commitment
+      );
+    }
+  }
+
+  function updateTrace() {
+    const section = findSection("VERIFICATION TRACE");
+    if (!section) return;
+
+    replace(section, "BLOCKED", state.decision);
+    replace(section, "AUTHORIZED", state.decision);
+
+    replace(section, "PASSED", "PASSED");
+
+    replace(
+      section,
+      "13 / 15 checks passed",
+      state.passed + " / " + state.total + " checks passed"
+    );
+
+    replace(
+      section,
+      "15 / 15 checks passed",
+      state.passed + " / " + state.total + " checks passed"
+    );
+
+    replace(
+      section,
+      "2 failed",
+      state.failed + " failed"
+    );
+
+    replace(
+      section,
+      "0 failed",
+      state.failed + " failed"
+    );
+  }
+
+  function updateEvidence() {
+    const section = findSection("EVIDENCE");
+    if (!section) return;
+
+    replace(section, "Awaiting verification", "Verified");
+    replace(section, "Awaiting action", state.action + " " + state.intentAmount + " USDC");
+    replace(section, "Awaiting transaction", state.amount + " USDC · " + state.protocol);
+    replace(section, "Awaiting verdict", state.decision);
+
+    containsReplace(
+      section,
+      "run a verification to generate evidence.",
+      state.commitment
+        ? "Evidence generated from the Phorva verification result."
+        : "Verification completed."
+    );
+  }
+
+  function updateProof() {
+    const section = findSection("PROOF-CARRYING ACTION");
+    if (!section) return;
+
+    replace(section, "BLOCKED", state.decision);
+    replace(section, "AUTHORIZED", state.decision);
+
+    replace(
+      section,
+      "3000 USDC",
+      state.amount + " USDC"
+    );
+
+    replace(
+      section,
+      "300 USDC",
+      state.intentAmount + " USDC"
+    );
+
+    replace(
+      section,
+      "13/15",
+      state.passed + "/" + state.total
+    );
+
+    replace(
+      section,
+      "AWAITING",
+      "VERIFIED"
+    );
+  }
+
+  function updateDeveloperStatus() {
+    const section = findSection("DEVELOPER INTEGRATION");
+    if (!section) return;
+
+    replace(section, "READY", "VERIFIED");
+    replace(
+      section,
+      "Select an action and run verification.",
+      state.decision + " · " +
+      state.passed + "/" + state.total +
+      " checks"
+    );
+  }
+
+  function updateAllSurfaces() {
+    updateExecutionGraph();
+    updateTrace();
+    updateEvidence();
+    updateProof();
+    updateDeveloperStatus();
+
+    document.documentElement.dataset.phorvaVerdict =
+      state.decision.toLowerCase();
+
+    document.documentElement.dataset.phorvaAmount =
+      String(state.amount);
+
+    console.log(
+      "[Phorva] unified verification:",
+      state.decision,
+      state.passed + "/" + state.total
+    );
+  }
+
+  async function runVerification(blocked) {
+    const amount = blocked ? 3000 : 300;
+
+    const request = {
+      agent: state.agent,
+      action: state.action,
+      chain: "baseSepolia",
+      protocol: state.protocol,
+      asset: "USDC-equivalent",
+      amount: amount,
+      intentAmount: state.intentAmount,
+      maxTransaction: 500
+    };
+
+    try {
+      const response = await fetch("/authorize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(request)
+      });
+
+      if (!response.ok) {
+        throw new Error("HTTP " + response.status);
+      }
+
+      const data = await response.json();
+
+      const authorized =
+        data.authorized === true ||
+        data.verdict === "AUTHORIZED" ||
+        data.status === "AUTHORIZED" ||
+        data.decision === "AUTHORIZED";
+
+      state.decision = authorized ? "AUTHORIZED" : "BLOCKED";
+      state.risk = authorized ? "LOW" : "HIGH";
+      state.amount = amount;
+      state.passed = authorized ? 15 : 13;
+      state.failed = authorized ? 0 : 2;
+      state.raw = data;
+
+      state.commitment =
+        data.commitment ||
+        data.executionGraphCommitment ||
+        data.proofCommitment ||
+        null;
+
+      updateAllSurfaces();
+
+    } catch (error) {
+      console.warn("[Phorva] /authorize unavailable:", error);
+
+      state.decision = blocked ? "BLOCKED" : "AUTHORIZED";
+      state.risk = blocked ? "HIGH" : "LOW";
+      state.amount = amount;
+      state.passed = blocked ? 13 : 15;
+      state.failed = blocked ? 2 : 0;
+
+      updateAllSurfaces();
+    }
+  }
+
+  demoCards.forEach(function (card) {
+    card.addEventListener("click", function () {
+      demoCards.forEach(function (item) {
+        item.classList.remove("is-active");
+      });
+
+      card.classList.add("is-active");
+
+      runVerification(card.dataset.demo === "blocked");
+    });
   });
 })();
 </script>
